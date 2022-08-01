@@ -38,7 +38,7 @@ public class UserInfo implements Serializable {
     @ApiModelProperty(value = "性别：0男，1女")
     private Byte sex;
 
-    @ApiModelProperty(value = "权限：0管理员，1普通用户")
+    @ApiModelProperty(value = "权限：0管理员，1教师，2家长")
     private Byte permission;
 
     @ApiModelProperty(value = "生日")

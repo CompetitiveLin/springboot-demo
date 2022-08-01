@@ -14,5 +14,4 @@ public interface UserInfoService {
 
     UserInfo getUserByUsername(String username);
 
-    String login(LoginDto loginDto);
 }

@@ -24,7 +24,7 @@ public class JwtConfig {
     /*Base64对该令牌进行编码*/
     private String secret;
 
-    /*令牌过期时间 此处单位/毫秒 */
+    /*令牌过期时间 此处单位秒 */
     private Long expiration;
 
 }

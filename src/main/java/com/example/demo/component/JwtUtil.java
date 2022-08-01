@@ -1,4 +1,4 @@
-package com.example.demo.component.utils;
+package com.example.demo.component;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -95,6 +96,28 @@ public class JwtUtil {
      */
     public String getUserNameToken(String token){
         return parse(token) == null ? null : parse(token).get("username").toString();
+    }
+
+    /**
+     * 刷新Token，如果30分钟内刷新过，返回原token，否则返回新token
+     * @param token
+     * @return
+     */
+    public String refreshToken(String token){
+        if(checkRefreshWithin(token, 30 * 60))  return token;
+        Map<String, Object> map = new HashMap<>();
+        map.put("username", getUserNameToken(token));
+        return create(map);
+    }
+
+    /**
+     * 检查一定时间内是否刷新过。Time时间内刷新过返回True，否则返回False
+     * @param token
+     * @param time
+     * @return
+     */
+    public boolean checkRefreshWithin(String token, long time){
+        return time > DateUtil.currentSeconds() + jwtConfig.getExpiration() - getExpiredToken(token);
     }
 
 

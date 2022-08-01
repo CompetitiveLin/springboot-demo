@@ -3,8 +3,6 @@ package com.example.demo.component;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.example.demo.dto.UserInfoDetails;
-import com.example.demo.component.utils.JwtUtil;
-import com.example.demo.component.utils.RedisUtil;
 import com.example.demo.config.JwtConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

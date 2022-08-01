@@ -1,17 +1,16 @@
 package com.example.demo.controller;
 
 import com.example.demo.common.api.CommonResult;
-import com.example.demo.component.utils.RedisUtil;
+import com.example.demo.component.RedisUtil;
 import com.example.demo.dto.LoginDto;
 import com.example.demo.dto.UpdatePasswordDto;
 import com.example.demo.mbg.model.UserInfo;
 import com.example.demo.service.UserInfoService;
+import com.example.demo.service.UserLoginService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +26,9 @@ public class UserController {
     private UserInfoService userInfoService;
 
     @Autowired
+    private UserLoginService userLoginService;
+
+    @Autowired
     private RedisUtil redisUtil;
 
     /**
@@ -37,7 +39,7 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation("用户登录")
     public CommonResult login(LoginDto loginDto){
-        String token = userInfoService.login(loginDto);
+        String token = userLoginService.login(loginDto);
         if(token == null) return CommonResult.failed("用户名或密码不正确");  // 根据ServiceImpl里的内容，token永远不可能为null，要么已经抛异常，要么返回正确的token
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", token);
@@ -61,7 +63,7 @@ public class UserController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiOperation("update password")
-    public CommonResult updatePassword(@Validated @RequestBody UpdatePasswordDto updatePasswordDto){   //bindingResult是NotBlank等注解发生错误时返回的异常
+    public CommonResult updatePassword(@Validated @RequestBody UpdatePasswordDto updatePasswordDto){   //当UpdatePasswordDto里的参数不符合要求时，会抛出BindingException的异常，接着会被全局异常捕捉器捕捉，返回异常消息
         int count = userInfoService.updatePassword(updatePasswordDto.getUsername(), updatePasswordDto.getOldPassword(), updatePasswordDto.getNewPassword());
         if(count == -1) return CommonResult.failed("不存在该用户名");
         else if(count == -2) return CommonResult.failed("旧密码不匹配");

@@ -20,7 +20,9 @@ public class UserInfoDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return userInfo.getPermission() == (byte) 0 ? Arrays.asList(new SimpleGrantedAuthority("admin")) : Arrays.asList(new SimpleGrantedAuthority("user"));
+        if(userInfo.getPermission() == (byte) 0) return Arrays.asList(new SimpleGrantedAuthority("admin"));
+        else if (userInfo.getPermission() == (byte) 1) return Arrays.asList(new SimpleGrantedAuthority("teacher"));
+        return Arrays.asList(new SimpleGrantedAuthority("parents"));
     }
 
     @Override
