@@ -2,6 +2,8 @@ package com.example.demo.component;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import com.example.demo.utils.JwtUtil;
+import com.example.demo.utils.RedisUtil;
 import com.example.demo.dto.UserInfoDetails;
 import com.example.demo.config.JwtConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -66,11 +68,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {    // æ
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-        }
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(ObjectUtil.isNotNull(auth)){
-            log.info(auth.getDetails().toString());
         }
         filterChain.doFilter(request,response);
     }

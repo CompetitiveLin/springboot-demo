@@ -1,7 +1,7 @@
 package com.example.demo.exception;
 
 
-import com.example.demo.common.api.IErrorCode;
+import com.example.demo.response.IErrorCode;
 
 /**
  * 断言处理类，用于抛出各种API异常，多用于业务层，Service方法中

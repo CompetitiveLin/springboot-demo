@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.common.api.CommonResult;
+import com.example.demo.response.CommonResult;
 import com.example.demo.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

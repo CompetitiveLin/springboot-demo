@@ -1,4 +1,4 @@
-package com.example.demo.common.api;
+package com.example.demo.response;
 
 /**
  * 常用API返回对象接口

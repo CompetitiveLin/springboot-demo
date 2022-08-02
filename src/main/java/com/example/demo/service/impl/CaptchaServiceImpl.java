@@ -2,7 +2,7 @@ package com.example.demo.service.impl;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.ShearCaptcha;
-import com.example.demo.component.RedisUtil;
+import com.example.demo.utils.RedisUtil;
 import com.example.demo.exception.Asserts;
 import com.example.demo.service.CaptchaService;
 import org.springframework.beans.factory.annotation.Autowired;

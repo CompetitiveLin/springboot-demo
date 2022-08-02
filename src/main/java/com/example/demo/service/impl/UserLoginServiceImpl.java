@@ -1,9 +1,8 @@
 package com.example.demo.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.example.demo.component.JwtUtil;
-import com.example.demo.component.RedisUtil;
-import com.example.demo.config.JwtConfig;
+import com.example.demo.utils.JwtUtil;
+import com.example.demo.utils.RedisUtil;
 import com.example.demo.dto.LoginDto;
 import com.example.demo.exception.Asserts;
 import com.example.demo.service.UserLoginService;

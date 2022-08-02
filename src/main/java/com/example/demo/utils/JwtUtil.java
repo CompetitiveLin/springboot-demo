@@ -1,4 +1,4 @@
-package com.example.demo.component;
+package com.example.demo.utils;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;

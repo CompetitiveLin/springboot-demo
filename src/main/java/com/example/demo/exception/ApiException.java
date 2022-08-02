@@ -1,6 +1,6 @@
 package com.example.demo.exception;
 
-import com.example.demo.common.api.IErrorCode;
+import com.example.demo.response.IErrorCode;
 
 /**
  * 自定义API异常

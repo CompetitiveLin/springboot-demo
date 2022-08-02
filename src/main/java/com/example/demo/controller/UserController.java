@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.common.api.CommonResult;
-import com.example.demo.component.RedisUtil;
+import com.example.demo.annotation.Log;
+import com.example.demo.response.CommonResult;
+import com.example.demo.utils.RedisUtil;
 import com.example.demo.dto.LoginDto;
 import com.example.demo.dto.UpdatePasswordDto;
 import com.example.demo.mbg.model.UserInfo;
@@ -46,6 +47,7 @@ public class UserController {
         return CommonResult.success(tokenMap);
     }
 
+    @Log
     @RequestMapping(value = "/getAll",method = RequestMethod.GET)
     @ApiOperation(value = "getAll方法", notes = "查询所有用户")
     @PreAuthorize("hasAuthority('admin')")

@@ -1,4 +1,4 @@
-package com.example.demo.common.api;
+package com.example.demo.response;
 
 import com.github.pagehelper.PageInfo;
 import lombok.Getter;

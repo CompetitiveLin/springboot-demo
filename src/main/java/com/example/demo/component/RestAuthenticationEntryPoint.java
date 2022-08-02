@@ -1,7 +1,7 @@
 package com.example.demo.component;
 
 import cn.hutool.json.JSONUtil;
-import com.example.demo.common.api.CommonResult;
+import com.example.demo.response.CommonResult;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
