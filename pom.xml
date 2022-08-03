@@ -121,6 +121,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+        <!--minio服务-->
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>3.0.10</version>
+        </dependency>
+        <!--minio依赖中存在okio依赖冲突，maven采用“最短路径”选择依赖。具体见maven的插件dependency analyzer.
+        因为okio：1.12.0的深度小于okio：2.8.0，所以会选择1.12.0版本。但是okhttp4.9.3只能与okio1.12.0搭配。
+        因此两者不匹配，只能重新导入okio:2.8.0-->
+        <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+            <version>2.8.0</version>
+        </dependency>
     </dependencies>
 
     <build>

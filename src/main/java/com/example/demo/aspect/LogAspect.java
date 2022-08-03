@@ -45,6 +45,11 @@ public class LogAspect {
         return result;
     }
 
+    /**
+     * 不能用于封装参数后的方法，例如login方法中的参数是LoginDto，求参数名称步骤中将会得到的是参数的地址。
+     * @param joinPoint
+     * @param time
+     */
 	private void saveLog(ProceedingJoinPoint joinPoint, long time) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();

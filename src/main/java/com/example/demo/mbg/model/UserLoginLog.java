@@ -23,6 +23,12 @@ public class UserLoginLog implements Serializable {
     @ApiModelProperty(value = "浏览器类型")
     private String browserType;
 
+    @ApiModelProperty(value = "操作系统")
+    private String operatingSystem;
+
+    @ApiModelProperty(value = "登录平台")
+    private String platform;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -73,6 +79,22 @@ public class UserLoginLog implements Serializable {
         this.browserType = browserType;
     }
 
+    public String getOperatingSystem() {
+        return operatingSystem;
+    }
+
+    public void setOperatingSystem(String operatingSystem) {
+        this.operatingSystem = operatingSystem;
+    }
+
+    public String getPlatform() {
+        return platform;
+    }
+
+    public void setPlatform(String platform) {
+        this.platform = platform;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -85,6 +107,8 @@ public class UserLoginLog implements Serializable {
         sb.append(", address=").append(address);
         sb.append(", loginTime=").append(loginTime);
         sb.append(", browserType=").append(browserType);
+        sb.append(", operatingSystem=").append(operatingSystem);
+        sb.append(", platform=").append(platform);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

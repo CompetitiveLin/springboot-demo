@@ -494,6 +494,146 @@ public class UserLoginLogExample {
             addCriterion("browser_type not between", value1, value2, "browserType");
             return (Criteria) this;
         }
+
+        public Criteria andOperatingSystemIsNull() {
+            addCriterion("operating_system is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatingSystemIsNotNull() {
+            addCriterion("operating_system is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatingSystemEqualTo(String value) {
+            addCriterion("operating_system =", value, "operatingSystem");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatingSystemNotEqualTo(String value) {
+            addCriterion("operating_system <>", value, "operatingSystem");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatingSystemGreaterThan(String value) {
+            addCriterion("operating_system >", value, "operatingSystem");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatingSystemGreaterThanOrEqualTo(String value) {
+            addCriterion("operating_system >=", value, "operatingSystem");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatingSystemLessThan(String value) {
+            addCriterion("operating_system <", value, "operatingSystem");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatingSystemLessThanOrEqualTo(String value) {
+            addCriterion("operating_system <=", value, "operatingSystem");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatingSystemLike(String value) {
+            addCriterion("operating_system like", value, "operatingSystem");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatingSystemNotLike(String value) {
+            addCriterion("operating_system not like", value, "operatingSystem");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatingSystemIn(List<String> values) {
+            addCriterion("operating_system in", values, "operatingSystem");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatingSystemNotIn(List<String> values) {
+            addCriterion("operating_system not in", values, "operatingSystem");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatingSystemBetween(String value1, String value2) {
+            addCriterion("operating_system between", value1, value2, "operatingSystem");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperatingSystemNotBetween(String value1, String value2) {
+            addCriterion("operating_system not between", value1, value2, "operatingSystem");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformIsNull() {
+            addCriterion("platform is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformIsNotNull() {
+            addCriterion("platform is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformEqualTo(String value) {
+            addCriterion("platform =", value, "platform");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformNotEqualTo(String value) {
+            addCriterion("platform <>", value, "platform");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformGreaterThan(String value) {
+            addCriterion("platform >", value, "platform");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformGreaterThanOrEqualTo(String value) {
+            addCriterion("platform >=", value, "platform");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformLessThan(String value) {
+            addCriterion("platform <", value, "platform");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformLessThanOrEqualTo(String value) {
+            addCriterion("platform <=", value, "platform");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformLike(String value) {
+            addCriterion("platform like", value, "platform");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformNotLike(String value) {
+            addCriterion("platform not like", value, "platform");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformIn(List<String> values) {
+            addCriterion("platform in", values, "platform");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformNotIn(List<String> values) {
+            addCriterion("platform not in", values, "platform");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformBetween(String value1, String value2) {
+            addCriterion("platform between", value1, value2, "platform");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformNotBetween(String value1, String value2) {
+            addCriterion("platform not between", value1, value2, "platform");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -1,6 +1,8 @@
 package com.example.demo.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.example.demo.mbg.mapper.UserLoginLogMapper;
+import com.example.demo.mbg.model.UserLoginLog;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.RedisUtil;
 import com.example.demo.dto.LoginDto;
@@ -20,12 +22,16 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 @Slf4j
 public class UserLoginServiceImpl implements UserLoginService {
+
+    @Autowired
+    private UserLoginLogMapper userLoginLogMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -79,5 +85,17 @@ public class UserLoginServiceImpl implements UserLoginService {
             Asserts.fail(e.getMessage());
             return null;
         }
+    }
+
+    @Override
+    public void insertLog(Long userId, String browser, String platform, String ip, String os) {
+        UserLoginLog userLoinLog = new UserLoginLog();
+        userLoinLog.setUserId(userId);
+        userLoinLog.setBrowserType(browser);
+        userLoinLog.setPlatform(platform);
+        userLoinLog.setIpAddress(ip);
+        userLoinLog.setOperatingSystem(os);
+        userLoinLog.setLoginTime(new Date());
+        userLoginLogMapper.insertSelective(userLoinLog);
     }
 }

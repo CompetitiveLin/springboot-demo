@@ -8,6 +8,8 @@
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
     <result column="browser_type" jdbcType="VARCHAR" property="browserType" />
+    <result column="operating_system" jdbcType="VARCHAR" property="operatingSystem" />
+    <result column="platform" jdbcType="VARCHAR" property="platform" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, ip_address, address, login_time, browser_type
+    id, user_id, ip_address, address, login_time, browser_type, operating_system, platform
   </sql>
   <select id="selectByExample" parameterType="com.example.demo.mbg.model.UserLoginLogExample" resultMap="BaseResultMap">
     select
@@ -105,9 +107,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into user_login_log (user_id, ip_address, address, 
-      login_time, browser_type)
+      login_time, browser_type, operating_system, 
+      platform)
     values (#{userId,jdbcType=BIGINT}, #{ipAddress,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
-      #{loginTime,jdbcType=TIMESTAMP}, #{browserType,jdbcType=VARCHAR})
+      #{loginTime,jdbcType=TIMESTAMP}, #{browserType,jdbcType=VARCHAR}, #{operatingSystem,jdbcType=VARCHAR}, 
+      #{platform,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.demo.mbg.model.UserLoginLog">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -130,6 +134,12 @@
       <if test="browserType != null">
         browser_type,
       </if>
+      <if test="operatingSystem != null">
+        operating_system,
+      </if>
+      <if test="platform != null">
+        platform,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
@@ -146,6 +156,12 @@
       </if>
       <if test="browserType != null">
         #{browserType,jdbcType=VARCHAR},
+      </if>
+      <if test="operatingSystem != null">
+        #{operatingSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="platform != null">
+        #{platform,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -176,6 +192,12 @@
       <if test="record.browserType != null">
         browser_type = #{record.browserType,jdbcType=VARCHAR},
       </if>
+      <if test="record.operatingSystem != null">
+        operating_system = #{record.operatingSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="record.platform != null">
+        platform = #{record.platform,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -188,7 +210,9 @@
       ip_address = #{record.ipAddress,jdbcType=VARCHAR},
       address = #{record.address,jdbcType=VARCHAR},
       login_time = #{record.loginTime,jdbcType=TIMESTAMP},
-      browser_type = #{record.browserType,jdbcType=VARCHAR}
+      browser_type = #{record.browserType,jdbcType=VARCHAR},
+      operating_system = #{record.operatingSystem,jdbcType=VARCHAR},
+      platform = #{record.platform,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -211,6 +235,12 @@
       <if test="browserType != null">
         browser_type = #{browserType,jdbcType=VARCHAR},
       </if>
+      <if test="operatingSystem != null">
+        operating_system = #{operatingSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="platform != null">
+        platform = #{platform,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -220,7 +250,9 @@
       ip_address = #{ipAddress,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
       login_time = #{loginTime,jdbcType=TIMESTAMP},
-      browser_type = #{browserType,jdbcType=VARCHAR}
+      browser_type = #{browserType,jdbcType=VARCHAR},
+      operating_system = #{operatingSystem,jdbcType=VARCHAR},
+      platform = #{platform,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

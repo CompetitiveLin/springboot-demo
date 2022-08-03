@@ -33,7 +33,8 @@ public class UserController {
     private RedisUtil redisUtil;
 
     /**
-     * 参数用表单登录，没有@RequestBody注解
+     * 参数用表单登录，没有@RequestBody注解。即使方法中的参数是LoginDto类型，但是在实际的参数传输过程中还是以LoginDto里的基本数据类型为准。
+     * 例如LoginDto包含username,password,uuid,captcha.前端发送请求时还是按照上述四个参数进行的。LoginDto的作用只是在后端简化方法内的参数。
      * @param loginDto
      * @return
      */
@@ -73,6 +74,14 @@ public class UserController {
         return CommonResult.success();
     }
 
+
+    /**
+     * 带有@RequestParam：url?后的参数
+     * @param key
+     * @param value
+     * @param time
+     * @return
+     */
     @RequestMapping(value = "/redis", method = RequestMethod.GET)
     @ApiOperation("test redis")
     @ApiImplicitParams({
@@ -80,7 +89,7 @@ public class UserController {
             @ApiImplicitParam(name = "value", value = "值", dataTypeClass= String.class),
             @ApiImplicitParam(name = "time", value = "时间", dataTypeClass = Integer.class)
     })
-    public CommonResult testRedis(@RequestParam(defaultValue = "key") String key,@RequestParam(defaultValue = "value") String value,@RequestParam(defaultValue = "-1") int time){
+    public CommonResult testRedis(@RequestParam(defaultValue = "key") String key,@RequestParam(defaultValue = "value") String value,@RequestParam(defaultValue = "-1") Integer time){   // 为防止time为null抛出异常，参数中应该为包装类型
         redisUtil.stringSet(key,value,time);
         return CommonResult.success();
     }
