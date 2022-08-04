@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NonNull;
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
+@ApiModel
 public class LoginDto {
 
     @ApiModelProperty("用户名")

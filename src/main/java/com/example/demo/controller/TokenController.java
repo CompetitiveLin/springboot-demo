@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.response.CommonResult;
 import com.example.demo.service.TokenService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+@Api(tags = "TokenController", description = "Token管理")
 @RestController
 public class TokenController {
 
@@ -21,6 +24,7 @@ public class TokenController {
     @Autowired
     private TokenService tokenService;
 
+    @ApiOperation("刷新Token")
     @RequestMapping(value = "/refreshToken",  method = RequestMethod.GET)
     public CommonResult refresh(HttpServletRequest request){
         String token = request.getHeader(tokenHeader);

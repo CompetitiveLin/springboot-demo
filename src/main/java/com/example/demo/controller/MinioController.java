@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.response.CommonResult;
-import io.minio.MinioClient;
-import io.minio.policy.PolicyType;
+import io.minio.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -43,21 +42,28 @@ public class MinioController {
     public CommonResult upload(@RequestParam("file") MultipartFile file) {
         try {
             //创建一个MinIO的Java客户端
-            MinioClient minioClient = new MinioClient(ENDPOINT, ACCESS_KEY, SECRET_KEY);
-            boolean isExist = minioClient.bucketExists(BUCKET_NAME);
-            if (isExist) {
-                log.info("存储桶已经存在！");
-            } else {
-                //创建存储桶并设置只读权限
-                minioClient.makeBucket(BUCKET_NAME);
-                minioClient.setBucketPolicy(BUCKET_NAME, "*.*", PolicyType.READ_ONLY);
+            MinioClient minioClient = MinioClient.builder().endpoint(ENDPOINT).credentials(ACCESS_KEY, SECRET_KEY).build();
+            boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME).build());
+            if (!isExist){
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(BUCKET_NAME).build());
             }
             String filename = file.getOriginalFilename();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             // 设置存储对象名称
             String objectName = sdf.format(new Date()) + "/" + filename;
-            // 使用putObject上传一个文件到存储桶中
-            minioClient.putObject(BUCKET_NAME, objectName, file.getInputStream(), file.getContentType());
+            minioClient.putObject(PutObjectArgs.builder()       // 使用putObject上传一个文件到存储桶中
+                    .bucket(BUCKET_NAME)
+                    .object(objectName)
+                    .stream(file.getInputStream(), file.getInputStream().available(), -1)
+                    .contentType(file.getContentType())
+                    .build());
+//            minioClient.uploadObject(UploadObjectArgs.builder()     // uploadObject适合上传比较大的文件
+//                            .bucket(BUCKET_NAME)
+//                            .object(objectName)
+//                            .filename("C:\\Users\\CompetitiveLin\\Postman\\files\\20220607_051616000_iOS.mp4")  // Absolute path in server
+//                            .contentType(file.getContentType())
+//                            .build());
+
             log.info("文件上传成功!");
             Map<String, String> map = new HashMap<>();
             map.put("filename",filename);
@@ -74,9 +80,9 @@ public class MinioController {
     @ResponseBody
     public CommonResult delete(@RequestParam("objectName") String objectName) {
         try {
-            MinioClient minioClient = new MinioClient(ENDPOINT, ACCESS_KEY, SECRET_KEY);
-            minioClient.removeObject(BUCKET_NAME, objectName);
-            return CommonResult.success(null);
+            MinioClient minioClient = MinioClient.builder().endpoint(ENDPOINT).credentials(ACCESS_KEY, SECRET_KEY).build();
+            minioClient.removeObject(RemoveObjectArgs.builder().bucket(BUCKET_NAME).object(objectName).build());
+            return CommonResult.success();
         } catch (Exception e) {
             e.printStackTrace();
         }

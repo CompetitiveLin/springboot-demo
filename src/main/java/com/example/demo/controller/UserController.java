@@ -21,7 +21,7 @@ import java.util.Map;
 
 @RestController
 @Slf4j
-@Api(tags = "it's a test")
+@Api(tags = "UserController", description = "管理用户登录等信息")
 public class UserController {
     @Autowired
     private UserInfoService userInfoService;

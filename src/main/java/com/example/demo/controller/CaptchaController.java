@@ -4,10 +4,12 @@ import cn.hutool.core.util.ObjectUtil;
 import com.example.demo.annotation.Log;
 import com.example.demo.response.CommonResult;
 import com.example.demo.service.CaptchaService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@Api(tags = "CaptchaController", description = "验证码管理")
 @RestController
 public class CaptchaController {
     @Autowired

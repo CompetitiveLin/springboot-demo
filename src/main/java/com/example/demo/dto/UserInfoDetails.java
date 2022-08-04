@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collection;
-/*
+/**
     分配系统角色权限
  */
 public class UserInfoDetails implements UserDetails {
