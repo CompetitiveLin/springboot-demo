@@ -132,6 +132,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
+        <!---redisson分布式锁依赖，但暂时没用到-->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.17.5</version>
+        </dependency>
     </dependencies>
 
     <build>

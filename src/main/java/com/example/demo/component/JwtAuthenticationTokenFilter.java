@@ -24,17 +24,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * jwttokenfilter
- * @author yueranzs
- * @date 2021/12/4 10:14
+ * @className: JwtAuthenticationTokenFilter
+ * @description: jwt过滤器,每次请求都会经过这个filter
  */
 @Slf4j
-@Component
-public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {    // 每次请求都会经过这个filter
+//@Component
+public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-
-    @Autowired
-    private RedisUtil redisUtil;
     @Autowired
     private UserDetailsService userDetailsService;
 
