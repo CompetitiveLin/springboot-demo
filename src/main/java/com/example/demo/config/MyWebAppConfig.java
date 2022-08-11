@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 
 @Configuration
 @Slf4j
-public class MyWebAppConfig extends WebMvcConfigurerAdapter {
+public class MyWebAppConfig implements WebMvcConfigurer {
 
 //    @Bean
 //    IpUrlLimitInterceptor getIpUrlLimitInterceptor() {
@@ -29,7 +30,6 @@ public class MyWebAppConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(ipUrlLimitInterceptor).addPathPatterns("/**");
-        super.addInterceptors(registry);
     }
 
 }
