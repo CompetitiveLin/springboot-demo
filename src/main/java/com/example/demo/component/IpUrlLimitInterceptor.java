@@ -45,9 +45,9 @@ public class IpUrlLimitInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        log.info("requestUri={},ip={}", httpServletRequest.getRequestURI(), IpUtils.getIpAddr(httpServletRequest));
+        log.info("Interceptor preHandle: requestUri = {}, ip = {}", httpServletRequest.getRequestURI(), IpUtils.getIpAddr(httpServletRequest));
         if (ipIsLock(IpUtils.getIpAddr(httpServletRequest))) {
-            log.info("ip:{} is locked", IpUtils.getIpAddr(httpServletRequest));
+            log.info("ip = {} is locked", IpUtils.getIpAddr(httpServletRequest));
             returnJson(httpServletResponse, String.valueOf(JSONUtil.parse(CommonResult.failed(ResultCode.LOCK_IP))));
             return false;
         }
@@ -60,12 +60,12 @@ public class IpUrlLimitInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-
+        log.info("Interceptor postHandle");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-
+        log.info("Interceptor afterCompletion");
     }
 
     /**
