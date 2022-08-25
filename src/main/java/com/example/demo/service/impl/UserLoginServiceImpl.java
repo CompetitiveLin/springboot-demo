@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.example.demo.mbg.mapper.UserLoginLogMapper;
 import com.example.demo.mbg.model.UserLoginLog;
+import com.example.demo.utils.HttpClientUtil;
 import com.example.demo.utils.JwtUtil;
 import com.example.demo.utils.RedisUtil;
 import com.example.demo.dto.LoginDto;
@@ -29,6 +30,10 @@ import java.util.Map;
 @Service
 @Slf4j
 public class UserLoginServiceImpl implements UserLoginService {
+
+    private final static String APPID = "wx9b9baf564eb3bae7";
+
+    private final static String APPSECRET = "a390e4b029567168bd9b86b82046c2e0";
 
     @Autowired
     private UserLoginLogMapper userLoginLogMapper;
@@ -97,5 +102,16 @@ public class UserLoginServiceImpl implements UserLoginService {
         userLoinLog.setOperatingSystem(os);
         userLoinLog.setLoginTime(new Date());
         userLoginLogMapper.insertSelective(userLoinLog);
+    }
+
+    @Override
+    public String wxLogin(String code) {
+        Map<String, String> param = new HashMap<>();
+        param.put("appid", APPID);
+        param.put("secret", APPSECRET);
+        param.put("js_code", code);
+        param.put("grant_type", "authorization_code");
+        String json = HttpClientUtil.doGet("https://api.weixin.qq.com/sns/jscode2session", param);
+        return json;
     }
 }

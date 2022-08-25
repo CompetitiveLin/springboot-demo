@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.example.demo.annotation.Log;
 import com.example.demo.response.CommonResult;
+import com.example.demo.utils.HttpClientUtil;
 import com.example.demo.utils.RedisUtil;
 import com.example.demo.dto.LoginDto;
 import com.example.demo.dto.UpdatePasswordDto;
@@ -98,5 +101,21 @@ public class UserController {
     @ApiOperation("Register user")
     public CommonResult register(){
         return CommonResult.success();
+    }
+
+    /**
+     * 表单登录，将小程序端发送至服务端的code + appid + appsecret 发送至微信服务器，得到session_key 和 openid.
+     * 如果使用 (@Responsebody String code) 那么code将是json格式 {"code":"xxx"}
+     * @param code
+     * @return
+     */
+    @RequestMapping(value = "/wxlogin", method = RequestMethod.POST)
+    @ApiOperation("Wechat login")
+    public CommonResult wxLogin(String code){
+        String json = userLoginService.wxLogin(code);
+        JSONObject jsonObject = JSONUtil.parseObj(json);
+        String errmsg = jsonObject.getStr("errmsg");
+        if(errmsg != null) return CommonResult.failed(errmsg);
+        return CommonResult.success(jsonObject);
     }
 }
