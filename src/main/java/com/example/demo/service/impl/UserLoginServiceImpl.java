@@ -1,6 +1,8 @@
 package com.example.demo.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.example.demo.mbg.mapper.UserLoginLogMapper;
 import com.example.demo.mbg.model.UserLoginLog;
 import com.example.demo.utils.HttpClientUtil;
@@ -112,6 +114,12 @@ public class UserLoginServiceImpl implements UserLoginService {
         param.put("js_code", code);
         param.put("grant_type", "authorization_code");
         String json = HttpClientUtil.doGet("https://api.weixin.qq.com/sns/jscode2session", param);
-        return json;
+        JSONObject jsonObject = JSONUtil.parseObj(json);
+        if(jsonObject.getStr("errmsg") != null) return null;
+        Map<String, Object> map = new HashMap<>();
+        map.put("openid", jsonObject.getStr("openid"));
+        String token = jwtUtil.create(map);
+        redisUtil.stringSet("token:" + jsonObject.getStr("openid"), token, JWT_EXPIRATION);
+        return token;
     }
 }

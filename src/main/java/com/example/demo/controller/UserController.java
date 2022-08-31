@@ -112,10 +112,8 @@ public class UserController {
     @RequestMapping(value = "/wxlogin", method = RequestMethod.POST)
     @ApiOperation("Wechat login")
     public CommonResult wxLogin(String code){
-        String json = userLoginService.wxLogin(code);
-        JSONObject jsonObject = JSONUtil.parseObj(json);
-        String errmsg = jsonObject.getStr("errmsg");
-        if(errmsg != null) return CommonResult.failed(errmsg);
-        return CommonResult.success(jsonObject);
+        String token = userLoginService.wxLogin(code);
+        if(token == null) return CommonResult.failed("登录失败");
+        return CommonResult.success(token);
     }
 }
