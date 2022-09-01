@@ -5,39 +5,37 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.signers.JWTSigner;
 import cn.hutool.jwt.signers.JWTSignerUtil;
-import com.example.demo.config.JwtConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * jwt工具类
  * @author yueranzs
  * @date 2021/11/25 15:55
  */
-@Component
 @Slf4j
 public class JwtUtil {
 
-    @Autowired
-    private JwtConfig jwtConfig;
+//    @Value("${jwt.secret}")   // value无法给static变量赋值
+    private static String secret = "CompetitiveLin";
+
+//    @Value("${jwt.expiration}")
+    private static Long expiration = 604800L;
 
     /**
      * 生成jwt
      * @param payload 数据主体
      * @return
      */
-    public String create(Map<String,Object> payload){
+    public static String create(Map<String,Object> payload){
         //每个jwt都默认生成一个到期时间
-        payload.put("expire_time", DateUtil.currentSeconds() + jwtConfig.getExpiration());
+        payload.put("expire_time", DateUtil.currentSeconds() + expiration);
         //生成私钥
-        JWTSigner jwtSigner = JWTSignerUtil.hs256(jwtConfig.getSecret().getBytes(StandardCharsets.UTF_8));
+        JWTSigner jwtSigner = JWTSignerUtil.hs256(secret.getBytes(StandardCharsets.UTF_8));
         //生成token
         return JWTUtil.createToken(payload,jwtSigner);
     }
@@ -47,7 +45,7 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public JSONObject parse(String token){
+    public static JSONObject parse(String token){
         JSONObject jsonObject = null;
         try{
             jsonObject = JWTUtil.parseToken(token).getPayload().getClaimsJson();
@@ -63,10 +61,10 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public boolean verifyToken(String token){
+    public static boolean verifyToken(String token){
         //先判断是否到期，再判断是否正确
         if (isNotExpiredToken(token)) {
-            return JWTUtil.verify(token,jwtConfig.getSecret().getBytes(StandardCharsets.UTF_8));
+            return JWTUtil.verify(token,secret.getBytes(StandardCharsets.UTF_8));
         }
         return false;
     }
@@ -76,7 +74,7 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public boolean isNotExpiredToken(String token){
+    public static boolean isNotExpiredToken(String token){
         return DateUtil.currentSeconds() < getExpiredToken(token);
     }
 
@@ -85,7 +83,7 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public long getExpiredToken(String token){
+    public static long getExpiredToken(String token){
         return parse(token) == null ? null : Long.parseLong(parse(token).get("expire_time").toString());
     }
 
@@ -94,7 +92,7 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public String getUserNameToken(String token){
+    public static String getUserNameToken(String token){
         return parse(token) == null ? null : parse(token).get("username").toString();
     }
 
@@ -103,7 +101,7 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public String refreshToken(String token){
+    public static String refreshToken(String token){
         if(checkRefreshWithin(token, 30 * 60))  return token;
         Map<String, Object> map = new HashMap<>();
         map.put("username", getUserNameToken(token));
@@ -116,8 +114,8 @@ public class JwtUtil {
      * @param time
      * @return
      */
-    public boolean checkRefreshWithin(String token, long time){
-        return time > DateUtil.currentSeconds() + jwtConfig.getExpiration() - getExpiredToken(token);
+    public static boolean checkRefreshWithin(String token, long time){
+        return time > DateUtil.currentSeconds() + expiration - getExpiredToken(token);
     }
 
 

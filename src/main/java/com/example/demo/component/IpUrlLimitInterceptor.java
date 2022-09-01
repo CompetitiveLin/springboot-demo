@@ -1,10 +1,9 @@
 package com.example.demo.component;
 
-import cn.hutool.json.JSON;
 import cn.hutool.json.JSONUtil;
 import com.example.demo.response.CommonResult;
 import com.example.demo.response.ResultCode;
-import com.example.demo.utils.IpUtils;
+import com.example.demo.utils.IpUtil;
 import com.example.demo.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +44,13 @@ public class IpUrlLimitInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        log.info("Interceptor preHandle: requestUri = {}, ip = {}", httpServletRequest.getRequestURI(), IpUtils.getIpAddr(httpServletRequest));
-        if (ipIsLock(IpUtils.getIpAddr(httpServletRequest))) {
-            log.info("ip = {} is locked", IpUtils.getIpAddr(httpServletRequest));
+        log.info("Interceptor preHandle: requestUri = {}, ip = {}", httpServletRequest.getRequestURI(), IpUtil.getIpAddr(httpServletRequest));
+        if (ipIsLock(IpUtil.getIpAddr(httpServletRequest))) {
+            log.info("ip = {} is locked", IpUtil.getIpAddr(httpServletRequest));
             returnJson(httpServletResponse, String.valueOf(JSONUtil.parse(CommonResult.failed(ResultCode.LOCK_IP))));
             return false;
         }
-        if (!addRequestTime(IpUtils.getIpAddr(httpServletRequest), httpServletRequest.getRequestURI())) {
+        if (!addRequestTime(IpUtil.getIpAddr(httpServletRequest), httpServletRequest.getRequestURI())) {
             returnJson(httpServletResponse, String.valueOf(JSONUtil.parse(CommonResult.failed(ResultCode.LOCK_IP))));
             return false;
         }

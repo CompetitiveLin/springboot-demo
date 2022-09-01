@@ -1,8 +1,7 @@
 package com.example.demo.aspect;
 
-import com.example.demo.annotation.Log;
 import com.example.demo.service.SysLogService;
-import com.example.demo.utils.IpUtils;
+import com.example.demo.utils.IpUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -69,6 +68,6 @@ public class LogAspect {
                 params.append(paramNames[i]).append(": ").append(args[i]).append(" ");
             }
         }
-        sysLogService.insert(className + "." + methodName + "()", time, params.toString(), IpUtils.getIpAddr(request), new Date());
+        sysLogService.insert(className + "." + methodName + "()", time, params.toString(), IpUtil.getIpAddr(request), new Date());
     }
 }

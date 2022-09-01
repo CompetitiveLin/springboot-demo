@@ -3,18 +3,15 @@ package com.example.demo.component;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.example.demo.utils.JwtUtil;
-import com.example.demo.utils.RedisUtil;
 import com.example.demo.dto.UserInfoDetails;
-import com.example.demo.config.JwtConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -34,24 +31,22 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    @Value("${jwt.tokenHeader}")
+    private String tokenHeader;
 
-    @Autowired
-    private JwtConfig jwtConfig;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, ServletException, IOException {
         log.info("doFilterInternal");
-        String authToken = request.getHeader(jwtConfig.getTokenHeader());
+        String authToken = request.getHeader(tokenHeader);
         if (ObjectUtil.isNotNull(authToken)) {
-            String userName = jwtUtil.getUserNameToken(authToken);
+            String userName = JwtUtil.getUserNameToken(authToken);
             //当userName不为空且没经过认证时进行校验token是否为有效token
             if (ObjectUtil.isNotNull(userName) && ObjectUtil.isNull(SecurityContextHolder.getContext().getAuthentication())) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
                 UserInfoDetails user = (UserInfoDetails) userDetails;
                 //检验token，新增下面的if判断
-                if (StrUtil.equals(userName,user.getUsername()) && jwtUtil.verifyToken(authToken)) {
+                if (StrUtil.equals(userName,user.getUsername()) && JwtUtil.verifyToken(authToken)) {
                     /**
                      * UsernamePasswordAuthenticationToken继承AbstractAuthenticationToken实现Authentication
                      * 所以当在页面中输入用户名和密码之后首先会进入到UsernamePasswordAuthenticationToken验证(Authentication)，

@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
  * @author: ChenWenLong
  * @create: 2019-10-18 11:55
  **/
-public class IpUtils {
+public class IpUtil {
 
     public static String getIpAddr(HttpServletRequest request) {
         if (request == null) {

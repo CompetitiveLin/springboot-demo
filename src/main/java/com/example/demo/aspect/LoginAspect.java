@@ -4,7 +4,7 @@ import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.example.demo.service.UserInfoService;
 import com.example.demo.service.UserLoginService;
-import com.example.demo.utils.IpUtils;
+import com.example.demo.utils.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -64,7 +64,7 @@ public class LoginAspect {
         Long userId = userInfoService.getUserByUsername(username).getId();  // 当找不到userId时，会返回null。但在此处找不到username时已经抛出异常，并不会执行到这里
         String userAgent = request.getHeader("User-Agent");
         UserAgent ua = UserAgentUtil.parse(userAgent);
-        userLoginService.insertLog(userId, ua.getBrowser().toString(), ua.getPlatform().toString(), IpUtils.getIpAddr(request), ua.getOs().toString());
+        userLoginService.insertLog(userId, ua.getBrowser().toString(), ua.getPlatform().toString(), IpUtil.getIpAddr(request), ua.getOs().toString());
         return result;
     }
 

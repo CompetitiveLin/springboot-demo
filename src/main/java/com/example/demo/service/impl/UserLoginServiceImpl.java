@@ -47,9 +47,6 @@ public class UserLoginServiceImpl implements UserLoginService {
     private RedisUtil redisUtil;
 
     @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
     private UserDetailsService userDetailsService;
 
     @Value("${jwt.expiration}")
@@ -84,8 +81,8 @@ public class UserLoginServiceImpl implements UserLoginService {
             log.info("ip:" + request.getRemoteAddr());
             Map<String, Object> map = new HashMap<>();
             map.put("username", loginDto.getUsername());
-            String token = jwtUtil.create(map);
-            redisUtil.stringSet("token:" + jwtUtil.getUserNameToken(token), token, JWT_EXPIRATION);
+            String token = JwtUtil.create(map);
+            redisUtil.stringSet("token:" + JwtUtil.getUserNameToken(token), token, JWT_EXPIRATION);
             return token;
         }
         catch(Exception e){
@@ -118,8 +115,8 @@ public class UserLoginServiceImpl implements UserLoginService {
         if(jsonObject.getStr("errmsg") != null) return null;
         Map<String, Object> map = new HashMap<>();
         map.put("openid", jsonObject.getStr("openid"));
-        String token = jwtUtil.create(map);
-        redisUtil.stringSet("token:" + jsonObject.getStr("openid"), token, JWT_EXPIRATION);
+        String token = JwtUtil.create(map);
+        redisUtil.stringSet("wx:token:" + jsonObject.getStr("openid"), token, JWT_EXPIRATION);
         return token;
     }
 }

@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 public class TokenServiceImpl implements TokenService {
 
     @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
     private RedisUtil redisUtil;
 
     @Value("${jwt.expiration}")
@@ -23,10 +20,10 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public String refreshToken(String token) {
-        if(!jwtUtil.isNotExpiredToken(token)) Asserts.fail("Token已过期");
-        else if(!jwtUtil.verifyToken(token)) Asserts.fail("Invalid Token");
-        String newToken = jwtUtil.refreshToken(token);
-        redisUtil.stringSet("token:" + jwtUtil.getUserNameToken(newToken), newToken, JWT_EXPIRATION);
+        if(!JwtUtil.isNotExpiredToken(token)) Asserts.fail("Token已过期");
+        else if(!JwtUtil.verifyToken(token)) Asserts.fail("Invalid Token");
+        String newToken = JwtUtil.refreshToken(token);
+        redisUtil.stringSet("token:" + JwtUtil.getUserNameToken(newToken), newToken, JWT_EXPIRATION);
         return newToken;
     }
 }
