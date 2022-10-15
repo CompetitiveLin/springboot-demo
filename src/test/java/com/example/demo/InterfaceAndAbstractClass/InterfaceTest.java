@@ -4,7 +4,7 @@ import org.junit.Test;
 
 
 // 接口可实现多继承
-public class TestInterface implements Interface, Interface2{
+public class InterfaceTest implements Interface, Interface2{
 
     // 重写接口中未实现的方法
     @Test
