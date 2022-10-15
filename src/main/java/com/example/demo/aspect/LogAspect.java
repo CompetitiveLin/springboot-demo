@@ -1,7 +1,7 @@
 package com.example.demo.aspect;
 
 import com.example.demo.service.SysLogService;
-import com.example.demo.utils.IpUtil;
+import com.example.demo.util.IpUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

@@ -2,7 +2,7 @@ package com.example.demo.component;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.example.demo.utils.JwtUtil;
+import com.example.demo.util.JwtUtil;
 import com.example.demo.dto.UserInfoDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

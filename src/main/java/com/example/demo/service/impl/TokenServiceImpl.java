@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.utils.JwtUtil;
-import com.example.demo.utils.RedisUtil;
+import com.example.demo.util.JwtUtil;
+import com.example.demo.util.RedisUtil;
 import com.example.demo.exception.Asserts;
 import com.example.demo.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;

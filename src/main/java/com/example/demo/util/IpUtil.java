@@ -1,4 +1,4 @@
-package com.example.demo.utils;
+package com.example.demo.util;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;

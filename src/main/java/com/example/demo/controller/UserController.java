@@ -1,11 +1,8 @@
 package com.example.demo.controller;
 
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.example.demo.annotation.Log;
 import com.example.demo.response.CommonResult;
-import com.example.demo.utils.HttpClientUtil;
-import com.example.demo.utils.RedisUtil;
+import com.example.demo.util.RedisUtil;
 import com.example.demo.dto.LoginDto;
 import com.example.demo.dto.UpdatePasswordDto;
 import com.example.demo.mbg.model.UserInfo;
