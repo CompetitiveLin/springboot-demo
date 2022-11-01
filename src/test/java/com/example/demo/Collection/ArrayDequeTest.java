@@ -19,10 +19,20 @@ public class ArrayDequeTest {
         /*
          *****Queue*****
          */
-        animals.add("Dog");
         animals.offer("Horse");
-        System.out.println("返回出队元素： " + animals.peek());
-        System.out.println("返回出队元素并弹出： " + animals.poll());
+        System.out.println("返回队首元素： " + animals.peek());
+        System.out.println("返回队首元素并弹出： " + animals.poll());
+
+        /*
+         *****Deque*****
+         */
+        animals.push("Bird");    // 队首
+        animals.offer("Dog");    // 队尾
+        System.out.println("返回队首元素： " + animals.peek());
+        System.out.println("返回队首元素并弹出： " + animals.poll());
+        System.out.println("返回队尾元素： " + animals.peekLast());
+        System.out.println("返回队尾元素并弹出： " + animals.pollLast());
+
         /*
          *****Common*****
          */
