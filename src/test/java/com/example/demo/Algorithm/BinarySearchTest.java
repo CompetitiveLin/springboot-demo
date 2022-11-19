@@ -14,6 +14,8 @@ public class BinarySearchTest {
         System.out.println("Array2: " + Arrays.toString(array2));
         System.out.println("Lower bound of array2: " + lower_bound(array2, 0, array2.length, 3));
         System.out.println("Upper bound of array2: " + upper_bound(array2, 0, array2.length, 3));
+        System.out.println("Rightmost index before target 3: " + rightmost_before(array2, 0, array2.length, 3));
+        System.out.println("Leftmost index after target 3: " + leftmost_after(array2, 0, array2.length, 3));
     }
 
     /**
@@ -78,6 +80,42 @@ public class BinarySearchTest {
             return -1;
         }
          return left - 1;
+    }
+
+    /**
+     *
+     * @param arrays
+     * @param left = 0
+     * @param right = arrays.length
+     * @param target
+     * @return
+     */
+    public static int rightmost_before(int[] arrays, int left, int right, int target){
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(target > arrays[mid]){
+                left = mid + 1;
+            } else right = mid;
+        }
+        return left - 1;
+    }
+
+    /**
+     *
+     * @param arrays
+     * @param left = 0
+     * @param right = arrays.length
+     * @param target
+     * @return
+     */
+    public static int leftmost_after(int[] arrays, int left, int right, int target){
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if(target < arrays[mid]){
+                right = mid;
+            } else left = mid + 1;
+        }
+        return left;
     }
 
 
