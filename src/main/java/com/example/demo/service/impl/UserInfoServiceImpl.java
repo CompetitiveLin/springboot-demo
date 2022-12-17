@@ -8,6 +8,7 @@ import com.example.demo.mbg.model.UserInfoExample;
 import com.example.demo.service.UserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,13 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Autowired
     private UserInfoMapper userInfoMapper;
 
-    @Autowired
+
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    public void setPasswordEncoder(@Lazy PasswordEncoder passwordEncoder){
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public List<UserInfo> getAll() {
