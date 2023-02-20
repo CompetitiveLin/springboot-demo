@@ -17,9 +17,12 @@ public class TokenServiceImpl implements TokenService {
     @Value("${jwt.expiration}")
     private Long JWT_EXPIRATION;
 
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
 
     @Override
     public String refreshToken(String token) {
+        token = token.substring(tokenHead.length() + 1);    // The part after "Bearer "
         if(!JwtUtil.isNotExpiredToken(token)) Asserts.fail("Token已过期");
         else if(!JwtUtil.verifyToken(token)) Asserts.fail("Invalid Token");
         String newToken = JwtUtil.refreshToken(token);

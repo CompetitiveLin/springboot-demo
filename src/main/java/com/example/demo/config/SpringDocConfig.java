@@ -35,17 +35,8 @@ public class SpringDocConfig {
                 .addSecurityItem(new SecurityRequirement().addList("Authorization"))
                 .components(new Components().addSecuritySchemes("Authorization", new SecurityScheme()
                         .name("Authorization")
-                        /*
-                        请求头带Bearer时
-                         */
-//                        .scheme("bearer")
-//                        .type(SecurityScheme.Type.HTTP)
-
-                        /*
-                        请求头不带Bearer时
-                         */
-                        .type(SecurityScheme.Type.APIKEY)
-
+                        .scheme("bearer")
+                        .type(SecurityScheme.Type.HTTP)
                         .in(SecurityScheme.In.HEADER)));
     }
 }
