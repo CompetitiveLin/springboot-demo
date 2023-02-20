@@ -2,8 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.response.CommonResult;
 import io.minio.*;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ import java.util.Map;
  * Created by macro on 2019/12/25.
  */
 @Slf4j
-@Api(tags = "MinioController", description = "MinIO对象存储管理")
+@Tag(name = "MinioController", description = "MinIO对象存储管理")
 @Controller
 @RequestMapping("/minio")
 public class MinioController {
@@ -36,7 +36,7 @@ public class MinioController {
     @Value("${minio.secretKey}")
     private String SECRET_KEY;
 
-    @ApiOperation("文件上传")
+    @Operation(description = "文件上传")
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
     public CommonResult upload(@RequestParam("file") MultipartFile file) {
@@ -75,7 +75,7 @@ public class MinioController {
         return CommonResult.failed();
     }
 
-    @ApiOperation("文件删除")
+    @Operation(description = "文件删除")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public CommonResult delete(@RequestParam("objectName") String objectName) {

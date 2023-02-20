@@ -1,32 +1,33 @@
 package com.example.demo.mbg.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class UserLoginLog implements Serializable {
-    @ApiModelProperty(value = "用户登录记录id")
+    @Schema(name = "用户登录记录id")
     private Long id;
 
-    @ApiModelProperty(value = "用户id")
+    @Schema(name = "用户id")
     private Long userId;
 
-    @ApiModelProperty(value = "ip地址")
+    @Schema(name = "ip地址")
     private String ipAddress;
 
-    @ApiModelProperty(value = "ip地址所对应的地区")
+    @Schema(name = "ip地址所对应的地区")
     private String address;
 
-    @ApiModelProperty(value = "登录时间")
+    @Schema(name = "登录时间")
     private Date loginTime;
 
-    @ApiModelProperty(value = "浏览器类型")
+    @Schema(name = "浏览器类型")
     private String browserType;
 
-    @ApiModelProperty(value = "操作系统")
+    @Schema(name = "操作系统")
     private String operatingSystem;
 
-    @ApiModelProperty(value = "登录平台")
+    @Schema(name = "登录平台")
     private String platform;
 
     private static final long serialVersionUID = 1L;

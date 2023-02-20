@@ -8,7 +8,9 @@ import com.example.demo.dto.UpdatePasswordDto;
 import com.example.demo.mbg.model.UserInfo;
 import com.example.demo.service.UserInfoService;
 import com.example.demo.service.UserLoginService;
-import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +23,7 @@ import java.util.Map;
 
 @RestController
 @Slf4j
-@Api(tags = "UserController", description = "管理用户登录等信息")
+@Tag(name = "UserController", description = "管理用户登录等信息")
 public class UserController {
     @Autowired
     private UserInfoService userInfoService;
@@ -39,7 +41,7 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ApiOperation("用户登录")
+    @Operation(description = "用户登录")
     public CommonResult login(LoginDto loginDto){
         String token = userLoginService.login(loginDto);
         if(token == null) return CommonResult.failed("用户名或密码不正确");  // 根据ServiceImpl里的内容，token永远不可能为null，要么已经抛异常，要么返回正确的token
@@ -50,7 +52,7 @@ public class UserController {
 
     @Log
     @RequestMapping(value = "/getAll",method = RequestMethod.GET)
-    @ApiOperation(value = "getAll方法", notes = "查询所有用户")
+    @Operation(description = "查询所有用户")
     @PreAuthorize("hasAuthority('admin')")
     public CommonResult getUser(){
         //日志级别从小到大为 trace < debug < info < warn < error < fatal,由于默认日志级别设置为 INFO，因此 trace 和 debug 级别的日志都看不到。
@@ -65,7 +67,7 @@ public class UserController {
 
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    @ApiOperation("update password")
+    @Operation(description = "update password")
     public CommonResult updatePassword(@Validated @RequestBody UpdatePasswordDto updatePasswordDto){   //当UpdatePasswordDto里的参数不符合要求时，会抛出BindingException的异常，接着会被全局异常捕捉器捕捉，返回异常消息
         int count = userInfoService.updatePassword(updatePasswordDto.getUsername(), updatePasswordDto.getOldPassword(), updatePasswordDto.getNewPassword());
         if(count == -1) return CommonResult.failed("不存在该用户名");
@@ -83,19 +85,17 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/redis", method = RequestMethod.GET)
-    @ApiOperation("test redis")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "key", value = "键", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "value", value = "值", dataTypeClass= String.class),
-            @ApiImplicitParam(name = "time", value = "时间", dataTypeClass = Integer.class)
-    })
+    @Operation(description = "test redis", parameters = {
+            @Parameter(name = "key", description = "键"),
+            @Parameter(name = "value", description = "值"),
+            @Parameter(name = "time", description = "时长")})
     public CommonResult testRedis(@RequestParam(defaultValue = "key") String key,@RequestParam(defaultValue = "value") String value,@RequestParam(defaultValue = "-1") Integer time){   // 为防止time为null抛出异常，参数中应该为包装类型
         redisUtil.stringSet(key,value,time);
         return CommonResult.success();
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    @ApiOperation("Register user")
+    @Operation(description = "Register user")
     public CommonResult register(){
         return CommonResult.success();
     }
@@ -107,7 +107,7 @@ public class UserController {
      * @return
      */
     @RequestMapping(value = "/wxlogin", method = RequestMethod.POST)
-    @ApiOperation("Wechat login")
+    @Operation(description = "Wechat login")
     public CommonResult wxLogin(String code){
         String token = userLoginService.wxLogin(code);
         if(token == null) return CommonResult.failed("登录失败");

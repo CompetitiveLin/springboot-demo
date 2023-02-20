@@ -1,26 +1,27 @@
 package com.example.demo.mbg.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class SysLog implements Serializable {
-    @ApiModelProperty(value = "系统日志id")
+    @Schema(name = "系统日志id")
     private Long id;
 
-    @ApiModelProperty(value = "方法")
+    @Schema(name = "方法")
     private String method;
 
-    @ApiModelProperty(value = "持续时间")
+    @Schema(name = "持续时间")
     private Long duration;
 
-    @ApiModelProperty(value = "方法参数")
+    @Schema(name = "方法参数")
     private String params;
 
-    @ApiModelProperty(value = "ip地址")
+    @Schema(name = "ip地址")
     private String ip;
 
-    @ApiModelProperty(value = "执行时间")
+    @Schema(name = "执行时间")
     private Date createTime;
 
     private static final long serialVersionUID = 1L;

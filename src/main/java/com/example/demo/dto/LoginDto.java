@@ -1,31 +1,29 @@
 package com.example.demo.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@ApiModel
+@Schema
 public class LoginDto {
 
-    @ApiModelProperty("用户名")
+    @Schema(name = "用户名")
     @NotNull(message = "用户名不能为空")
     private String username;
 
-    @ApiModelProperty("密码")
+    @Schema(name = "密码")
     @NotNull(message = "密码不能为空")
     private String password;
 
-    @ApiModelProperty("uuid")
+    @Schema(name = "uuid")
     @NotNull(message = "uuid不能为空")
     private String uuid;
 
-    @ApiModelProperty("验证码")
+    @Schema(name = "验证码")
     @NotNull(message = "验证码不能为空")
     private String captcha;
 }

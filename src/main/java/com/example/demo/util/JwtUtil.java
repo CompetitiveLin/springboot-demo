@@ -20,10 +20,10 @@ import java.util.Map;
 public class JwtUtil {
 
 //    @Value("${jwt.secret}")   // value无法给static变量赋值
-    private static String secret = "CompetitiveLin";
+    private static final String secret = "CompetitiveLin";
 
 //    @Value("${jwt.expiration}")
-    private static Long expiration = 604800L;
+    private static final Long expiration = 604800L;
 
     /**
      * 生成jwt

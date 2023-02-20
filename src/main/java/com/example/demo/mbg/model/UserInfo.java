@@ -1,47 +1,48 @@
 package com.example.demo.mbg.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serializable;
 import java.util.Date;
 
 public class UserInfo implements Serializable {
-    @ApiModelProperty(value = "用户id")
+    @Schema(name = "用户id")
     private Long id;
 
-    @ApiModelProperty(value = "用户名")
+    @Schema(name = "用户名")
     private String username;
 
-    @ApiModelProperty(value = "密码")
+    @Schema(name = "密码")
     private String password;
 
-    @ApiModelProperty(value = "状态：0锁定，1有效")
+    @Schema(name = "状态：0锁定，1有效")
     private Byte status;
 
-    @ApiModelProperty(value = "昵称")
+    @Schema(name = "昵称")
     private String nickname;
 
-    @ApiModelProperty(value = "电子邮箱")
+    @Schema(name = "电子邮箱")
     private String email;
 
-    @ApiModelProperty(value = "头像")
+    @Schema(name = "头像")
     private String avatar;
 
-    @ApiModelProperty(value = "电话号码")
+    @Schema(name = "电话号码")
     private String phoneNumber;
 
-    @ApiModelProperty(value = "账号创建时间")
+    @Schema(name = "账号创建时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "账号修改时间")
+    @Schema(name = "账号修改时间")
     private Date modifiedTime;
 
-    @ApiModelProperty(value = "性别：0男，1女")
+    @Schema(name = "性别：0男，1女")
     private Byte sex;
 
-    @ApiModelProperty(value = "权限：0管理员，1教师，2家长")
+    @Schema(name = "权限：0管理员，1教师，2家长")
     private Byte permission;
 
-    @ApiModelProperty(value = "生日")
+    @Schema(name = "生日")
     private Date birth;
 
     private static final long serialVersionUID = 1L;
