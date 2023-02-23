@@ -18,9 +18,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by macro on 2019/12/25.
- */
+
 @Slf4j
 @Tag(name = "MinioController", description = "MinIO对象存储管理")
 @Controller

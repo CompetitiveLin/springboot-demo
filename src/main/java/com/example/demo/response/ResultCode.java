@@ -5,7 +5,6 @@ import lombok.Getter;
 
 /**
  * 常用API返回对象
- * Created by macro on 2019/4/19.
  */
 @AllArgsConstructor
 @Getter

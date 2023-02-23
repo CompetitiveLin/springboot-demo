@@ -5,7 +5,6 @@ import lombok.Setter;
 
 /**
  * 通用返回对象
- * Created by macro on 2019/4/19.
  */
 @Getter
 @Setter

@@ -13,7 +13,6 @@ import java.io.IOException;
 
 /**
  * 自定义返回结果：未登录或登录过期
- * Created by macro on 2018/5/14.
  */
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
