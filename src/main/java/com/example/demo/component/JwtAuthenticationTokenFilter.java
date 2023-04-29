@@ -20,6 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.example.demo.constant.AuthorizationConstant.HEADER_NAME;
+import static com.example.demo.constant.AuthorizationConstant.HEADER_PREFIX;
+
 /**
  * @className: JwtAuthenticationTokenFilter
  * @description: jwt过滤器,每次请求都会经过这个filter
@@ -31,18 +34,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Value("${jwt.tokenHeader}")
-    private String tokenHeader;
-
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, ServletException, IOException {
         log.info("doFilterInternal");
-        String authHeader  = request.getHeader(tokenHeader);
-        if (ObjectUtil.isNotNull(authHeader )) {
-            String authToken = authHeader.substring(tokenHead.length() + 1);    // The part after "Bearer "
+        String authHeader  = request.getHeader(HEADER_NAME);
+        if (ObjectUtil.isNotNull(authHeader)) {
+            String authToken = authHeader.substring(HEADER_PREFIX.length());    // The part after "Bearer "
             String userName = JwtUtil.getUserNameToken(authToken);
             //当userName不为空且没经过认证时进行校验token是否为有效token
             if (ObjectUtil.isNotNull(userName) && ObjectUtil.isNull(SecurityContextHolder.getContext().getAuthentication())) {

@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import static com.example.demo.constant.AuthorizationConstant.HEADER_PREFIX;
+import static com.example.demo.constant.RedisKeyConstant.token.TOKEN_USERNAME;
+
 @Service
 public class TokenServiceImpl implements TokenService {
 
@@ -17,16 +20,17 @@ public class TokenServiceImpl implements TokenService {
     @Value("${jwt.expiration}")
     private Long JWT_EXPIRATION;
 
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
-
     @Override
     public String refreshToken(String token) {
-        token = token.substring(tokenHead.length() + 1);    // The part after "Bearer "
+        token = token.substring(HEADER_PREFIX.length());    // The part after "Bearer "
         if(!JwtUtil.isNotExpiredToken(token)) Asserts.fail("Token已过期");
         else if(!JwtUtil.verifyToken(token)) Asserts.fail("Invalid Token");
         String newToken = JwtUtil.refreshToken(token);
-        redisUtil.stringSet("token:" + JwtUtil.getUserNameToken(newToken), newToken, JWT_EXPIRATION);
+
+        // 为方便查看，存入redis中，但其实没必要存到redis中
+        String key = TOKEN_USERNAME + JwtUtil.getUserNameToken(newToken);
+        redisUtil.stringSet(key, newToken, JWT_EXPIRATION);
+
         return newToken;
     }
 }

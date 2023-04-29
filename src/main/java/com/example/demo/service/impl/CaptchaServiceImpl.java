@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.ShearCaptcha;
+import cn.hutool.core.util.ObjectUtil;
 import com.example.demo.util.RedisUtil;
 import com.example.demo.exception.Asserts;
 import com.example.demo.service.CaptchaService;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
+
+import static com.example.demo.constant.RedisKeyConstant.captcha.CAPTCHA_UUID;
 
 @Service
 @Slf4j
@@ -31,10 +34,9 @@ public class CaptchaServiceImpl implements CaptchaService {
         ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(90, 34, 4, 3);
         //设置背景颜色
         captcha.setBackground(Color.WHITE);
-        //验证图形验证码的有效性，返回boolean值
-        captcha.verify("60");
+        String key = CAPTCHA_UUID + uuid;
         //将字符长存入redis，并判断redis中是否存在
-        boolean redisCode = redisUtil.stringSet("captcha:" + uuid, captcha.getCode(), 60);
+        boolean redisCode = redisUtil.stringSet(key, captcha.getCode(), 60);
         //如果存入redis中失败，抛出异常
         //这里是自定义异常类，可以自行处理，不影响
         if (!redisCode) {

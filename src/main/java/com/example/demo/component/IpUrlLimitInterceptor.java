@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import static com.example.demo.constant.RedisKeyConstant.limiter.*;
+
 /**
  * @package: com.example.demo.component
  * @className: IpUrlLimitInterceptor
@@ -29,18 +31,6 @@ public class IpUrlLimitInterceptor implements HandlerInterceptor {
     @Autowired
     private RedisUtil redisUtil;
 
-    private static final String LOCK_IP_URL_KEY = "ip_url_lock:locked:";
-
-    private static final String IP_URL_REQ_TIME = "ip_url_lock:times:";
-
-    /*
-    Allowing 5 times max of same request uri within 1 second, otherwise ip get locked for 60 seconds.
-     */
-    private static final long LIMIT_TIMES = 5;
-
-    private static final int IP_LOCK_TIME = 60;
-
-    private static final int LIMIT_SECOND = 1;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
@@ -73,7 +63,7 @@ public class IpUrlLimitInterceptor implements HandlerInterceptor {
      * @Description: 判断ip是否被禁用
      */
     private Boolean ipIsLock(String ip) {
-        if (redisUtil.hasKey(LOCK_IP_URL_KEY + ip)) {
+        if (redisUtil.hasKey(IP_URL_BLOCK + ip)) {
             return true;
         }
         return false;
@@ -86,11 +76,11 @@ public class IpUrlLimitInterceptor implements HandlerInterceptor {
      * @Description: 记录请求次数
      */
     private Boolean addRequestTime(String ip, String uri) {
-        String key = IP_URL_REQ_TIME + ip + ":" + uri;
+        String key = IP_URL_TIMES + ip + ":" + uri;
         if (redisUtil.hasKey(key)) {
             long time = redisUtil.stringIncr(key, 1);
             if (time >= LIMIT_TIMES) {
-                redisUtil.getLock(LOCK_IP_URL_KEY + ip, ip, IP_LOCK_TIME);
+                redisUtil.getLock(IP_URL_BLOCK + ip, ip, IP_LOCK_TIME);
                 return false;
             }
         } else {

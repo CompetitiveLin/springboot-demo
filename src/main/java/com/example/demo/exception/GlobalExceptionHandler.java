@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ResponseBody
+    @ResponseStatus
     @ExceptionHandler(value = ApiException.class)
     public CommonResult handle(ApiException e) {
         if (e.getErrorCode() != null) {
@@ -31,6 +33,7 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseBody
+    @ResponseStatus
     @ExceptionHandler(value = BindException.class)
     public CommonResult handleValidException(BindException e) {
         BindingResult bindingResult = e.getBindingResult();

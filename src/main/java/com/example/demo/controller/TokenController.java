@@ -14,12 +14,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.demo.constant.AuthorizationConstant.HEADER_NAME;
+import static com.example.demo.constant.AuthorizationConstant.HEADER_PREFIX;
+
 @Tag(name = "TokenController", description = "Token管理")
 @RestController
 public class TokenController {
-
-    @Value("${jwt.tokenHeader}")
-    private String tokenHeader;
 
     @Autowired
     private TokenService tokenService;
@@ -27,8 +27,8 @@ public class TokenController {
     @Operation(description = "刷新Token")
     @RequestMapping(value = "/refreshToken",  method = RequestMethod.GET)
     public CommonResult refresh(HttpServletRequest request){
-        String token = request.getHeader(tokenHeader);
-        String newToken = tokenService.refreshToken(token);
+        String token = request.getHeader(HEADER_NAME);
+        String newToken = HEADER_PREFIX + tokenService.refreshToken(token);
         Map<String, String> map = new HashMap<>();
         map.put("token", newToken);
         return CommonResult.success(map);

@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
+
 /**
  * 自定义返回结果：没有权限访问时
  */
@@ -20,6 +22,7 @@ public class RestfulAccessDeniedHandler implements AccessDeniedHandler{
     public void handle(HttpServletRequest request,
                        HttpServletResponse response,
                        AccessDeniedException e) throws IOException, ServletException {
+        response.setStatus(SC_UNAUTHORIZED);
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Cache-Control","no-cache");
         response.setCharacterEncoding("UTF-8");

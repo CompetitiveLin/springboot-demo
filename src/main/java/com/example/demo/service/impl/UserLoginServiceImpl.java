@@ -29,6 +29,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.demo.constant.RedisKeyConstant.captcha.CAPTCHA_UUID;
+import static com.example.demo.constant.RedisKeyConstant.token.TOKEN_USERNAME;
+
 @Service
 @Slf4j
 public class UserLoginServiceImpl implements UserLoginService {
@@ -62,7 +65,8 @@ public class UserLoginServiceImpl implements UserLoginService {
     @Override
     public String login(LoginDto loginDto) {
         try{
-            Object redisCode = redisUtil.stringGet("captcha:" + loginDto.getUuid());
+            String key = CAPTCHA_UUID + loginDto.getUuid();
+            Object redisCode = redisUtil.stringGet(key);
             if(ObjectUtil.notEqual(redisCode, loginDto.getCaptcha())){
                 throw new Exception("验证码错误");
             }
@@ -70,7 +74,7 @@ public class UserLoginServiceImpl implements UserLoginService {
             if (!passwordEncoder.matches(loginDto.getPassword(), userDetails.getPassword())) {
                 throw new Exception("密码错误");
             }
-            redisUtil.delete("captcha:" + loginDto.getUuid());
+            redisUtil.delete(key);
             //获得HttpServletRequest对象
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
@@ -82,7 +86,10 @@ public class UserLoginServiceImpl implements UserLoginService {
             Map<String, Object> map = new HashMap<>();
             map.put("username", loginDto.getUsername());
             String token = JwtUtil.create(map);
-            redisUtil.stringSet("token:" + JwtUtil.getUserNameToken(token), token, JWT_EXPIRATION);
+            // 为方便查看，存入redis中，但其实没必要存到redis中
+            String key_token = TOKEN_USERNAME + JwtUtil.getUserNameToken(token);
+            redisUtil.stringSet(key_token, token, JWT_EXPIRATION);
+
             return token;
         }
         catch(Exception e){
