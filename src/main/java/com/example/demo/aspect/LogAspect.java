@@ -1,7 +1,9 @@
 package com.example.demo.aspect;
 
+import com.example.demo.exception.Asserts;
 import com.example.demo.service.SysLogService;
 import com.example.demo.util.IpUtil;
+import lombok.SneakyThrows;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -28,18 +30,18 @@ public class LogAspect {
     public void pointcut() { }
 
     @Around("pointcut()")
+    @SneakyThrows
     public Object around(ProceedingJoinPoint point) {
         Object result = null;
         long beginTime = System.currentTimeMillis();
-        try {
-            // 执行方法
-            result = point.proceed();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        // 执行时长(毫秒)
+        result = point.proceed();
+//        try {
+//            // 执行方法
+//            result = point.proceed();
+//        } catch (Throwable e) {
+//            Asserts.fail(e.getMessage());
+//        }
         long time = System.currentTimeMillis() - beginTime;
-        // 保存日志
         saveLog(point, time);
         return result;
     }
