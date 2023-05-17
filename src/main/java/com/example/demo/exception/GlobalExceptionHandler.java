@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 全局异常处理
@@ -46,5 +49,14 @@ public class GlobalExceptionHandler {
             }
         }
         return CommonResult.validateFailed(map);
+    }
+
+
+    @ResponseBody
+    @ResponseStatus
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    public CommonResult handleValidException(ConstraintViolationException ex) {
+        return CommonResult.validateFailed(ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(";")));
+
     }
 }

@@ -10,8 +10,12 @@ public interface UserInfoService {
     List<UserInfo> getAll();
 
     @Transactional
-    int updatePassword(String username, String oldPassword, String newPassword);
+    void updatePassword(String username, String oldPassword, String newPassword);
 
     UserInfo getUserByUsername(String username);
+
+    UserInfo getUserByEmail(String emailAddress);
+    
+    void resetPassword(String emailAddress, String captcha, String newPassword);
 
 }

@@ -123,13 +123,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(
                             "/js/**", "/css/**","/images/**",
                             "/swagger-resources/**", "/v3/**", "/swagger-ui/**"   //访问swagger所需的静态资源
-                            ,"/getRandomCode","/login", "/register"
+                            ,"/getCaptcha","/login","/loginCheck", "/register", "/sendEmailCaptcha"
                             )
                     .permitAll()
-//                    .antMatchers("/getRandomCode").hasAuthority("TEST")
-                    .antMatchers("/**")   //测试时全部运行访问
-                    .permitAll()
-                    .anyRequest().authenticated()  // 除上面外的所有请求全部需要鉴权认证
+//                    .antMatchers("/**")   //测试时全部允许访问
+//                    .permitAll()
+//                    .anyRequest().authenticated()  // 除上面外的所有请求全部需要鉴权认证
                     .and()
                 .formLogin()
                     .loginPage("/login.html")

@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.example.demo.annotation.Log;
+import com.example.demo.exception.Asserts;
 import com.example.demo.response.CommonResult;
+import com.example.demo.util.JwtUtil;
 import com.example.demo.util.RedisUtil;
 import com.example.demo.dto.LoginDto;
 import com.example.demo.dto.UpdatePasswordDto;
@@ -12,17 +15,24 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.demo.constant.AuthorizationConstant.HEADER_NAME;
+import static com.example.demo.constant.AuthorizationConstant.HEADER_PREFIX;
+
 @RestController
 @Slf4j
+@Validated
 @Tag(name = "UserController", description = "管理用户登录等信息")
 public class UserController {
     @Autowired
@@ -37,23 +47,40 @@ public class UserController {
     /**
      * 参数用表单登录，没有@RequestBody注解。即使方法中的参数是LoginDto类型，但是在实际的参数传输过程中还是以LoginDto里的基本数据类型为准。
      * 例如LoginDto包含username,password,uuid,captcha.前端发送请求时还是按照上述四个参数进行的。LoginDto的作用只是在后端简化方法内的参数。
+     * 相反，如果有@RequestBody，那么curl为：
+     * curl -X POST -H "Content-type: application/json" -d "{\"username\" : \"John\", \"password\" : \"123\", \"uuid\" : \"1\", \"captcha\" : \"1234\"}" "http://localhost:8080/response/postbody"
      * @param loginDto
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @Operation(description = "用户登录")
     public CommonResult login(LoginDto loginDto){
-        String token = userLoginService.login(loginDto);
+        String token = HEADER_PREFIX + userLoginService.login(loginDto);
         if(token == null) return CommonResult.failed("用户名或密码不正确");  // 根据ServiceImpl里的内容，token永远不可能为null，要么已经抛异常，要么返回正确的token
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", token);
         return CommonResult.success(tokenMap);
     }
 
+    @GetMapping("/loginCheck")
+    @Operation(description = "登录状态检查")
+    public CommonResult check(HttpServletRequest httpServletRequest){
+        String authToken = httpServletRequest.getHeader(HEADER_NAME);
+        if (ObjectUtil.isNull(authToken)) Asserts.fail("Token is null");
+        String token = authToken.substring(HEADER_PREFIX.length());
+        String username = JwtUtil.getUserNameToken(token);
+        UserInfo userInfo = userInfoService.getUserByUsername(username);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("username", username);
+        hashMap.put("nickname", userInfo.getNickname());
+        hashMap.put("role", userInfo.getPermission()==(byte)0 ? "student": "teacher");
+        return CommonResult.success(hashMap);
+    }
+
     @Log
     @RequestMapping(value = "/getAll",method = RequestMethod.GET)
     @Operation(description = "查询所有用户")
-    @PreAuthorize("hasAuthority('admin')")
+    @PreAuthorize("hasAuthority('student')")
     public CommonResult getUser(){
         //日志级别从小到大为 trace < debug < info < warn < error < fatal,由于默认日志级别设置为 INFO，因此 trace 和 debug 级别的日志都看不到。
         log.trace("Trace 日志...");
@@ -68,11 +95,17 @@ public class UserController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @Operation(description = "update password")
-    public CommonResult updatePassword(@Validated @RequestBody UpdatePasswordDto updatePasswordDto){   //当UpdatePasswordDto里的参数不符合要求时，会抛出BindingException的异常，接着会被全局异常捕捉器捕捉，返回异常消息
-        int count = userInfoService.updatePassword(updatePasswordDto.getUsername(), updatePasswordDto.getOldPassword(), updatePasswordDto.getNewPassword());
-        if(count == -1) return CommonResult.failed("不存在该用户名");
-        else if(count == -2) return CommonResult.failed("旧密码不匹配");
-        else if(count == -3) return CommonResult.failed("新旧密码不能一致");
+    public CommonResult updatePassword(@NotNull(message = "null username") String username,
+                                       @Length(min = 6, max = 12) String oldPassword,
+                                       @Length(min = 6, max = 12) String newPassword){   //当UpdatePasswordDto里的参数不符合要求时，会抛出BindingException的异常，接着会被全局异常捕捉器捕捉，返回异常消息
+        userInfoService.updatePassword(username, oldPassword, newPassword);
+        return CommonResult.success();
+    }
+
+    @PostMapping(value = "/reset")
+    @Operation(description = "reset password")
+    public CommonResult resetPassword(String emailAddress, String captcha, String newPassword){
+        userInfoService.resetPassword(emailAddress, captcha, newPassword);
         return CommonResult.success();
     }
 

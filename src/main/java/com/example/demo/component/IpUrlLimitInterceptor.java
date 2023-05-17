@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import static com.example.demo.constant.AuthorizationConstant.HEADER_NAME;
 import static com.example.demo.constant.RedisKeyConstant.limiter.*;
 
 /**
@@ -33,7 +34,7 @@ public class IpUrlLimitInterceptor implements HandlerInterceptor {
 
 
     @Override
-    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
+    public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
         log.info("Interceptor preHandle: requestUri = {}, ip = {}", httpServletRequest.getRequestURI(), IpUtil.getIpAddr(httpServletRequest));
         if (ipIsLock(IpUtil.getIpAddr(httpServletRequest))) {
             log.info("ip = {} is locked", IpUtil.getIpAddr(httpServletRequest));
@@ -48,12 +49,12 @@ public class IpUrlLimitInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler, ModelAndView modelAndView) throws Exception {
         log.info("Interceptor postHandle");
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
+    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler, Exception e) throws Exception {
         log.info("Interceptor afterCompletion");
     }
 

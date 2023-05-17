@@ -50,7 +50,7 @@ public class JwtUtil {
             jsonObject = JWTUtil.parseToken(token).getPayload().getClaimsJson();
         }
         catch (Exception e){
-            log.info("JWT格式验证失败");
+            log.error("JWT格式验证失败");
         }
         return jsonObject;
     }
