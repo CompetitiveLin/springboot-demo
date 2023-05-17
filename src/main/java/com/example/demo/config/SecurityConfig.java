@@ -128,7 +128,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
 //                    .antMatchers("/**")   //测试时全部允许访问
 //                    .permitAll()
-//                    .anyRequest().authenticated()  // 除上面外的所有请求全部需要鉴权认证
+                    .anyRequest().authenticated()  // 除上面外的所有请求全部需要鉴权认证
                     .and()
                 .formLogin()
                     .loginPage("/login.html")
