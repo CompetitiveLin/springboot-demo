@@ -6,14 +6,11 @@ import com.example.demo.annotation.ParseToken;
 import com.example.demo.exception.Asserts;
 import com.example.demo.response.CommonResult;
 import com.example.demo.util.JwtUtil;
-import com.example.demo.util.RedisUtil;
 import com.example.demo.dto.LoginDto;
-import com.example.demo.dto.UpdatePasswordDto;
 import com.example.demo.mbg.model.UserInfo;
 import com.example.demo.service.UserInfoService;
 import com.example.demo.service.UserLoginService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.Length;
@@ -23,7 +20,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,18 +28,17 @@ import static com.example.demo.constant.AuthorizationConstant.HEADER_NAME;
 import static com.example.demo.constant.AuthorizationConstant.HEADER_PREFIX;
 
 @RestController
+@RequestMapping("/user")
 @Slf4j
 @Validated
 @Tag(name = "UserController", description = "管理用户登录等信息")
 public class UserController {
+
     @Autowired
     private UserInfoService userInfoService;
 
     @Autowired
     private UserLoginService userLoginService;
-
-    @Autowired
-    private RedisUtil redisUtil;
 
     /**
      * 参数用表单登录，没有@RequestBody注解。即使方法中的参数是LoginDto类型，但是在实际的参数传输过程中还是以LoginDto里的基本数据类型为准。
@@ -63,7 +58,7 @@ public class UserController {
         return CommonResult.success(tokenMap);
     }
 
-    @GetMapping("/loginCheck")
+    @GetMapping("/login-check")
     @Operation(description = "登录状态检查")
     public CommonResult check(HttpServletRequest httpServletRequest){
         String bearerToken = httpServletRequest.getHeader(HEADER_NAME);
@@ -78,7 +73,7 @@ public class UserController {
     }
 
     @Log
-    @RequestMapping(value = "/getAll",method = RequestMethod.GET)
+    @RequestMapping(value = "/get-all",method = RequestMethod.GET)
     @Operation(description = "查询所有用户")
     @PreAuthorize("hasAuthority('student')")
     public CommonResult getUser(){
@@ -102,30 +97,13 @@ public class UserController {
         return CommonResult.success();
     }
 
-    @PostMapping(value = "/reset")
+    @PostMapping(value = "/reset-password")
     @Operation(description = "reset password")
     public CommonResult resetPassword(String emailAddress, String captcha, String newPassword){
         userInfoService.resetPassword(emailAddress, captcha, newPassword);
         return CommonResult.success();
     }
 
-
-    /**
-     * 带有@RequestParam：url?后的参数
-     * @param key
-     * @param value
-     * @param time
-     * @return
-     */
-    @RequestMapping(value = "/redis", method = RequestMethod.GET)
-    @Operation(description = "test redis", parameters = {
-            @Parameter(name = "key", description = "键"),
-            @Parameter(name = "value", description = "值"),
-            @Parameter(name = "time", description = "时长")})
-    public CommonResult testRedis(@RequestParam(defaultValue = "key") String key,@RequestParam(defaultValue = "value") String value,@RequestParam(defaultValue = "-1") Integer time){   // 为防止time为null抛出异常，参数中应该为包装类型
-        redisUtil.stringSet(key,value,time);
-        return CommonResult.success();
-    }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @Operation(description = "Register user")

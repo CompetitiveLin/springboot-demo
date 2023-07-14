@@ -462,6 +462,107 @@ public final class RedisUtil {
     }
 
 
+    // =============================== Zset =================================
+
+    /**
+     * 增加有序集合
+     *
+     * @param key
+     * @param value
+     * @param score
+     * @return
+     */
+    public Boolean addIfAbsentZset(String key, Object value, double score) {
+        try {
+            return redisTemplate.opsForZSet().addIfAbsent(key, value, score);
+        } catch (Exception e) {
+            log.error("[RedisUtils.addZset] [error]", e);
+            return false;
+        }
+    }
+
+    /**
+     * 获取zset集合数量
+     *
+     * @param key
+     * @return
+     */
+    public Long countZset(String key) {
+        try {
+            return redisTemplate.opsForZSet().size(key);
+        } catch (Exception e) {
+            log.error("[RedisUtils.countZset] [error] [key is {}]", key, e);
+            return 0L;
+        }
+    }
+
+    /**
+     * 获取zset指定范围内的集合
+     *
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    public Set<Object> rangeZset(String key, long start, long end) {
+        try {
+            return redisTemplate.opsForZSet().range(key, start, end);
+        } catch (Exception e) {
+            log.error("[RedisUtils.rangeZset] [error] [key is {},start is {},end is {}]", key, start, end, e);
+            return null;
+        }
+    }
+
+
+    /**
+     * 根据key和value移除指定元素
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    public Long removeZset(String key, Object value) {
+        return redisTemplate.opsForZSet().remove(key, value);
+    }
+
+
+    /**
+     * 获取对应key和value的score
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    public Double score(String key, Object value) {
+        return redisTemplate.opsForZSet().score(key, value);
+    }
+
+    /**
+     * 指定元素增加指定值
+     *
+     * @param key
+     * @param obj
+     * @param score
+     * @return
+     */
+    public Object addScore(String key, Object obj, double score) {
+        return redisTemplate.opsForZSet().incrementScore(key, obj, score);
+    }
+
+    /**
+     * 排名
+     *
+     * @param key
+     * @param obj
+     * @return
+     */
+    public Object rank(String key, Object obj) {
+        return redisTemplate.opsForZSet().rank(key, obj);
+    }
+
+
+
+
     // ===============================List=================================
 
     /**
@@ -630,6 +731,15 @@ public final class RedisUtil {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    // ========================== Bitmap =============================
+
+    /**
+     *
+     */
+    public boolean setBit(String key, long offset, boolean value){
+        return redisTemplate.opsForValue().setBit(key, offset, true);
     }
 
 }

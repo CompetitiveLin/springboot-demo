@@ -5,23 +5,23 @@ import com.example.demo.response.IErrorCode;
 /**
  * 自定义API异常
  */
-public class ApiException extends RuntimeException {
+public class CustomException extends RuntimeException {
     private IErrorCode errorCode;
 
-    public ApiException(IErrorCode errorCode) {
+    public CustomException(IErrorCode errorCode) {
         super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 
-    public ApiException(String message) {
+    public CustomException(String message) {
         super(message);
     }
 
-    public ApiException(Throwable cause) {
+    public CustomException(Throwable cause) {
         super(cause);
     }
 
-    public ApiException(String message, Throwable cause) {
+    public CustomException(String message, Throwable cause) {
         super(message, cause);
     }
 

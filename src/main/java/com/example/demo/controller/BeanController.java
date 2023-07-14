@@ -10,13 +10,13 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/bean")
 public class BeanController {
 
     @Autowired
     private ApplicationContext applicationContext;
 
-    @GetMapping("/beanList")
+    @GetMapping("/bean-list")
     public List<String> beanList() {
         return Arrays.asList(applicationContext.getBeanDefinitionNames());
     }

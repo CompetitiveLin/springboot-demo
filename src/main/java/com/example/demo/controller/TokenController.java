@@ -19,13 +19,14 @@ import static com.example.demo.constant.AuthorizationConstant.HEADER_PREFIX;
 
 @Tag(name = "TokenController", description = "Token管理")
 @RestController
+@RequestMapping("/token")
 public class TokenController {
 
     @Autowired
     private TokenService tokenService;
 
     @Operation(description = "刷新Token")
-    @RequestMapping(value = "/refreshToken",  method = RequestMethod.POST)
+    @RequestMapping(value = "/refresh-token",  method = RequestMethod.POST)
     public CommonResult refresh(HttpServletRequest request){
         String token = request.getHeader(HEADER_NAME);
         String newToken = HEADER_PREFIX + tokenService.refreshToken(token);

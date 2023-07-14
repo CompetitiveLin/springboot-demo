@@ -9,11 +9,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
 
 @RestController
+@RequestMapping("/confirmation")
 @RequiredArgsConstructor
 @Validated
 public class ConfirmationController {
@@ -44,28 +46,28 @@ public class ConfirmationController {
     }
 
 //    @PreAuthorize("hasAuthority('student')")
-    @PostMapping("/clickInformation")
+    @PostMapping("/confirm/information")
     public CommonResult clickInformation(String username) {
         confirmationService.clickInformation(username);
         return CommonResult.success();
     }
 
 //    @PreAuthorize("hasAuthority('student')")
-    @PostMapping("/clickCourse")
+    @PostMapping("/confirm/course")
     public CommonResult clickCourse(String username){
         confirmationService.clickCourse(username);
         return CommonResult.success();
     }
 
 //    @PreAuthorize("hasAuthority('student')")
-    @PostMapping("/clickAcademic")
+    @PostMapping("/confirm/academic")
     public CommonResult clickAcademic(String username){
         confirmationService.clickAcademic(username);
         return CommonResult.success();
     }
 
 
-    @PostMapping("/submit")
+    @PostMapping("/confirm/submit")
     public CommonResult submitDissertation(@NotNull String username,
                                            @NotNull String title,
                                            @NotNull String keywords,

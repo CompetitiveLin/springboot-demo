@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Controller
 @Tag(name = "MemberReadHistoryController", description = "会员商品浏览记录管理")
-@RequestMapping("/member/readHistory")
+@RequestMapping("/member/read-history")
 public class MemberReadHistoryController {
     @Autowired
     private MemberReadHistoryService memberReadHistoryService;

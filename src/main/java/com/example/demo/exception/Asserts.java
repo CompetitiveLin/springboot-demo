@@ -8,10 +8,10 @@ import com.example.demo.response.IErrorCode;
  */
 public class Asserts {
     public static void fail(String message) {
-        throw new ApiException(message);
+        throw new CustomException(message);
     }
 
     public static void fail(IErrorCode errorCode) {
-        throw new ApiException(errorCode);
+        throw new CustomException(errorCode);
     }
 }

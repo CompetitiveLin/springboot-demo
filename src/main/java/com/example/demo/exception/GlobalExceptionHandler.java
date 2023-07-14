@@ -2,6 +2,7 @@ package com.example.demo.exception;
 
 import com.example.demo.response.CommonResult;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -24,9 +25,9 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ResponseBody
-    @ResponseStatus
-    @ExceptionHandler(value = ApiException.class)
-    public CommonResult handle(ApiException e) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = CustomException.class)
+    public CommonResult handle(CustomException e) {
         if (e.getErrorCode() != null) {
             log.error(e.getErrorCode().getMessage());
             return CommonResult.failed(e.getErrorCode());

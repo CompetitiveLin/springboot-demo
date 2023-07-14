@@ -123,7 +123,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(
                             "/js/**", "/css/**","/images/**",
                             "/swagger-resources/**", "/v3/**", "/swagger-ui/**"   //访问swagger所需的静态资源
-                            ,"/getCaptcha","/login","/loginCheck", "/register", "/sendEmailCaptcha"
+                            ,"/captcha/getCaptcha","/user/login", "/user/register", "/captcha/sendEmailCaptcha"
                             )
                     .permitAll()
 //                    .antMatchers("/**")   //测试时全部允许访问
