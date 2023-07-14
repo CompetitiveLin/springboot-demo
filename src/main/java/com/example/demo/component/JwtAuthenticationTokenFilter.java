@@ -37,16 +37,16 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, ServletException, IOException {
         log.info("doFilterInternal");
-        String authHeader  = request.getHeader(HEADER_NAME);
-        if (ObjectUtil.isNotNull(authHeader)) {
-            String authToken = authHeader.substring(HEADER_PREFIX.length());    // The part after "Bearer "
-            String userName = JwtUtil.getUserNameToken(authToken);
+        String bearerToken  = request.getHeader(HEADER_NAME);
+        if (ObjectUtil.isNotNull(bearerToken)) {
+            String token = bearerToken.substring(HEADER_PREFIX.length());    // The part after "Bearer "
+            String userName = JwtUtil.getUserNameToken(token);
             //当userName不为空且没经过认证时进行校验token是否为有效token
             if (ObjectUtil.isNotNull(userName) && ObjectUtil.isNull(SecurityContextHolder.getContext().getAuthentication())) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
                 UserInfoDetails user = (UserInfoDetails) userDetails;
                 //检验token，新增下面的if判断
-                if (StrUtil.equals(userName,user.getUsername()) && JwtUtil.verifyToken(authToken)) {
+                if (StrUtil.equals(userName,user.getUsername()) && JwtUtil.verifyToken(token)) {
                     /**
                      * UsernamePasswordAuthenticationToken继承AbstractAuthenticationToken实现Authentication
                      * 所以当在页面中输入用户名和密码之后首先会进入到UsernamePasswordAuthenticationToken验证(Authentication)，

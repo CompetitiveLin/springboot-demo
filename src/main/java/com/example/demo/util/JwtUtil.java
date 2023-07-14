@@ -11,6 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.demo.constant.AuthorizationConstant.HEADER_PREFIX;
+
 /**
  * jwt工具类
  * @author yueranzs
@@ -86,9 +88,20 @@ public class JwtUtil {
         return parse(token) == null ? null : Long.parseLong(parse(token).get("expire_time").toString());
     }
 
+
     /**
      * 获取登录人账号
-     * @param token
+     * @param bearerToken is like `Bearer XXXXXXXXXX`
+     * @return
+     */
+    public static String getUserNameBearerToken(String bearerToken){
+        return getUserNameToken(bearerToken.substring(HEADER_PREFIX.length()));
+    }
+
+
+    /**
+     * 获取登录人账号
+     * @param token is like `XXXXXXXXXX`
      * @return
      */
     public static String getUserNameToken(String token){

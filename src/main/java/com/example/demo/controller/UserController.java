@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.example.demo.annotation.Log;
+import com.example.demo.annotation.ParseToken;
 import com.example.demo.exception.Asserts;
 import com.example.demo.response.CommonResult;
 import com.example.demo.util.JwtUtil;
@@ -65,10 +66,9 @@ public class UserController {
     @GetMapping("/loginCheck")
     @Operation(description = "登录状态检查")
     public CommonResult check(HttpServletRequest httpServletRequest){
-        String authToken = httpServletRequest.getHeader(HEADER_NAME);
-        if (ObjectUtil.isNull(authToken)) Asserts.fail("Token is null");
-        String token = authToken.substring(HEADER_PREFIX.length());
-        String username = JwtUtil.getUserNameToken(token);
+        String bearerToken = httpServletRequest.getHeader(HEADER_NAME);
+        if (ObjectUtil.isNull(bearerToken)) Asserts.fail("Token is null");
+        String username = JwtUtil.getUserNameBearerToken(bearerToken);
         UserInfo userInfo = userInfoService.getUserByUsername(username);
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("username", username);
@@ -95,7 +95,7 @@ public class UserController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @Operation(description = "update password")
-    public CommonResult updatePassword(@NotNull(message = "null username") String username,
+    public CommonResult updatePassword(@ParseToken String username,
                                        @Length(min = 6, max = 12) String oldPassword,
                                        @Length(min = 6, max = 12) String newPassword){   //当UpdatePasswordDto里的参数不符合要求时，会抛出BindingException的异常，接着会被全局异常捕捉器捕捉，返回异常消息
         userInfoService.updatePassword(username, oldPassword, newPassword);
