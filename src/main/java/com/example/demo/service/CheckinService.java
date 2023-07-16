@@ -3,7 +3,7 @@ package com.example.demo.service;
 public interface CheckinService {
     void checkin(String username);
 
-    boolean isCheckin(String username);
+    String checkinMonthlyList(String username, String date);
 
     void lateCheckin(String username, String date);
 

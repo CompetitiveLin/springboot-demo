@@ -2,6 +2,8 @@ package com.example.demo.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.BitFieldSubCommands;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
@@ -738,8 +740,35 @@ public final class RedisUtil {
     /**
      *
      */
-    public boolean setBit(String key, long offset, boolean value){
-        return redisTemplate.opsForValue().setBit(key, offset, true);
+    public Boolean setBit(String key, long offset, boolean value){
+        return redisTemplate.opsForValue().setBit(key, offset, value);
     }
+
+    public Boolean bitGet(String key, int offset) {
+        return redisTemplate.opsForValue().getBit(key, offset);
+    }
+
+    /**
+     * 统计计数
+     *
+     * @param key
+     * @return
+     */
+    public Long bitCount(String key) {
+        return redisTemplate.execute((RedisCallback<Long>) redisConnection -> redisConnection.bitCount(key.getBytes()));
+    }
+
+    /**
+     * 获取多字节位域
+     * @param key
+     * @param limit
+     * @param offset
+     * @return
+     */
+    public List<Long> bitfield(String key, int limit, long offset) {
+        return redisTemplate.opsForValue().bitField(
+                key, BitFieldSubCommands.create().get(BitFieldSubCommands.BitFieldType.unsigned(limit)).valueAt(offset));
+    }
+
 
 }

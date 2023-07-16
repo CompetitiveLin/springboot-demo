@@ -20,20 +20,21 @@ public class CheckinController {
 
     private final CheckinService checkinService;
 
+
+    /**
+     * 签到
+     * @param username
+     * @return
+     */
     @PostMapping("/do")
     public CommonResult<Void> doCheckin(@ParseToken String username){
         checkinService.checkin(username);
         return CommonResult.success();
     }
 
-    @GetMapping("/check")
-    public CommonResult<Boolean> checkTodayIsCheckin(@ParseToken String username){
-        return CommonResult.success(checkinService.isCheckin(username));
-    }
-
 
     /**
-     *
+     *  指定日期补签
      * @param username
      * @param date be like 20230616
      * @return
@@ -46,19 +47,26 @@ public class CheckinController {
 
 
     /**
-     *
+     *  统计月级签到情况
      * @param username
      * @param date be like 202306
-     * @return
+     * @return count 表示当月签到数量， list 表示当月签到分布图，由0或1组成的字符串，第0位代表当月第一天签到情况
      */
-    @GetMapping("/count-monthly")
-    public CommonResult<?> countMonthly(@ParseToken String username, String date){
+    @GetMapping("/list-monthly")
+    public CommonResult<?> listMonthly(@ParseToken String username, String date){
         int count = checkinService.checkinMonthlyCount(username, date);
         Map<String, String> data = new HashMap<>();
         data.put("count", "" + count);
+        data.put("list", checkinService.checkinMonthlyList(username, date));
         return CommonResult.success(data);
     }
 
+
+    /**
+     * 统计连续签到情况
+     * @param username
+     * @return
+     */
     @GetMapping("/count-continuously")
     public CommonResult<?> countContinuously(@ParseToken String username){
         int count = checkinService.checkinContinuouslyCount(username);
