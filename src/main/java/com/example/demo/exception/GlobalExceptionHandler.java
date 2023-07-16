@@ -6,10 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -21,13 +18,12 @@ import java.util.stream.Collectors;
  * 全局异常处理
  */
 @Slf4j
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = CustomException.class)
-    public CommonResult handle(CustomException e) {
+    public CommonResult<String> handle(CustomException e) {
         if (e.getErrorCode() != null) {
             log.error(e.getErrorCode().getMessage());
             return CommonResult.failed(e.getErrorCode());
@@ -36,10 +32,17 @@ public class GlobalExceptionHandler {
         return CommonResult.failed(e.getMessage());
     }
 
-    @ResponseBody
-    @ResponseStatus
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = Exception.class)
+    public CommonResult<String> handleException(Exception e) {
+        log.error(e.getMessage());
+        return CommonResult.failed(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = BindException.class)
-    public CommonResult handleValidException(BindException e) {
+    public CommonResult<Map<String, String>> handleValidException(BindException e) {
         BindingResult bindingResult = e.getBindingResult();
         Map<String, String> map = new HashMap<>();
         if (bindingResult.hasErrors()) {
@@ -52,12 +55,9 @@ public class GlobalExceptionHandler {
         return CommonResult.validateFailed(map);
     }
 
-
-    @ResponseBody
-    @ResponseStatus
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = ConstraintViolationException.class)
-    public CommonResult handleValidException(ConstraintViolationException ex) {
+    public CommonResult<String> handleValidException(ConstraintViolationException ex) {
         return CommonResult.validateFailed(ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(";")));
-
     }
 }

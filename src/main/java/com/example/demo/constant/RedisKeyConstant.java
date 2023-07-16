@@ -3,9 +3,9 @@ package com.example.demo.constant;
 public interface RedisKeyConstant {
 
     interface user {
-        String USER_CHECKOUT = "user:checkout:";
+        String USER_CHECKIN = "user:checkin:";
 
-        String USER_CHECKOUT_RANK = "user:checkout:rank:";
+        String USER_CHECKIN_RANK = "user:checkin:rank:";
     }
 
 

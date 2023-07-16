@@ -25,7 +25,7 @@ public class CaptchaController {
     @Log
     @Operation(description = "获取验证码")
     @RequestMapping(value = "/get-captcha",  method = RequestMethod.GET)
-    public CommonResult getRandomCode(String uuid){
+    public CommonResult<?> getRandomCode(String uuid){
         if (ObjectUtil.isEmpty(uuid)) {
             Asserts.fail("UUID为空");
         }
@@ -35,7 +35,7 @@ public class CaptchaController {
 
     @Operation(description = "发送邮件验证码")
     @PostMapping("/send-email-captcha")
-    public CommonResult sendEmail(String emailAddress){
+    public CommonResult<Void> sendEmail(String emailAddress){
         emailService.sendEmail(emailAddress);
         return CommonResult.success();
     }

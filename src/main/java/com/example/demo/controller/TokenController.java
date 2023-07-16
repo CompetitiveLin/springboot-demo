@@ -27,7 +27,7 @@ public class TokenController {
 
     @Operation(description = "刷新Token")
     @RequestMapping(value = "/refresh-token",  method = RequestMethod.POST)
-    public CommonResult refresh(HttpServletRequest request){
+    public CommonResult<Map<String, String>> refresh(HttpServletRequest request){
         String token = request.getHeader(HEADER_NAME);
         String newToken = HEADER_PREFIX + tokenService.refreshToken(token);
         Map<String, String> map = new HashMap<>();
