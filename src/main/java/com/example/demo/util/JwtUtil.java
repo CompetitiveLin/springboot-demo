@@ -6,7 +6,10 @@ import cn.hutool.jwt.JWTUtil;
 import cn.hutool.jwt.signers.JWTSigner;
 import cn.hutool.jwt.signers.JWTSignerUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,13 +22,24 @@ import static com.example.demo.constant.AuthorizationConstant.HEADER_PREFIX;
  * @date 2021/11/25 15:55
  */
 @Slf4j
+@Component
 public class JwtUtil {
 
-//    @Value("${jwt.secret}")   // value无法给static变量赋值
-    private static final String secret = "CompetitiveLin";
+    private static String SECRET;
 
-//    @Value("${jwt.expiration}")
-    private static final Long expiration = 604800L;
+    private static Long EXPIRATION;
+
+    @Value("${jwt.secret}")         // value无法直接给static变量赋值
+    private String SECRET_TEMP;
+
+    @Value("${jwt.expiration}")
+    private Long EXPIRATION_TEMP;
+
+    @PostConstruct
+    private void init(){
+        SECRET = SECRET_TEMP;
+        EXPIRATION = EXPIRATION_TEMP;
+    }
 
     /**
      * 生成jwt
@@ -34,9 +48,9 @@ public class JwtUtil {
      */
     public static String create(Map<String,Object> payload){
         //每个jwt都默认生成一个到期时间
-        payload.put("expire_time", DateUtil.currentSeconds() + expiration);
+        payload.put("expire_time", DateUtil.currentSeconds() + EXPIRATION);
         //生成私钥
-        JWTSigner jwtSigner = JWTSignerUtil.hs256(secret.getBytes(StandardCharsets.UTF_8));
+        JWTSigner jwtSigner = JWTSignerUtil.hs256(SECRET.getBytes(StandardCharsets.UTF_8));
         //生成token
         return JWTUtil.createToken(payload,jwtSigner);
     }
@@ -65,7 +79,7 @@ public class JwtUtil {
     public static boolean verifyToken(String token){
         //先判断是否到期，再判断是否正确
         if (isNotExpiredToken(token)) {
-            return JWTUtil.verify(token,secret.getBytes(StandardCharsets.UTF_8));
+            return JWTUtil.verify(token, SECRET.getBytes(StandardCharsets.UTF_8));
         }
         return false;
     }
@@ -127,7 +141,7 @@ public class JwtUtil {
      * @return
      */
     public static boolean checkRefreshWithin(String token, long time){
-        return time > DateUtil.currentSeconds() + expiration - getExpiredToken(token);
+        return time > DateUtil.currentSeconds() + EXPIRATION - getExpiredToken(token);
     }
 
 

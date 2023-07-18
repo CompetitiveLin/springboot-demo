@@ -81,11 +81,11 @@ public class IpUrlLimitInterceptor implements HandlerInterceptor {
         if (redisUtil.hasKey(key)) {
             long time = redisUtil.stringIncr(key, 1);
             if (time >= LIMIT_TIMES) {
-                redisUtil.getLock(IP_URL_BLOCK + ip, ip, IP_LOCK_TIME);
+                redisUtil.stringSet(IP_URL_BLOCK + ip, ip, IP_LOCK_TIME);
                 return false;
             }
         } else {
-            redisUtil.getLock(key, (long) 1, LIMIT_SECOND);
+            redisUtil.stringSet(key, 1, LIMIT_SECOND);
         }
         return true;
     }

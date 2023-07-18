@@ -340,7 +340,7 @@ public interface RedisService {
      * @param b      状态
      * @return 结果
      */
-    Boolean bitAdd(String key, int offset, boolean b);
+    Boolean bitSet(String key, int offset, boolean value);
 
     /**
      * 从bitmap中获取偏移量的值

@@ -47,7 +47,7 @@ public class CheckinServiceImpl implements CheckinService {
         LocalDateTime now = LocalDateTime.now();
         String key = jointKey(now, username);
         int dayOfMonth = now.getDayOfMonth();
-        redisUtil.setBit(key, dayOfMonth -1, true);
+        redisUtil.bitSet(key, dayOfMonth -1, true);
 
         TemporalField temporalField = ChronoField.MILLI_OF_DAY;
         long score =  now.getLong(temporalField);
@@ -87,7 +87,7 @@ public class CheckinServiceImpl implements CheckinService {
         if(!(targetDate.isBefore(LocalDateTime.now()) && targetDate.isAfter(LocalDateTime.of(2000, 1, 1, 0, 0)))) throw new CustomException("Date Error");
         String key = jointKey(targetDate, username);
         int dayOfMonth = targetDate.getDayOfMonth();
-        redisUtil.setBit(key, dayOfMonth -1, true);
+        redisUtil.bitSet(key, dayOfMonth -1, true);
     }
 
     /**

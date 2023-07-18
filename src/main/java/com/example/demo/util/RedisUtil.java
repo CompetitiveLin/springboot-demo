@@ -740,7 +740,7 @@ public final class RedisUtil {
     /**
      *
      */
-    public Boolean setBit(String key, long offset, boolean value){
+    public Boolean bitSet(String key, long offset, boolean value){
         return redisTemplate.opsForValue().setBit(key, offset, value);
     }
 
