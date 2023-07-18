@@ -1,7 +1,7 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.service.RedisService;
 import com.example.demo.util.JwtUtil;
-import com.example.demo.util.RedisUtil;
 import com.example.demo.exception.Asserts;
 import com.example.demo.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import static com.example.demo.constant.RedisKeyConstant.token.TOKEN_USERNAME;
 public class TokenServiceImpl implements TokenService {
 
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisService redisService;
 
     @Value("${jwt.expiration}")
     private Long JWT_EXPIRATION;
@@ -29,7 +29,7 @@ public class TokenServiceImpl implements TokenService {
 
         // 为方便查看，存入redis中，但其实没必要存到redis中
         String key = TOKEN_USERNAME + JwtUtil.getUserNameToken(newToken);
-        redisUtil.stringSet(key, newToken, JWT_EXPIRATION);
+        redisService.set(key, newToken, JWT_EXPIRATION);
 
         return newToken;
     }

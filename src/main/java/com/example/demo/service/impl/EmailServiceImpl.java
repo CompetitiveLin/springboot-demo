@@ -5,8 +5,8 @@ import cn.hutool.core.util.RandomUtil;
 import com.example.demo.exception.Asserts;
 import com.example.demo.mbg.model.UserInfo;
 import com.example.demo.service.EmailService;
+import com.example.demo.service.RedisService;
 import com.example.demo.service.UserInfoService;
-import com.example.demo.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +27,7 @@ public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender javaMailSender;
 
-    private final RedisUtil redisUtil;
+    private final RedisService redisService;
 
     private final UserInfoService userInfoService;
 
@@ -45,7 +45,7 @@ public class EmailServiceImpl implements EmailService {
         message.setSubject("Verification Code");
         message.setText("Code: " + verificationCode);
         String key = CAPTCHA_EMAIL_ADDRESS + emailAddress;
-        if (redisUtil.hasKey(key)) {
+        if (redisService.hasKey(key)) {
             Asserts.fail("Already have CAPTCHA_EMAIL_ADDRESS!");
         }
         try{
@@ -54,6 +54,6 @@ public class EmailServiceImpl implements EmailService {
         } catch (Exception e){
             Asserts.fail("Sending mail failed.");
         }
-        redisUtil.stringSet(key, verificationCode, 60);
+        redisService.set(key, verificationCode, 60);
     }
 }

@@ -46,7 +46,7 @@ public interface RedisService {
      * @param key key值
      * @return 返回成功
      */
-    Boolean del(String key);
+    Boolean delete(String key);
 
     /**
      * 批量删除属性
@@ -54,7 +54,7 @@ public interface RedisService {
      * @param keys key值集合
      * @return 返回删除数量
      */
-    Long del(List<String> keys);
+    Long delete(List<String> keys);
 
     /**
      * 设置过期时间
@@ -249,6 +249,80 @@ public interface RedisService {
      * @return 删除掉的数据量
      */
     Long sRemove(String key, Object... values);
+
+    // ============================= Zset =============================
+
+
+    /**
+     * 增加有序集合
+     *
+     * @param key
+     * @param value
+     * @param score
+     * @return
+     */
+    Boolean zAddIfAbsent(String key, Object value, double score);
+
+    /**
+     * 获取zset集合数量
+     *
+     * @param key
+     * @return
+     */
+    Long zCount(String key);
+
+
+    /**
+     * 获取zset指定范围内的集合
+     *
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    Set<Object> zRange(String key, long start, long end);
+
+    /**
+     * 根据key和value移除指定元素
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    Long zRemove(String key, Object value);
+
+
+    /**
+     * 获取对应key和value的score
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    Double zScore(String key, Object value);
+
+
+    /**
+     * 指定元素增加指定值
+     *
+     * @param key
+     * @param obj
+     * @param score
+     * @return
+     */
+    Object zAddScore(String key, Object obj, double score);
+
+
+    /**
+     * 排名
+     *
+     * @param key
+     * @param obj
+     * @return
+     */
+    Object zRank(String key, Object obj);
+
+
 
 
     // ============================= List =============================

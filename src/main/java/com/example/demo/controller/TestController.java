@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.response.CommonResult;
 import com.example.demo.service.RedisService;
-import com.example.demo.util.RedisUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.redisson.api.RLock;
@@ -25,7 +24,7 @@ public class TestController {
     private ApplicationContext applicationContext;
 
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisService redisService;
 
     @Autowired
     private RedissonClient redissonClient;
@@ -49,7 +48,7 @@ public class TestController {
             @Parameter(name = "value", description = "值"),
             @Parameter(name = "time", description = "时长")})
     public CommonResult testRedis(@RequestParam(defaultValue = "key") String key, @RequestParam(defaultValue = "value") String value, @RequestParam(defaultValue = "-1") Integer time){   // 为防止time为null抛出异常，参数中应该为包装类型
-        redisUtil.stringSet(key,value,time);
+        redisService.set(key,value,time);
         return CommonResult.success();
     }
 

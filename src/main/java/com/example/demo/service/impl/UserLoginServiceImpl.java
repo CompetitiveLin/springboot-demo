@@ -5,9 +5,9 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.example.demo.mbg.mapper.UserLoginLogMapper;
 import com.example.demo.mbg.model.UserLoginLog;
+import com.example.demo.service.RedisService;
 import com.example.demo.util.HttpClientUtil;
 import com.example.demo.util.JwtUtil;
-import com.example.demo.util.RedisUtil;
 import com.example.demo.dto.LoginDto;
 import com.example.demo.exception.Asserts;
 import com.example.demo.service.UserLoginService;
@@ -47,7 +47,7 @@ public class UserLoginServiceImpl implements UserLoginService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisService redisService;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -66,7 +66,7 @@ public class UserLoginServiceImpl implements UserLoginService {
     public String login(LoginDto loginDto) {
         try{
             String key = CAPTCHA_UUID + loginDto.getUuid();
-            Object redisCode = redisUtil.stringGet(key);
+            Object redisCode = redisService.get(key);
             if(ObjectUtil.notEqual(redisCode, loginDto.getCaptcha())){
                 throw new Exception("验证码错误");
             }
@@ -74,7 +74,7 @@ public class UserLoginServiceImpl implements UserLoginService {
             if (!passwordEncoder.matches(loginDto.getPassword(), userDetails.getPassword())) {
                 throw new Exception("密码错误");
             }
-            redisUtil.delete(key);
+            redisService.delete(key);
             //获得HttpServletRequest对象
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = attributes.getRequest();
@@ -88,7 +88,7 @@ public class UserLoginServiceImpl implements UserLoginService {
             String token = JwtUtil.create(map);
             // 为方便查看，存入redis中，但其实没必要存到redis中
             String key_token = TOKEN_USERNAME + JwtUtil.getUserNameToken(token);
-            redisUtil.stringSet(key_token, token, JWT_EXPIRATION);
+            redisService.set(key_token, token, JWT_EXPIRATION);
 
             return token;
         }
@@ -123,7 +123,7 @@ public class UserLoginServiceImpl implements UserLoginService {
         Map<String, Object> map = new HashMap<>();
         map.put("openid", jsonObject.getStr("openid"));
         String token = JwtUtil.create(map);
-        redisUtil.stringSet("wx:token:" + jsonObject.getStr("openid"), token, JWT_EXPIRATION);
+        redisService.set("wx:token:" + jsonObject.getStr("openid"), token, JWT_EXPIRATION);
         return token;
     }
 }

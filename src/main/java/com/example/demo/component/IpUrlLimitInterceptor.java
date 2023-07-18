@@ -3,8 +3,8 @@ package com.example.demo.component;
 import cn.hutool.json.JSONUtil;
 import com.example.demo.response.CommonResult;
 import com.example.demo.response.ResultCode;
+import com.example.demo.service.RedisService;
 import com.example.demo.util.IpUtil;
-import com.example.demo.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import static com.example.demo.constant.AuthorizationConstant.HEADER_NAME;
 import static com.example.demo.constant.RedisKeyConstant.limiter.*;
 
 /**
@@ -28,9 +27,8 @@ import static com.example.demo.constant.RedisKeyConstant.limiter.*;
 @Component
 public class IpUrlLimitInterceptor implements HandlerInterceptor {
 
-
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisService redisService;
 
 
     @Override
@@ -64,7 +62,7 @@ public class IpUrlLimitInterceptor implements HandlerInterceptor {
      * @Description: 判断ip是否被禁用
      */
     private Boolean ipIsLock(String ip) {
-        if (redisUtil.hasKey(IP_URL_BLOCK + ip)) {
+        if (redisService.hasKey(IP_URL_BLOCK + ip)) {
             return true;
         }
         return false;
@@ -78,14 +76,14 @@ public class IpUrlLimitInterceptor implements HandlerInterceptor {
      */
     private Boolean addRequestTime(String ip, String uri) {
         String key = IP_URL_TIMES + ip + ":" + uri;
-        if (redisUtil.hasKey(key)) {
-            long time = redisUtil.stringIncr(key, 1);
+        if (redisService.hasKey(key)) {
+            long time = redisService.incr(key, 1);
             if (time >= LIMIT_TIMES) {
-                redisUtil.stringSet(IP_URL_BLOCK + ip, ip, IP_LOCK_TIME);
+                redisService.set(IP_URL_BLOCK + ip, ip, IP_LOCK_TIME);
                 return false;
             }
         } else {
-            redisUtil.stringSet(key, 1, LIMIT_SECOND);
+            redisService.set(key, 1, LIMIT_SECOND);
         }
         return true;
     }

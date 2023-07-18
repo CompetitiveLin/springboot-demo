@@ -2,9 +2,7 @@ package com.example.demo.service.impl;
 
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.ShearCaptcha;
-import cn.hutool.core.util.ObjectUtil;
-import com.example.demo.util.RedisUtil;
-import com.example.demo.exception.Asserts;
+import com.example.demo.service.RedisService;
 import com.example.demo.service.CaptchaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,7 @@ import static com.example.demo.constant.RedisKeyConstant.captcha.CAPTCHA_UUID;
 public class CaptchaServiceImpl implements CaptchaService {
 
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisService redisService;
     /**
      * 获取验证码Base64.事务的传播默认是用REQUIRED.SUPPORTS和不加Transactional的区别在于
      * 1.前者的方法可以获取和当前事务环境一致的 Connection 或 Session，而后者肯定是新的；
@@ -36,12 +34,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         captcha.setBackground(Color.WHITE);
         String key = CAPTCHA_UUID + uuid;
         //将字符长存入redis，并判断redis中是否存在
-        boolean redisCode = redisUtil.stringSet(key, captcha.getCode(), 60);
-        //如果存入redis中失败，抛出异常
-        //这里是自定义异常类，可以自行处理，不影响
-        if (!redisCode) {
-            Asserts.fail("Redis存入异常");
-        }
+        redisService.set(key, captcha.getCode(), 60);
         //3.这里只返回Base64字符串用来展示
         return captcha.getImageBase64Data();
     }

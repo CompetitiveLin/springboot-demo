@@ -5,8 +5,8 @@ import com.example.demo.exception.Asserts;
 import com.example.demo.mbg.mapper.UserInfoMapper;
 import com.example.demo.mbg.model.UserInfo;
 import com.example.demo.mbg.model.UserInfoExample;
+import com.example.demo.service.RedisService;
 import com.example.demo.service.UserInfoService;
-import com.example.demo.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -25,7 +25,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     private UserInfoMapper userInfoMapper;
 
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisService redisService;
+
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -75,9 +76,9 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserInfo userInfo = this.getUserByEmail(emailAddress);
         if(userInfo == null) Asserts.fail("No account connected to this email!");
         String key = CAPTCHA_EMAIL_ADDRESS + emailAddress;
-        if(!redisUtil.hasKey(key)) Asserts.fail("Get a captcha first!");
-        if (!redisUtil.stringGet(key).equals(captcha)) Asserts.fail("Wrong captcha!");
-        redisUtil.delete(key);
+        if(!redisService.hasKey(key)) Asserts.fail("Get a captcha first!");
+        if (!redisService.get(key).equals(captcha)) Asserts.fail("Wrong captcha!");
+        redisService.delete(key);
         userInfo.setPassword(passwordEncoder.encode(newPassword));
         userInfoMapper.updateByPrimaryKey(userInfo);
     }

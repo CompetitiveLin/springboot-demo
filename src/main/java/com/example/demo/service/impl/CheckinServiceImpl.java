@@ -2,7 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.exception.CustomException;
 import com.example.demo.service.CheckinService;
-import com.example.demo.util.RedisUtil;
+import com.example.demo.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ import static com.example.demo.constant.RedisKeyConstant.user.USER_CHECKIN_RANK;
 @Slf4j
 public class CheckinServiceImpl implements CheckinService {
 
-    private final RedisUtil redisUtil;
+    private final RedisService redisService;
 
 
     private String jointKey(LocalDateTime localDateTime, String username){
@@ -47,12 +47,12 @@ public class CheckinServiceImpl implements CheckinService {
         LocalDateTime now = LocalDateTime.now();
         String key = jointKey(now, username);
         int dayOfMonth = now.getDayOfMonth();
-        redisUtil.bitSet(key, dayOfMonth -1, true);
+        redisService.bitSet(key, dayOfMonth -1, true);
 
         TemporalField temporalField = ChronoField.MILLI_OF_DAY;
         long score =  now.getLong(temporalField);
         String key2 = jointKeyForRank();
-        redisUtil.addIfAbsentZset(key2, username, score);
+        redisService.zAddIfAbsent(key2, username, score);
     }
 
     /**
@@ -69,7 +69,7 @@ public class CheckinServiceImpl implements CheckinService {
         int dayOfMonth = localDateTime.getDayOfMonth();
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < dayOfMonth; i++){
-            if(redisUtil.bitGet(key, i) == Boolean.TRUE) sb.append("1");
+            if(redisService.bitGet(key, i) == Boolean.TRUE) sb.append("1");
             else sb.append("0");
         }
         return sb.toString();
@@ -87,7 +87,7 @@ public class CheckinServiceImpl implements CheckinService {
         if(!(targetDate.isBefore(LocalDateTime.now()) && targetDate.isAfter(LocalDateTime.of(2000, 1, 1, 0, 0)))) throw new CustomException("Date Error");
         String key = jointKey(targetDate, username);
         int dayOfMonth = targetDate.getDayOfMonth();
-        redisUtil.bitSet(key, dayOfMonth -1, true);
+        redisService.bitSet(key, dayOfMonth -1, true);
     }
 
     /**
@@ -133,7 +133,7 @@ public class CheckinServiceImpl implements CheckinService {
     public int checkinMonthlyCount(String username, String dateWithoutDay) {
         LocalDateTime dateOfSign = parseToLocalDateWithOutDay(dateWithoutDay);
         String key = jointKey(dateOfSign, username);
-        Long count = redisUtil.bitCount(key);
+        Long count = redisService.bitCount(key);
         return count.intValue();
     }
 
@@ -151,7 +151,7 @@ public class CheckinServiceImpl implements CheckinService {
             innerCount = 0;
             String key = jointKey(localDateTime, username);
             dayOfMonth = localDateTime.getDayOfMonth();
-            List<Long> result = redisUtil.bitfield(key, dayOfMonth, 0);
+            List<Long> result = redisService.bitField(key, dayOfMonth, 0);
             if (result == null || result.isEmpty() || result.get(0) == null || result.get(0) == 0) {
                 return count;
             }

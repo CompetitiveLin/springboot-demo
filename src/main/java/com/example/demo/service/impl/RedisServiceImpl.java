@@ -44,12 +44,12 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Boolean del(String key) {
+    public Boolean delete(String key) {
         return redisTemplate.delete(key);
     }
 
     @Override
-    public Long del(List<String> keys) {
+    public Long delete(List<String> keys) {
         return redisTemplate.delete(keys);
     }
 
@@ -160,6 +160,41 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public Long sRemove(String key, Object... values) {
         return redisTemplate.opsForSet().remove(key, values);
+    }
+
+    @Override
+    public Boolean zAddIfAbsent(String key, Object value, double score) {
+        return redisTemplate.opsForZSet().addIfAbsent(key, value, score);
+    }
+
+    @Override
+    public Long zCount(String key) {
+        return redisTemplate.opsForZSet().size(key);
+    }
+
+    @Override
+    public Set<Object> zRange(String key, long start, long end) {
+        return redisTemplate.opsForZSet().range(key, start, end);
+    }
+
+    @Override
+    public Long zRemove(String key, Object value) {
+        return redisTemplate.opsForZSet().remove(key, value);
+    }
+
+    @Override
+    public Double zScore(String key, Object value) {
+        return redisTemplate.opsForZSet().score(key, value);
+    }
+
+    @Override
+    public Object zAddScore(String key, Object obj, double score) {
+        return redisTemplate.opsForZSet().incrementScore(key, obj, score);
+    }
+
+    @Override
+    public Object zRank(String key, Object obj) {
+        return redisTemplate.opsForZSet().rank(key, obj);
     }
 
     @Override
