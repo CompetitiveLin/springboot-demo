@@ -74,4 +74,13 @@ public class CheckinController {
         data.put("count", "" + count);
         return CommonResult.success(data);
     }
+
+    @GetMapping("/rank")
+    public CommonResult<?> rank(@ParseToken String username){
+        long rank = checkinService.rank(username);
+        Map<String, String> data = new HashMap<>();
+        data.put("rank", "" + rank);
+        return CommonResult.success(data);
+    }
+
 }

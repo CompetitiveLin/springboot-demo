@@ -10,4 +10,6 @@ public interface CheckinService {
     int checkinMonthlyCount(String username, String date);
 
     int checkinContinuouslyCount(String username);
+
+    long rank(String username);
 }

@@ -165,4 +165,18 @@ public class CheckinServiceImpl implements CheckinService {
         } while (innerCount == dayOfMonth);
         return count;
     }
+
+
+    /**
+     * 查看当天签到排名，以0开始排序。
+     * @param username
+     * @return
+     */
+    @Override
+    public long rank(String username) {
+        String key = jointKeyForRank();
+        Object res = redisService.zRank(key, username);
+        if(res == null) throw new CustomException("Checkin first!");
+        return (long) res;
+    }
 }

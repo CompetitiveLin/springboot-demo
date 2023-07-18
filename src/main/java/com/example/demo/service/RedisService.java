@@ -314,9 +314,9 @@ public interface RedisService {
 
 
     /**
-     * 排名
+     * 获取排名
      *
-     * @param key
+     * @param key key
      * @param obj
      * @return
      */
