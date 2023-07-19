@@ -2,8 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.response.CommonResult;
 import com.example.demo.service.RedisService;
+import com.example.demo.util.IpUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequestMapping("/test")
 public class TestController {
 
@@ -63,6 +67,13 @@ public class TestController {
         } finally {
             rLock.unlock();
         }
+        return CommonResult.success();
+    }
+
+    @SneakyThrows
+    @GetMapping(value = "/ip")
+    public CommonResult<?> ip2region(String ip){
+        log.info(IpUtil.getIpAddress2(ip).toString());
         return CommonResult.success();
     }
 }

@@ -1,16 +1,115 @@
 package com.example.demo.util;
 
+import lombok.Cleanup;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.compress.utils.IOUtils;
+import org.lionsoul.ip2region.xdb.Searcher;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.util.FileCopyUtils;
+
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
- * @program: simple_tools
- * @description: 获取IP工具类
- * @author: ChenWenLong
- * @create: 2019-10-18 11:55
- **/
+ * Ip 工具类，ip转化成地区等功能
+ */
+@Slf4j
 public class IpUtil {
+
+    private static String tmpPath = null;
+
+    private static byte[] vectorIndexBuff;
+
+    private static byte[] contentBuff;
+
+    static {
+        try {
+            ClassPathResource classPathResource = new ClassPathResource("ip2region/ip2region.xdb");
+            @Cleanup InputStream inputStream = classPathResource.getInputStream();
+            contentBuff = FileCopyUtils.copyToByteArray(inputStream);
+//            Path path = Files.createTempFile("ip2region", ".xdb");
+//            Files.write(path, IOUtils.toByteArray(inputStream));    // 因为打包后无法根据路径读取压缩包里的内容，因此需要在本地路径重新写一份
+//            tmpPath = path.toString();
+//            log.info("Temp file: {}", tmpPath);
+//            vectorIndexBuff = Searcher.loadVectorIndexFromFile(tmpPath);  // 缓存 VectorIndex 索引
+//            contentBuff = Searcher.loadContentFromFile(tmpPath);  // 缓存整个 xdb 数据
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 每个线程需要单独创建一个独立的 Searcher 对象，但是都共享全局的制度 vIndex 缓存。
+     *
+     * @param ip ip
+     * @return
+     */
+    @SneakyThrows
+    public static List<String> getIpAddress(String ip) {
+
+        // 使用全局的 vIndex 创建带 VectorIndex 缓存的查询对象。
+        Searcher searcher = Searcher.newWithVectorIndex(tmpPath, vectorIndexBuff);
+
+        long sTime = System.nanoTime();
+
+        String region = searcher.search(ip);
+
+        long cost = TimeUnit.NANOSECONDS.toMicros(System.nanoTime() - sTime);
+
+        log.info("{region: {}, ioCount: {}, took: {} μs}\n", region, searcher.getIOCount(), cost);
+
+        return Arrays.stream(region.split("\\|")).filter(s -> !"0".equals(s)).collect(Collectors.toList());
+    }
+
+    /**
+     * 并发使用，用整个 xdb 数据缓存创建的查询对象可以安全的用于并发，
+     * 也就是你可以把这个 searcher 对象做成全局对象去跨线程访问
+     *
+     * @param ip ip
+     * @return
+     */
+    @SneakyThrows
+    public static List<String> getIpAddress2(String ip) {
+
+        // 使用上述的 contentBuff 创建一个完全基于内存的查询对象。
+        Searcher searcher = Searcher.newWithBuffer(contentBuff);
+
+        long sTime = System.nanoTime();
+
+        String region = searcher.search(ip);
+
+        long cost = TimeUnit.NANOSECONDS.toMicros(System.nanoTime() - sTime);
+
+        log.info("{region: {}, ioCount: {}, took: {} μs}\n", region, searcher.getIOCount(), cost);
+
+        return Arrays.stream(region.split("\\|")).filter(s -> !"0".equals(s)).collect(Collectors.toList());
+    }
+
+    public static String getIpPosition(String ip) throws Exception {
+        List<String> cityInfo = IpUtil.getIpAddress2(ip);
+        if (cityInfo.size() > 0) {
+            // 国内的显示到具体的省
+            if ("中国".equals(cityInfo.get(0))) {
+                if (cityInfo.size() > 1) {
+                    return cityInfo.get(1);
+                }
+            }
+            // 国外显示到国家
+            return cityInfo.get(0);
+        }
+        return "未知";
+    }
 
     public static String getIpAddr(HttpServletRequest request) {
         if (request == null) {
