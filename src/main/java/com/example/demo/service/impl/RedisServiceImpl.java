@@ -10,6 +10,7 @@ import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -75,7 +76,7 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public Long decr(String key, long delta) {
-        return redisTemplate.opsForValue().increment(key, -delta);
+        return redisTemplate.opsForValue().decrement(key, delta);
     }
 
     @Override
@@ -111,8 +112,8 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void hDel(String key, Object... hashKey) {
-        redisTemplate.opsForHash().delete(key, hashKey);
+    public Long hDel(String key, Object... hashKey) {
+        return redisTemplate.opsForHash().delete(key, hashKey);
     }
 
     @Override
@@ -178,7 +179,12 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Long zRemove(String key, Object value) {
+    public Set<ZSetOperations.TypedTuple<Object>> zRangeWithScores(String key, long start, long end) {
+        return redisTemplate.opsForZSet().rangeWithScores(key, start, end);
+    }
+
+    @Override
+    public Long zRemove(String key, Object... value) {
         return redisTemplate.opsForZSet().remove(key, value);
     }
 
@@ -188,12 +194,12 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public Object zAddScore(String key, Object obj, double score) {
+    public Double zAddScore(String key, Object obj, double score) {
         return redisTemplate.opsForZSet().incrementScore(key, obj, score);
     }
 
     @Override
-    public Object zRank(String key, Object obj) {
+    public Long zRank(String key, Object obj) {
         return redisTemplate.opsForZSet().rank(key, obj);
     }
 

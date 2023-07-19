@@ -3,22 +3,24 @@ package com.example.demo.service.impl;
 import com.example.demo.exception.CustomException;
 import com.example.demo.service.CheckinService;
 import com.example.demo.service.RedisService;
+import javafx.util.Pair;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.TemporalField;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.example.demo.constant.RedisKeyConstant.user.USER_CHECKIN;
 import static com.example.demo.constant.RedisKeyConstant.user.USER_CHECKIN_RANK;
@@ -168,15 +170,19 @@ public class CheckinServiceImpl implements CheckinService {
 
 
     /**
-     * 查看当天签到排名，以0开始排序。
-     * @param username
+     * 查看当天签到排名情况，集合中的顺序按排名先后情况排序。
      * @return
      */
     @Override
-    public long rank(String username) {
+    public Set<Pair<String, String>> rankTop100() {
         String key = jointKeyForRank();
-        Object res = redisService.zRank(key, username);
-        if(res == null) throw new CustomException("Checkin first!");
-        return (long) res;
+        Set<ZSetOperations.TypedTuple<Object>> zSet = redisService.zRangeWithScores(key, 0, 100);
+        Set<Pair<String, String>> rankTop100 = new LinkedHashSet<>();
+        for (ZSetOperations.TypedTuple<Object> next : zSet) {
+            Double time = next.getScore();
+            LocalTime localTime = LocalTime.ofNanoOfDay((long) (time * 1000000));
+            rankTop100.add(new Pair<>(next.getValue().toString(), localTime.toString()));
+        }
+        return rankTop100;
     }
 }

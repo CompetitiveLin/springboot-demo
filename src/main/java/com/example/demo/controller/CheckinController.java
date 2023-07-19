@@ -4,6 +4,7 @@ package com.example.demo.controller;
 import com.example.demo.annotation.ParseToken;
 import com.example.demo.response.CommonResult;
 import com.example.demo.service.CheckinService;
+import javafx.util.Pair;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @RequestMapping("/checkin")
 @RestController
@@ -76,11 +78,9 @@ public class CheckinController {
     }
 
     @GetMapping("/rank")
-    public CommonResult<?> rank(@ParseToken String username){
-        long rank = checkinService.rank(username);
-        Map<String, String> data = new HashMap<>();
-        data.put("rank", "" + rank);
-        return CommonResult.success(data);
+    public CommonResult<?> rankTop100(){
+        Set<Pair<String, String>> rankTop100 = checkinService.rankTop100();
+        return CommonResult.success(rankTop100);
     }
 
 }

@@ -5,6 +5,7 @@ import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.GeoResults;
 import org.springframework.data.geo.Point;
 import org.springframework.data.redis.connection.RedisGeoCommands;
+import org.springframework.data.redis.core.ZSetOperations;
 
 import java.util.List;
 import java.util.Map;
@@ -163,7 +164,7 @@ public interface RedisService {
      * @param key     外部key值
      * @param hashKey 内部key值
      */
-    void hDel(String key, Object... hashKey);
+    Long hDel(String key, Object... hashKey);
 
     /**
      * 判断Hash结构中是否有该属性
@@ -256,18 +257,18 @@ public interface RedisService {
     /**
      * 增加有序集合
      *
-     * @param key
-     * @param value
-     * @param score
-     * @return
+     * @param key   key
+     * @param value value
+     * @param score 权重
+     * @return  返回是否成功
      */
     Boolean zAddIfAbsent(String key, Object value, double score);
 
     /**
      * 获取zset集合数量
      *
-     * @param key
-     * @return
+     * @param key   key
+     * @return  返回集合数量
      */
     Long zCount(String key);
 
@@ -275,29 +276,39 @@ public interface RedisService {
     /**
      * 获取zset指定范围内的集合
      *
-     * @param key
-     * @param start
-     * @param end
-     * @return
+     * @param key   key
+     * @param start 初始下标
+     * @param end   结束下标
+     * @return  返回指定范围内的集合
      */
     Set<Object> zRange(String key, long start, long end);
+
+
+    /**
+     * 获取zset指定范围内的集合和分数
+     * @param key   key
+     * @param start 初始下标
+     * @param end   结束下标
+     * @return  返回指定范围内的集合和分数
+     */
+    Set<ZSetOperations.TypedTuple<Object>> zRangeWithScores(String key, long start, long end);
 
     /**
      * 根据key和value移除指定元素
      *
-     * @param key
-     * @param value
-     * @return
+     * @param key   key
+     * @param value value集合
+     * @return  返回移除元素的数量
      */
-    Long zRemove(String key, Object value);
+    Long zRemove(String key, Object... value);
 
 
     /**
      * 获取对应key和value的score
      *
-     * @param key
-     * @param value
-     * @return
+     * @param key   key
+     * @param value value
+     * @return  返回对应的权重
      */
     Double zScore(String key, Object value);
 
@@ -305,22 +316,22 @@ public interface RedisService {
     /**
      * 指定元素增加指定值
      *
-     * @param key
-     * @param obj
-     * @param score
-     * @return
+     * @param key   key
+     * @param obj   membership
+     * @param score 权重
+     * @return  返回增加权重后的权重值
      */
-    Object zAddScore(String key, Object obj, double score);
+    Double zAddScore(String key, Object obj, double score);
 
 
     /**
      * 获取排名
      *
-     * @param key key
-     * @param obj
-     * @return
+     * @param key   key
+     * @param obj   membership
+     * @return  返回对应的排名
      */
-    Object zRank(String key, Object obj);
+    Long zRank(String key, Object obj);
 
 
 
@@ -411,7 +422,7 @@ public interface RedisService {
      *
      * @param key    key
      * @param offset 偏移量
-     * @param b      状态
+     * @param value  状态
      * @return 结果
      */
     Boolean bitSet(String key, int offset, boolean value);

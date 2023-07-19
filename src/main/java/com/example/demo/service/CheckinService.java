@@ -1,5 +1,10 @@
 package com.example.demo.service;
 
+import javafx.util.Pair;
+import org.springframework.data.redis.core.ZSetOperations;
+
+import java.util.Set;
+
 public interface CheckinService {
     void checkin(String username);
 
@@ -11,5 +16,5 @@ public interface CheckinService {
 
     int checkinContinuouslyCount(String username);
 
-    long rank(String username);
+    Set<Pair<String, String>> rankTop100();
 }
