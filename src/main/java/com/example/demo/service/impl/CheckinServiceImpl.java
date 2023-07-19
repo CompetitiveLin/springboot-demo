@@ -22,6 +22,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.TemporalField;
 import java.util.*;
 
+import static com.example.demo.constant.CheckinConstant.MONTH_RANGE_OF_LATE_CHECKIN;
 import static com.example.demo.constant.RedisKeyConstant.user.USER_CHECKIN;
 import static com.example.demo.constant.RedisKeyConstant.user.USER_CHECKIN_RANK;
 
@@ -34,14 +35,13 @@ public class CheckinServiceImpl implements CheckinService {
     private final RedisService redisService;
 
 
-    private String jointKey(LocalDateTime localDateTime, String username){
+    private String jointKey(LocalDateTime localDateTime, String username) {
         return USER_CHECKIN + localDateTime.format(DateTimeFormatter.ofPattern("yyyyMM:")) + username;
     }
 
-    private String jointKeyForRank(){
+    private String jointKeyForRank() {
         return USER_CHECKIN_RANK + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     }
-
 
 
     @Override
@@ -49,18 +49,17 @@ public class CheckinServiceImpl implements CheckinService {
         LocalDateTime now = LocalDateTime.now();
         String key = jointKey(now, username);
         int dayOfMonth = now.getDayOfMonth();
-        redisService.bitSet(key, dayOfMonth -1, true);
+        redisService.bitSet(key, dayOfMonth - 1, true);
 
         TemporalField temporalField = ChronoField.MILLI_OF_DAY;
-        long score =  now.getLong(temporalField);
+        long score = now.getLong(temporalField);
         String key2 = jointKeyForRank();
         redisService.zAddIfAbsent(key2, username, score);
     }
 
     /**
-     *
      * @param username
-     * @param date is like 202306
+     * @param date     is like 202306
      * @return
      */
 
@@ -70,8 +69,8 @@ public class CheckinServiceImpl implements CheckinService {
         String key = jointKey(localDateTime, username);
         int dayOfMonth = localDateTime.getDayOfMonth();
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < dayOfMonth; i++){
-            if(redisService.bitGet(key, i) == Boolean.TRUE) sb.append("1");
+        for (int i = 0; i < dayOfMonth; i++) {
+            if (redisService.bitGet(key, i) == Boolean.TRUE) sb.append("1");
             else sb.append("0");
         }
         return sb.toString();
@@ -79,23 +78,28 @@ public class CheckinServiceImpl implements CheckinService {
 
 
     /**
-     *  补签功能，可防止恶意签到，比如一个月签到50天，并且将补签日期的范围限制为2000年1月1日至当天（开区间，即2000年1月1日和当天都不能补签）。
+     * 补签功能，可防止恶意签到，比如一个月签到50天，并且将补签日期的范围限制为 MONTH_RANGE_OF_LATE_CHECKIN 个月内
+     * 默认为两个月，即今天 7.19，只能从6.1日开始补签。
+     *
      * @param username
-     * @param date is like 20230715
+     * @param date     is like 20230715
      */
     @Override
     public void lateCheckin(String username, String date) {
         LocalDateTime targetDate = parseToLocalDateWithDay(date);
-        if(!(targetDate.isBefore(LocalDateTime.now()) && targetDate.isAfter(LocalDateTime.of(2000, 1, 1, 0, 0)))) throw new CustomException("Date Error");
+        LocalDateTime now = LocalDateTime.now();
+        if (targetDate.isAfter(now.minusDays(1))
+                || targetDate.isBefore(now.minusMonths(MONTH_RANGE_OF_LATE_CHECKIN).with(TemporalAdjusters.lastDayOfMonth())))
+            throw new CustomException("Date Error");
         String key = jointKey(targetDate, username);
         int dayOfMonth = targetDate.getDayOfMonth();
-        redisService.bitSet(key, dayOfMonth -1, true);
+        redisService.bitSet(key, dayOfMonth - 1, true);
     }
 
     /**
      * 字符串日期转换成LocalDate
      *
-     * @param date    20230101  20230201
+     * @param date 20230101  20230201
      * @return
      * @throws ParseException
      */
@@ -111,7 +115,7 @@ public class CheckinServiceImpl implements CheckinService {
     /**
      * 字符串日期转换LocalDate
      *
-     * @param dateWithoutDay    202301  202302
+     * @param dateWithoutDay 202301  202302
      * @return
      * @throws ParseException
      */
@@ -127,6 +131,7 @@ public class CheckinServiceImpl implements CheckinService {
 
     /**
      * 统计每个月的签到总数
+     *
      * @param username
      * @param dateWithoutDay is like 202306
      * @return
@@ -142,6 +147,7 @@ public class CheckinServiceImpl implements CheckinService {
 
     /**
      * 统计到当天为止连续签到的天数
+     *
      * @param username
      * @return
      */
@@ -149,7 +155,7 @@ public class CheckinServiceImpl implements CheckinService {
     public int checkinContinuouslyCount(String username) {
         int count = 0, innerCount, dayOfMonth;
         LocalDateTime localDateTime = LocalDateTime.now();
-        do{
+        do {
             innerCount = 0;
             String key = jointKey(localDateTime, username);
             dayOfMonth = localDateTime.getDayOfMonth();
@@ -171,6 +177,7 @@ public class CheckinServiceImpl implements CheckinService {
 
     /**
      * 查看当天签到排名情况，集合中的顺序按排名先后情况排序。
+     *
      * @return
      */
     @Override
