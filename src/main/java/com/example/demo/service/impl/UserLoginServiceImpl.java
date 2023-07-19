@@ -7,6 +7,7 @@ import com.example.demo.mbg.mapper.UserLoginLogMapper;
 import com.example.demo.mbg.model.UserLoginLog;
 import com.example.demo.service.RedisService;
 import com.example.demo.util.HttpClientUtil;
+import com.example.demo.util.IpUtil;
 import com.example.demo.util.JwtUtil;
 import com.example.demo.dto.LoginDto;
 import com.example.demo.exception.Asserts;
@@ -105,6 +106,7 @@ public class UserLoginServiceImpl implements UserLoginService {
         userLoinLog.setBrowserType(browser);
         userLoinLog.setPlatform(platform);
         userLoinLog.setIpAddress(ip);
+        userLoinLog.setAddress(IpUtil.getIpPosition(ip));
         userLoinLog.setOperatingSystem(os);
         userLoinLog.setLoginTime(new Date());
         userLoginLogMapper.insertSelective(userLoinLog);

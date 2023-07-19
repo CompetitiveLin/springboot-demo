@@ -74,6 +74,6 @@ public class TestController {
     @GetMapping(value = "/ip")
     public CommonResult<?> ip2region(String ip){
         log.info(IpUtil.getIpAddress2(ip).toString());
-        return CommonResult.success();
+        return CommonResult.success(IpUtil.getIpAddress2(ip));
     }
 }

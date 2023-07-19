@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -67,7 +65,7 @@ public class IpUtil {
 
         long cost = TimeUnit.NANOSECONDS.toMicros(System.nanoTime() - sTime);
 
-        log.info("{region: {}, ioCount: {}, took: {} μs}\n", region, searcher.getIOCount(), cost);
+        log.info("{region: {}, ioCount: {}, took: {} μs}", region, searcher.getIOCount(), cost);
 
         return Arrays.stream(region.split("\\|")).filter(s -> !"0".equals(s)).collect(Collectors.toList());
     }
@@ -91,12 +89,12 @@ public class IpUtil {
 
         long cost = TimeUnit.NANOSECONDS.toMicros(System.nanoTime() - sTime);
 
-        log.info("{region: {}, ioCount: {}, took: {} μs}\n", region, searcher.getIOCount(), cost);
+        log.info("{region: {}, ioCount: {}, took: {} μs}", region, searcher.getIOCount(), cost);
 
         return Arrays.stream(region.split("\\|")).filter(s -> !"0".equals(s)).collect(Collectors.toList());
     }
 
-    public static String getIpPosition(String ip) throws Exception {
+    public static String getIpPosition(String ip) {
         List<String> cityInfo = IpUtil.getIpAddress2(ip);
         if (cityInfo.size() > 0) {
             // 国内的显示到具体的省
@@ -108,7 +106,7 @@ public class IpUtil {
             // 国外显示到国家
             return cityInfo.get(0);
         }
-        return "未知";
+        return "Unknown";
     }
 
     public static String getIpAddr(HttpServletRequest request) {
