@@ -52,12 +52,12 @@ public class GlobalExceptionHandler {
                 map.put("field", fieldError.getField());
             }
         }
-        return CommonResult.validateFailed(map);
+        return CommonResult.failed(map);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = ConstraintViolationException.class)
     public CommonResult<String> handleValidException(ConstraintViolationException ex) {
-        return CommonResult.validateFailed(ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(";")));
+        return CommonResult.failed(ex.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(";")));
     }
 }

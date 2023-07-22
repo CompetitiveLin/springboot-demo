@@ -25,37 +25,40 @@ public class CheckinController {
 
     /**
      * 签到
+     *
      * @param username
      * @return
      */
     @PostMapping("/do")
-    public CommonResult<Void> doCheckin(@ParseToken String username){
+    public CommonResult<?> doCheckin(@ParseToken String username) {
         checkinService.checkin(username);
         return CommonResult.success();
     }
 
 
     /**
-     *  指定日期补签
+     * 指定日期补签
+     *
      * @param username
-     * @param date be like 20230616
+     * @param date     be like 20230616
      * @return
      */
     @PostMapping("/late")
-    public CommonResult<Void> lateCheckin(@ParseToken String username, String date){
+    public CommonResult<?> lateCheckin(@ParseToken String username, String date) {
         checkinService.lateCheckin(username, date);
         return CommonResult.success();
     }
 
 
     /**
-     *  统计月级签到情况
+     * 统计月级签到情况
+     *
      * @param username
-     * @param date be like 202306
+     * @param date     be like 202306
      * @return count 表示当月签到数量， list 表示当月签到分布图，由0或1组成的字符串，第0位代表当月第一天签到情况
      */
     @GetMapping("/list-monthly")
-    public CommonResult<?> listMonthly(@ParseToken String username, String date){
+    public CommonResult<?> listMonthly(@ParseToken String username, String date) {
         int count = checkinService.checkinMonthlyCount(username, date);
         Map<String, String> data = new HashMap<>();
         data.put("count", "" + count);
@@ -66,11 +69,12 @@ public class CheckinController {
 
     /**
      * 统计连续签到情况
+     *
      * @param username
      * @return
      */
     @GetMapping("/count-continuously")
-    public CommonResult<?> countContinuously(@ParseToken String username){
+    public CommonResult<?> countContinuously(@ParseToken String username) {
         int count = checkinService.checkinContinuouslyCount(username);
         Map<String, String> data = new HashMap<>();
         data.put("count", "" + count);
@@ -78,7 +82,7 @@ public class CheckinController {
     }
 
     @GetMapping("/rank")
-    public CommonResult<?> rankTop100(){
+    public CommonResult<?> rankTop100() {
         Set<Pair<String, String>> rankTop100 = checkinService.rankTop100();
         return CommonResult.success(rankTop100);
     }

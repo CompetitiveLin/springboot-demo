@@ -25,53 +25,53 @@ public class ConfirmationController {
     private final UserInfoService userInfoService;
 
     @GetMapping("/information")
-    public CommonResult getInformation(String username){
+    public CommonResult<?> getInformation(String username) {
         return CommonResult.success(userInfoService.getUserByUsername(username));
     }
 
 
     @GetMapping("/course")
-    public CommonResult getCourse(String username){
+    public CommonResult<?> getCourse(String username) {
         return CommonResult.success(confirmationService.getCourseStudentByUsername(username));
     }
 
     @GetMapping("/academic")
-    public CommonResult getAcademic(String username){
+    public CommonResult<?> getAcademic(String username) {
         return CommonResult.success(confirmationService.getAcademicStudentByUsername(username));
     }
 
     @GetMapping("/confirmation")
-    public CommonResult getConfirmationService(String username) {
+    public CommonResult<?> getConfirmationService(String username) {
         return CommonResult.success(confirmationService.getConfirmationByUsername(username));
     }
 
-//    @PreAuthorize("hasAuthority('student')")
+    //    @PreAuthorize("hasAuthority('student')")
     @PostMapping("/confirm/information")
-    public CommonResult clickInformation(String username) {
+    public CommonResult<?> clickInformation(String username) {
         confirmationService.clickInformation(username);
         return CommonResult.success();
     }
 
-//    @PreAuthorize("hasAuthority('student')")
+    //    @PreAuthorize("hasAuthority('student')")
     @PostMapping("/confirm/course")
-    public CommonResult clickCourse(String username){
+    public CommonResult<?> clickCourse(String username) {
         confirmationService.clickCourse(username);
         return CommonResult.success();
     }
 
-//    @PreAuthorize("hasAuthority('student')")
+    //    @PreAuthorize("hasAuthority('student')")
     @PostMapping("/confirm/academic")
-    public CommonResult clickAcademic(String username){
+    public CommonResult<?> clickAcademic(String username) {
         confirmationService.clickAcademic(username);
         return CommonResult.success();
     }
 
 
     @PostMapping("/confirm/submit")
-    public CommonResult submitDissertation(@NotNull String username,
-                                           @NotNull String title,
-                                           @NotNull String keywords,
-                                           @NotNull String abstracts){
+    public CommonResult<?> submitDissertation(@NotNull String username,
+                                              @NotNull String title,
+                                              @NotNull String keywords,
+                                              @NotNull String abstracts) {
         confirmationService.submitDissertation(username, title, keywords, abstracts);
         return CommonResult.success();
     }

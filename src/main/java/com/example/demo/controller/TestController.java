@@ -41,6 +41,7 @@ public class TestController {
 
     /**
      * 带有@RequestParam：url?后的参数
+     *
      * @param key
      * @param value
      * @param time
@@ -51,18 +52,18 @@ public class TestController {
             @Parameter(name = "key", description = "键"),
             @Parameter(name = "value", description = "值"),
             @Parameter(name = "time", description = "时长")})
-    public CommonResult testRedis(@RequestParam(defaultValue = "key") String key, @RequestParam(defaultValue = "value") String value, @RequestParam(defaultValue = "-1") Integer time){   // 为防止time为null抛出异常，参数中应该为包装类型
-        redisService.set(key,value,time);
+    public CommonResult<?> testRedis(@RequestParam(defaultValue = "key") String key, @RequestParam(defaultValue = "value") String value, @RequestParam(defaultValue = "-1") Integer time) {   // 为防止time为null抛出异常，参数中应该为包装类型
+        redisService.set(key, value, time);
         return CommonResult.success();
     }
 
     @GetMapping(value = "/get-lock")
-    public CommonResult<?> testRedissonLock(){
+    public CommonResult<?> testRedissonLock() {
         RLock rLock = redissonClient.getLock("TEST");
         rLock.lock();
-        try{
+        try {
             Thread.sleep(10000);
-        } catch (Exception e){
+        } catch (Exception e) {
 
         } finally {
             rLock.unlock();
@@ -72,7 +73,7 @@ public class TestController {
 
     @SneakyThrows
     @GetMapping(value = "/ip")
-    public CommonResult<?> ip2region(String ip){
+    public CommonResult<?> ip2region(String ip) {
         log.info(IpUtil.getIpAddress2(ip).toString());
         return CommonResult.success(IpUtil.getIpAddress2(ip));
     }

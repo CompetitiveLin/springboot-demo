@@ -40,16 +40,16 @@ public class MinioController {
     @SneakyThrows
     @Operation(description = "文件上传")
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public CommonResult upload(@RequestParam("file") MultipartFile file, String username) {
+    public CommonResult<?> upload(@RequestParam("file") MultipartFile file, String username) {
 
         //创建一个MinIO的Java客户端
         MinioClient minioClient = MinioClient.builder().endpoint(ENDPOINT).credentials(ACCESS_KEY, SECRET_KEY).build();
         boolean isExist = minioClient.bucketExists(BucketExistsArgs.builder().bucket(BUCKET_NAME).build());
-        if (!isExist){
+        if (!isExist) {
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(BUCKET_NAME).build());
         }
         String filename = file.getOriginalFilename();
-        if(filename!= null && !filename.endsWith("pdf")) Asserts.fail("Please upload pdf file!");
+        if (filename != null && !filename.endsWith("pdf")) Asserts.fail("Please upload pdf file!");
         // 设置存储对象名称
         String objectName = username + ".pdf";
         minioClient.putObject(PutObjectArgs.builder()       // 使用putObject上传一个文件到存储桶中
@@ -66,7 +66,7 @@ public class MinioController {
 //                            .build());
         log.info("文件上传成功!");
         Map<String, String> map = new HashMap<>();
-        map.put("filename",filename);
+        map.put("filename", filename);
         map.put("url", ENDPOINT + "/" + BUCKET_NAME + "/" + objectName);
         return CommonResult.success(map);
 
@@ -74,7 +74,7 @@ public class MinioController {
 
     @Operation(description = "文件删除")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public CommonResult delete(@RequestParam("username") String objectName) {
+    public CommonResult<?> delete(@RequestParam("username") String objectName) {
         try {
             MinioClient minioClient = MinioClient.builder().endpoint(ENDPOINT).credentials(ACCESS_KEY, SECRET_KEY).build();
             minioClient.removeObject(RemoveObjectArgs.builder().bucket(BUCKET_NAME).object(objectName + ".pdf").build());
@@ -88,7 +88,7 @@ public class MinioController {
 
     @Operation(description = "文件下载")
     @GetMapping("/download")
-    public CommonResult get() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    public CommonResult<?> get() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         String username = "51255902052";
         MinioClient minioClient = MinioClient.builder().endpoint(ENDPOINT).credentials(ACCESS_KEY, SECRET_KEY).build();
         minioClient.downloadObject(
