@@ -17,12 +17,12 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog>
 
     @Override
     public void insert(String method, long duration, String params, String ip, Date createTime) {
-//        SysLog sysLog = new SysLog();
-//        sysLog.setMethod(method);
-//        sysLog.setDuration(duration);
-//        sysLog.setParams(params);
-//        sysLog.setIp(ip);
-//        sysLog.setCreateTime(createTime);
-//        sysLogMapper.insertSelective(sysLog);
+        SysLog sysLog = new SysLog();
+        sysLog.setMethod(method);
+        sysLog.setDuration(duration);
+        sysLog.setParams(params);
+        sysLog.setIp(ip);
+        sysLog.setCreateTime(createTime);
+        sysLogMapper.insert(sysLog);
     }
 }

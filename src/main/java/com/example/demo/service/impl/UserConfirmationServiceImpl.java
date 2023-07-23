@@ -2,6 +2,8 @@ package com.example.demo.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.exception.Asserts;
 import com.example.demo.mbg.mapper.AcademicStudentMapper;
@@ -24,7 +26,7 @@ public class UserConfirmationServiceImpl extends ServiceImpl<UserConfirmationMap
 
     public final UserInfoService userInfoService;
 
-    private final UserConfirmationMapper confirmationMapper;
+    private final UserConfirmationMapper userConfirmationMapper;
 
     private final CourseStudentMapper courseStudentMapper;
 
@@ -33,73 +35,69 @@ public class UserConfirmationServiceImpl extends ServiceImpl<UserConfirmationMap
 
     @Override
     public void submitDissertation(String username, String title, String keywords, String abstracts) {
-//        Confirmation confirmation = getConfirmationByUsername(username);
-//        if(confirmation.getDissertationSubmitted().equals((byte)1)) Asserts.fail("Already submitted dissertation");
-//        confirmation.setDissertationSubmitted((byte)1);
-//        confirmation.setDissertationSubmittedTime(new DateTime());
-//        confirmation.setDissertationTitle(title);
-//        confirmation.setDissertationKeywords(keywords);
-//        confirmation.setDissertationAbstract(abstracts);
-//        confirmationMapper.updateByPrimaryKeySelective(confirmation);
+        UserConfirmation confirmation = getConfirmationByUsername(username);
+        if (confirmation.getDissertationSubmitted().equals(1)) Asserts.fail("Already clicked Academic");
+        UpdateWrapper<UserConfirmation> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.lambda().eq(UserConfirmation::getStuId, confirmation.getStuId())
+                .set(UserConfirmation::getDissertationSubmitted, 1)
+                .set(UserConfirmation::getDissertationSubmittedTime, new DateTime())
+                .set(UserConfirmation::getDissertationTitle, title)
+                .set(UserConfirmation::getDissertationKeywords, keywords)
+                .set(UserConfirmation::getDissertationAbstract, abstracts);
+        userConfirmationMapper.update(null, updateWrapper);
     }
 
     @Override
     public void clickInformation(String username) {
-//        Confirmation confirmation = getConfirmationByUsername(username);
-//        if(confirmation.getInformationConfirmation().equals((byte)1)) Asserts.fail("Already clicked information");
-//        confirmation.setInformationConfirmation((byte)1);
-//        confirmation.setInformationConfirmationTime(new DateTime());
-//        confirmationMapper.updateByPrimaryKeySelective(confirmation);
+        UserConfirmation confirmation = getConfirmationByUsername(username);
+        if (confirmation.getInformationConfirmation().equals(1)) Asserts.fail("Already clicked Academic");
+        UpdateWrapper<UserConfirmation> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.lambda().eq(UserConfirmation::getStuId, confirmation.getStuId())
+                .set(UserConfirmation::getInformationConfirmation, 1).set(UserConfirmation::getInformationConfirmationTime, new DateTime());
+        userConfirmationMapper.update(null, updateWrapper);
     }
 
     @Override
     public void clickCourse(String username) {
-//        Confirmation confirmation = getConfirmationByUsername(username);
-//        if(confirmation.getCourseConfirmation().equals((byte)1)) Asserts.fail("Already clicked Course");
-//        confirmation.setCourseConfirmation((byte)1);
-//        confirmation.setCourseConfirmationTime(new DateTime());
-//        confirmationMapper.updateByPrimaryKeySelective(confirmation);
+        UserConfirmation confirmation = getConfirmationByUsername(username);
+        if (confirmation.getCourseConfirmation().equals(1)) Asserts.fail("Already clicked Academic");
+        UpdateWrapper<UserConfirmation> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.lambda().eq(UserConfirmation::getStuId, confirmation.getStuId())
+                .set(UserConfirmation::getCourseConfirmation, 1).set(UserConfirmation::getCourseConfirmationTime, new DateTime());
+        userConfirmationMapper.update(null, updateWrapper);
     }
 
     @Override
     public void clickAcademic(String username) {
-//        Confirmation confirmation = getConfirmationByUsername(username);
-//        if(confirmation.getAcademicConfirmation().equals((byte)1)) Asserts.fail("Already clicked Academic");
-//        confirmation.setAcademicConfirmation((byte)1);
-//        confirmation.setAcademicConfirmationTime(new DateTime());
-//        confirmationMapper.updateByPrimaryKeySelective(confirmation);
+        UserConfirmation confirmation = getConfirmationByUsername(username);
+        if (confirmation.getAcademicConfirmation().equals(1)) Asserts.fail("Already clicked Academic");
+        UpdateWrapper<UserConfirmation> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.lambda().eq(UserConfirmation::getStuId, confirmation.getStuId())
+                .set(UserConfirmation::getAcademicConfirmation, 1).set(UserConfirmation::getAcademicConfirmationTime, new DateTime());
+        userConfirmationMapper.update(null, updateWrapper);
     }
 
     @Override
     public UserConfirmation getConfirmationByUsername(String username) {
-//        UserInfo userInfo = userInfoService.getUserByUsername(username);
-//        if(userInfo == null) Asserts.fail("username not found");
-//        ConfirmationExample example = new ConfirmationExample();
-//        example.createCriteria().andStuIdEqualTo(userInfo.getId());
-//        List<Confirmation> list = confirmationMapper.selectByExample(example);
-//        if(CollUtil.isNotEmpty(list)) return list.get(0);
-        return null;
+        UserInfo userInfo = userInfoService.getUserByUsername(username);
+        QueryWrapper<UserConfirmation> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(UserConfirmation::getStuId, userInfo.getId());
+        return userConfirmationMapper.selectOne(queryWrapper);
     }
 
     @Override
     public List<CourseStudent> getCourseStudentByUsername(String username) {
-//        UserInfo userInfo = userInfoService.getUserByUsername(username);
-//        if(userInfo == null) Asserts.fail("username not found");
-//        CourseStudentExample example = new CourseStudentExample();
-//        example.createCriteria().andStuIdEqualTo(userInfo.getId());
-//        List<CourseStudent> list = courseStudentMapper.selectByExample(example);
-//        return list;
-        return null;
+        UserInfo userInfo = userInfoService.getUserByUsername(username);
+        QueryWrapper<CourseStudent> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(CourseStudent::getStuId, userInfo.getId());
+        return courseStudentMapper.selectList(queryWrapper);
     }
 
     @Override
     public List<AcademicStudent> getAcademicStudentByUsername(String username) {
-//        UserInfo userInfo = userInfoService.getUserByUsername(username);
-//        if(userInfo == null) Asserts.fail("username not found");
-//        AcademicStudentExample example = new AcademicStudentExample();
-//        example.createCriteria().andStuIdEqualTo(userInfo.getId());
-//        List<AcademicStudent> list = academicStudentMapper.selectByExample(example);
-//        return list;
-        return null;
+        UserInfo userInfo = userInfoService.getUserByUsername(username);
+        QueryWrapper<AcademicStudent> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(AcademicStudent::getStuId, userInfo.getId());
+        return academicStudentMapper.selectList(queryWrapper);
     }
 }

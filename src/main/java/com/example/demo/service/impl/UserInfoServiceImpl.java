@@ -49,7 +49,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         UserInfo userInfo = getUserByUsername(username);
         if (!passwordEncoder.matches(oldPassword, userInfo.getPassword())) Asserts.fail("旧密码不匹配");
         UpdateWrapper<UserInfo> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("username", username).set("password", passwordEncoder.encode(newPassword));
+        updateWrapper.lambda().eq(UserInfo::getUsername, username).set(UserInfo::getPassword, passwordEncoder.encode(newPassword));
         userInfoMapper.update(null, updateWrapper);
 
 //        Asserts.fail("Intentional error");    // @Transactional的注解下会使事务回滚
@@ -58,14 +58,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     @Override
     public UserInfo getUserByUsername(String username) {
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", username);
+        queryWrapper.lambda().eq(UserInfo::getUsername, username);
         return userInfoMapper.selectOne(queryWrapper);
     }
 
     @Override
     public UserInfo getUserByEmail(String emailAddress) {
         QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("email", emailAddress);
+        queryWrapper.lambda().eq(UserInfo::getEmail, emailAddress);
         return userInfoMapper.selectOne(queryWrapper);
     }
 
@@ -78,7 +78,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         if (!redisService.get(key).equals(captcha)) Asserts.fail("Wrong captcha!");
         redisService.delete(key);
         UpdateWrapper<UserInfo> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.eq("email", emailAddress).set("password", passwordEncoder.encode(newPassword));
+        updateWrapper.lambda().eq(UserInfo::getEmail, emailAddress).set(UserInfo::getPassword, passwordEncoder.encode(newPassword));
         userInfoMapper.update(null, updateWrapper);
     }
 

@@ -103,15 +103,15 @@ public class UserLoginServiceImpl extends ServiceImpl<UserLoginLogMapper, UserLo
 
     @Override
     public void insertLog(Long userId, String browser, String platform, String ip, String os) {
-//        UserLoginLog userLoinLog = new UserLoginLog();
-//        userLoinLog.setUserId(userId);
-//        userLoinLog.setBrowserType(browser);
-//        userLoinLog.setPlatform(platform);
-//        userLoinLog.setIpAddress(ip);
-//        userLoinLog.setAddress(IpUtil.getIpPosition(ip));
-//        userLoinLog.setOperatingSystem(os);
-//        userLoinLog.setLoginTime(new Date());
-//        userLoginLogMapper.insertSelective(userLoinLog);
+        UserLoginLog userLoinLog = new UserLoginLog();
+        userLoinLog.setUserId(userId);
+        userLoinLog.setBrowserType(browser);
+        userLoinLog.setPlatform(platform);
+        userLoinLog.setIpAddress(ip);
+        userLoinLog.setAddress(IpUtil.getIpPosition(ip));
+        userLoinLog.setOperatingSystem(os);
+        userLoinLog.setLoginTime(new Date());
+        userLoginLogMapper.insert(userLoinLog);
     }
 
     @Override

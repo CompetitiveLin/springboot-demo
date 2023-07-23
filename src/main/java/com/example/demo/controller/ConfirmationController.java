@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.annotation.ParseToken;
 import com.example.demo.response.CommonResult;
 import com.example.demo.service.UserConfirmationService;
 import com.example.demo.service.UserInfoService;
@@ -20,53 +21,46 @@ public class ConfirmationController {
 
     public final UserConfirmationService userConfirmationService;
 
-    private final UserInfoService userInfoService;
-
-    @GetMapping("/information")
-    public CommonResult<?> getInformation(String username) {
-        return CommonResult.success(userInfoService.getUserByUsername(username));
-    }
-
 
     @GetMapping("/course")
-    public CommonResult<?> getCourse(String username) {
+    public CommonResult<?> getCourse(@ParseToken String username) {
         return CommonResult.success(userConfirmationService.getCourseStudentByUsername(username));
     }
 
     @GetMapping("/academic")
-    public CommonResult<?> getAcademic(String username) {
+    public CommonResult<?> getAcademic(@ParseToken String username) {
         return CommonResult.success(userConfirmationService.getAcademicStudentByUsername(username));
     }
 
     @GetMapping("/confirmation")
-    public CommonResult<?> getUserConfirmationService(String username) {
+    public CommonResult<?> getUserConfirmationService(@ParseToken String username) {
         return CommonResult.success(userConfirmationService.getConfirmationByUsername(username));
     }
 
     //    @PreAuthorize("hasAuthority('student')")
     @PostMapping("/confirm/information")
-    public CommonResult<?> clickInformation(String username) {
+    public CommonResult<?> clickInformation(@ParseToken String username) {
         userConfirmationService.clickInformation(username);
         return CommonResult.success();
     }
 
     //    @PreAuthorize("hasAuthority('student')")
     @PostMapping("/confirm/course")
-    public CommonResult<?> clickCourse(String username) {
+    public CommonResult<?> clickCourse(@ParseToken String username) {
         userConfirmationService.clickCourse(username);
         return CommonResult.success();
     }
 
     //    @PreAuthorize("hasAuthority('student')")
     @PostMapping("/confirm/academic")
-    public CommonResult<?> clickAcademic(String username) {
+    public CommonResult<?> clickAcademic(@ParseToken String username) {
         userConfirmationService.clickAcademic(username);
         return CommonResult.success();
     }
 
 
     @PostMapping("/confirm/submit")
-    public CommonResult<?> submitDissertation(@NotNull String username,
+    public CommonResult<?> submitDissertation(@ParseToken String username,
                                               @NotNull String title,
                                               @NotNull String keywords,
                                               @NotNull String abstracts) {
