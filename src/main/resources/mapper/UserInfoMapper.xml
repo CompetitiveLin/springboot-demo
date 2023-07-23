@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mbg.mapper.UserInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.demo.mbg.model.UserInfo">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+            <result property="phoneNumber" column="phone_number" jdbcType="VARCHAR"/>
+            <result property="sex" column="sex" jdbcType="TINYINT"/>
+            <result property="permission" column="permission" jdbcType="TINYINT"/>
+            <result property="birth" column="birth" jdbcType="DATE"/>
+            <result property="enrollDate" column="enroll_date" jdbcType="DATE"/>
+            <result property="graduateDate" column="graduate_date" jdbcType="DATE"/>
+            <result property="department" column="department" jdbcType="VARCHAR"/>
+            <result property="institute" column="institute" jdbcType="VARCHAR"/>
+            <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+            <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="BIT"/>
+            <result property="deletedTime" column="deleted_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,username,password,
+        status,nickname,email,
+        avatar,phone_number,sex,
+        permission,birth,enroll_date,
+        graduate_date,department,institute,
+        created_time,updated_time,is_deleted,
+        deleted_time
+    </sql>
+</mapper>

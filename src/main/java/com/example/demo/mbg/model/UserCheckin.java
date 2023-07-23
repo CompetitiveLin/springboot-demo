@@ -9,36 +9,26 @@ import lombok.Data;
 
 /**
  * 
- * @TableName course_student
+ * @TableName user_checkin
  */
-@TableName(value ="course_student")
+@TableName(value ="user_checkin")
 @Data
-public class CourseStudent implements Serializable {
+public class UserCheckin implements Serializable {
     /**
-     * 自增id
+     * 
      */
     @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
-     * 学生id
+     * 
      */
-    private Long stuId;
-
-    /**
-     * 课程名
-     */
-    private String course;
-
-    /**
-     * 学分
-     */
-    private Integer credit;
+    private Long userId;
 
     /**
      * 
      */
-    private String courseTime;
+    private Integer sum;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -54,12 +44,10 @@ public class CourseStudent implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        CourseStudent other = (CourseStudent) that;
+        UserCheckin other = (UserCheckin) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getStuId() == null ? other.getStuId() == null : this.getStuId().equals(other.getStuId()))
-            && (this.getCourse() == null ? other.getCourse() == null : this.getCourse().equals(other.getCourse()))
-            && (this.getCredit() == null ? other.getCredit() == null : this.getCredit().equals(other.getCredit()))
-            && (this.getCourseTime() == null ? other.getCourseTime() == null : this.getCourseTime().equals(other.getCourseTime()));
+            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+            && (this.getSum() == null ? other.getSum() == null : this.getSum().equals(other.getSum()));
     }
 
     @Override
@@ -67,10 +55,8 @@ public class CourseStudent implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getStuId() == null) ? 0 : getStuId().hashCode());
-        result = prime * result + ((getCourse() == null) ? 0 : getCourse().hashCode());
-        result = prime * result + ((getCredit() == null) ? 0 : getCredit().hashCode());
-        result = prime * result + ((getCourseTime() == null) ? 0 : getCourseTime().hashCode());
+        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
+        result = prime * result + ((getSum() == null) ? 0 : getSum().hashCode());
         return result;
     }
 
@@ -81,10 +67,8 @@ public class CourseStudent implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", stuId=").append(stuId);
-        sb.append(", course=").append(course);
-        sb.append(", credit=").append(credit);
-        sb.append(", courseTime=").append(courseTime);
+        sb.append(", userId=").append(userId);
+        sb.append(", sum=").append(sum);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

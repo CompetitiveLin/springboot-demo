@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mbg.mapper.CourseStudentMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.demo.mbg.model.CourseStudent">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="stuId" column="stu_id" jdbcType="BIGINT"/>
+            <result property="course" column="course" jdbcType="VARCHAR"/>
+            <result property="credit" column="credit" jdbcType="INTEGER"/>
+            <result property="courseTime" column="course_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,stu_id,course,
+        credit,course_time
+    </sql>
+</mapper>

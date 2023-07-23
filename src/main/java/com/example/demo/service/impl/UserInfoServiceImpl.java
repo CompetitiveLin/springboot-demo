@@ -1,12 +1,14 @@
 package com.example.demo.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.exception.Asserts;
 import com.example.demo.mbg.mapper.UserInfoMapper;
 import com.example.demo.mbg.model.UserInfo;
-import com.example.demo.mbg.model.UserInfoExample;
-import com.example.demo.service.RedisService;
 import com.example.demo.service.UserInfoService;
+import com.example.demo.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -17,9 +19,11 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.example.demo.constant.RedisKeyConstant.captcha.CAPTCHA_EMAIL_ADDRESS;
+
 @Service
 @Slf4j
-public class UserInfoServiceImpl implements UserInfoService {
+public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
+        implements UserInfoService {
 
     @Autowired
     private UserInfoMapper userInfoMapper;
@@ -30,57 +34,52 @@ public class UserInfoServiceImpl implements UserInfoService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public void setPasswordEncoder(@Lazy PasswordEncoder passwordEncoder){
+    public void setPasswordEncoder(@Lazy PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public List<UserInfo> getAll() {
-        return userInfoMapper.selectByExample(new UserInfoExample());
+        return userInfoMapper.selectList(null);
     }
 
     @Override
     public void updatePassword(String username, String oldPassword, String newPassword) {
-        if(Objects.equals(oldPassword,newPassword)) Asserts.fail("新旧密码不能一致");
-        UserInfoExample example = new UserInfoExample();
-        example.createCriteria().andUsernameEqualTo(username);
-        List<UserInfo> list = userInfoMapper.selectByExample(example);
-        if(CollUtil.isEmpty(list)) Asserts.fail("不存在该用户名");
-        UserInfo record = list.get(0);
-        if(!passwordEncoder.matches(oldPassword, record.getPassword())) Asserts.fail("旧密码不匹配");
-        record.setPassword(passwordEncoder.encode(newPassword));
-        userInfoMapper.updateByPrimaryKey(record);
+        if (Objects.equals(oldPassword, newPassword)) Asserts.fail("新旧密码不能一致");
+        UserInfo userInfo = getUserByUsername(username);
+        if (!passwordEncoder.matches(oldPassword, userInfo.getPassword())) Asserts.fail("旧密码不匹配");
+        UpdateWrapper<UserInfo> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("username", username).set("password", passwordEncoder.encode(newPassword));
+        userInfoMapper.update(null, updateWrapper);
+
 //        Asserts.fail("Intentional error");    // @Transactional的注解下会使事务回滚
     }
 
     @Override
     public UserInfo getUserByUsername(String username) {
-        UserInfoExample example = new UserInfoExample();
-        example.createCriteria().andUsernameEqualTo(username);
-        List<UserInfo> list = userInfoMapper.selectByExample(example);
-        if(CollUtil.isNotEmpty(list)) return list.get(0);
-        return null;
+        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", username);
+        return userInfoMapper.selectOne(queryWrapper);
     }
 
     @Override
     public UserInfo getUserByEmail(String emailAddress) {
-        UserInfoExample example = new UserInfoExample();
-        example.createCriteria().andEmailEqualTo(emailAddress);
-        List<UserInfo> list = userInfoMapper.selectByExample(example);
-        if(CollUtil.isNotEmpty(list)) return list.get(0);
-        return null;
+        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("email", emailAddress);
+        return userInfoMapper.selectOne(queryWrapper);
     }
 
     @Override
     public void resetPassword(String emailAddress, String captcha, String newPassword) {
         UserInfo userInfo = this.getUserByEmail(emailAddress);
-        if(userInfo == null) Asserts.fail("No account connected to this email!");
+        if (userInfo == null) Asserts.fail("No account is connected to this email!");
         String key = CAPTCHA_EMAIL_ADDRESS + emailAddress;
-        if(!redisService.hasKey(key)) Asserts.fail("Get a captcha first!");
+        if (!redisService.hasKey(key)) Asserts.fail("Get a captcha first!");
         if (!redisService.get(key).equals(captcha)) Asserts.fail("Wrong captcha!");
         redisService.delete(key);
-        userInfo.setPassword(passwordEncoder.encode(newPassword));
-        userInfoMapper.updateByPrimaryKey(userInfo);
+        UpdateWrapper<UserInfo> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("email", emailAddress).set("password", passwordEncoder.encode(newPassword));
+        userInfoMapper.update(null, updateWrapper);
     }
 
 

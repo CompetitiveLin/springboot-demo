@@ -36,42 +36,40 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
 
     private UserInfoService userInfoService;
+
     @Autowired
-    public void getUseInfoService(@Lazy UserInfoService userInfoService){
+    public void getUseInfoService(@Lazy UserInfoService userInfoService) {
         this.userInfoService = userInfoService;
     }
 
 
     @Bean
-    public PasswordEncoder passwordEncoder(){return new BCryptPasswordEncoder();}
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
-    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter(){
+    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter() {
         return new JwtAuthenticationTokenFilter();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
         //获取登录用户信息
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                UserInfo admin = userInfoService.getUserByUsername(username);
-                if (admin != null) {
-                    return new UserInfoDetails(admin);
-                }
-                throw new UsernameNotFoundException("用户名或密码错误");
+        return username -> {
+            UserInfo admin = userInfoService.getUserByUsername(username);
+            if (admin != null) {
+                return new UserInfoDetails(admin);
             }
+            throw new UsernameNotFoundException("该用户不存在");
         };
     }
-
 
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
     }
-
 
 
     /**
@@ -117,26 +115,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception{
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeRequests()
-                    .antMatchers(
-                            "/js/**", "/css/**","/images/**",
-                            "/swagger-resources/**", "/v3/**", "/swagger-ui/**"   //访问swagger所需的静态资源
-                            ,"/captcha/**","/user/login", "/user/register", "/test/**"
-                            )
-                    .permitAll()
+                .antMatchers(
+                        "/js/**", "/css/**", "/images/**",
+                        "/swagger-resources/**", "/v3/**", "/swagger-ui/**"   //访问swagger所需的静态资源
+                        , "/captcha/**", "/user/login", "/user/reset", "/user/register", "/test/**"
+                )
+                .permitAll()
 //                    .antMatchers("/**")   //测试时全部允许访问
 //                    .permitAll()
-                    .anyRequest().authenticated()  // 除上面外的所有请求全部需要鉴权认证
-                    .and()
+                .anyRequest().authenticated()  // 除上面外的所有请求全部需要鉴权认证
+                .and()
                 .formLogin()
-                    .loginPage("/login.html")
+                .loginPage("/login.html")
 //                    .loginProcessingUrl("/login")   // 前端的action="/login"
-                    .permitAll()
-                    .and()
+                .permitAll()
+                .and()
                 .csrf()
-                    .disable()
+                .disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
 //        禁止页面缓存
