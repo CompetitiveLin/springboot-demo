@@ -1,11 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.mbg.model.UserInfo;
+import com.example.demo.annotation.ParseToken;
 import com.example.demo.response.CommonResult;
-import com.example.demo.service.ConfirmationService;
+import com.example.demo.service.UserConfirmationService;
 import com.example.demo.service.UserInfoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,59 +19,52 @@ import javax.validation.constraints.NotNull;
 @Validated
 public class ConfirmationController {
 
-    public final ConfirmationService confirmationService;
-
-    private final UserInfoService userInfoService;
-
-    @GetMapping("/information")
-    public CommonResult<?> getInformation(String username) {
-        return CommonResult.success(userInfoService.getUserByUsername(username));
-    }
+    public final UserConfirmationService userConfirmationService;
 
 
     @GetMapping("/course")
-    public CommonResult<?> getCourse(String username) {
-        return CommonResult.success(confirmationService.getCourseStudentByUsername(username));
+    public CommonResult<?> getCourse(@ParseToken String username) {
+        return CommonResult.success(userConfirmationService.getCourseStudentByUsername(username));
     }
 
     @GetMapping("/academic")
-    public CommonResult<?> getAcademic(String username) {
-        return CommonResult.success(confirmationService.getAcademicStudentByUsername(username));
+    public CommonResult<?> getAcademic(@ParseToken String username) {
+        return CommonResult.success(userConfirmationService.getAcademicStudentByUsername(username));
     }
 
     @GetMapping("/confirmation")
-    public CommonResult<?> getConfirmationService(String username) {
-        return CommonResult.success(confirmationService.getConfirmationByUsername(username));
+    public CommonResult<?> getUserConfirmationService(@ParseToken String username) {
+        return CommonResult.success(userConfirmationService.getConfirmationByUsername(username));
     }
 
     //    @PreAuthorize("hasAuthority('student')")
     @PostMapping("/confirm/information")
-    public CommonResult<?> clickInformation(String username) {
-        confirmationService.clickInformation(username);
+    public CommonResult<?> clickInformation(@ParseToken String username) {
+        userConfirmationService.clickInformation(username);
         return CommonResult.success();
     }
 
     //    @PreAuthorize("hasAuthority('student')")
     @PostMapping("/confirm/course")
-    public CommonResult<?> clickCourse(String username) {
-        confirmationService.clickCourse(username);
+    public CommonResult<?> clickCourse(@ParseToken String username) {
+        userConfirmationService.clickCourse(username);
         return CommonResult.success();
     }
 
     //    @PreAuthorize("hasAuthority('student')")
     @PostMapping("/confirm/academic")
-    public CommonResult<?> clickAcademic(String username) {
-        confirmationService.clickAcademic(username);
+    public CommonResult<?> clickAcademic(@ParseToken String username) {
+        userConfirmationService.clickAcademic(username);
         return CommonResult.success();
     }
 
 
     @PostMapping("/confirm/submit")
-    public CommonResult<?> submitDissertation(@NotNull String username,
+    public CommonResult<?> submitDissertation(@ParseToken String username,
                                               @NotNull String title,
                                               @NotNull String keywords,
                                               @NotNull String abstracts) {
-        confirmationService.submitDissertation(username, title, keywords, abstracts);
+        userConfirmationService.submitDissertation(username, title, keywords, abstracts);
         return CommonResult.success();
     }
 }

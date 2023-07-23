@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mbg.mapper.UserConfirmationMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.demo.mbg.model.UserConfirmation">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="stuId" column="stu_id" jdbcType="BIGINT"/>
+            <result property="informationConfirmation" column="information_confirmation" jdbcType="TINYINT"/>
+            <result property="informationConfirmationTime" column="information_confirmation_time" jdbcType="TIMESTAMP"/>
+            <result property="courseConfirmation" column="course_confirmation" jdbcType="TINYINT"/>
+            <result property="courseConfirmationTime" column="course_confirmation_time" jdbcType="TIMESTAMP"/>
+            <result property="academicConfirmation" column="academic_confirmation" jdbcType="TINYINT"/>
+            <result property="academicConfirmationTime" column="academic_confirmation_time" jdbcType="TIMESTAMP"/>
+            <result property="dissertationSubmitted" column="dissertation_submitted" jdbcType="TINYINT"/>
+            <result property="dissertationSubmittedTime" column="dissertation_submitted_time" jdbcType="TIMESTAMP"/>
+            <result property="dissertationTitle" column="dissertation_title" jdbcType="VARCHAR"/>
+            <result property="dissertationKeywords" column="dissertation_keywords" jdbcType="VARCHAR"/>
+            <result property="dissertationAbstract" column="dissertation_abstract" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,stu_id,information_confirmation,
+        information_confirmation_time,course_confirmation,course_confirmation_time,
+        academic_confirmation,academic_confirmation_time,dissertation_submitted,
+        dissertation_submitted_time,dissertation_title,dissertation_keywords,
+        dissertation_abstract
+    </sql>
+</mapper>

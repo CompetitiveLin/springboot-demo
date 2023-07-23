@@ -1,15 +1,18 @@
 package com.example.demo.controller;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.annotation.Log;
 import com.example.demo.annotation.ParseToken;
+import com.example.demo.dto.UpdatePasswordDto;
 import com.example.demo.exception.Asserts;
+import com.example.demo.mbg.mapper.UserInfoMapper;
 import com.example.demo.response.CommonResult;
 import com.example.demo.util.JwtUtil;
 import com.example.demo.dto.LoginDto;
 import com.example.demo.mbg.model.UserInfo;
 import com.example.demo.service.UserInfoService;
-import com.example.demo.service.UserLoginService;
+import com.example.demo.service.UserLoginLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +41,22 @@ public class UserController {
     private UserInfoService userInfoService;
 
     @Autowired
-    private UserLoginService userLoginService;
+    private UserLoginLogService userLoginLogService;
+
+    @Autowired
+    private UserInfoMapper userInfoMapper;
+
+
+    /**
+     * 查看个人信息
+     *
+     * @param username
+     * @return
+     */
+    @GetMapping("/information")
+    public CommonResult<?> getInformation(@ParseToken String username) {
+        return CommonResult.success(userInfoService.getUserByUsername(username));
+    }
 
     /**
      * 参数用表单登录，没有@RequestBody注解。即使方法中的参数是LoginDto类型，但是在实际的参数传输过程中还是以LoginDto里的基本数据类型为准。
@@ -52,7 +70,7 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @Operation(description = "用户登录")
     public CommonResult<?> login(LoginDto loginDto) {
-        String token = HEADER_PREFIX + userLoginService.login(loginDto);
+        String token = HEADER_PREFIX + userLoginLogService.login(loginDto);
         if (token == null)
             return CommonResult.failed("用户名或密码不正确");  // 根据ServiceImpl里的内容，token永远不可能为null，要么已经抛异常，要么返回正确的token
         Map<String, String> tokenMap = new HashMap<>();
@@ -90,16 +108,37 @@ public class UserController {
     }
 
 
+    /**
+     * 分页查找
+     *
+     * @param pageNo   页数
+     * @param pageSize 每一页的内容数
+     * @return
+     */
+    @GetMapping("/page")
+    public CommonResult<?> pageSelect(Integer pageNo, Integer pageSize) {
+        Page<UserInfo> page = new Page<>(pageNo, pageSize);
+        userInfoMapper.selectPage(page, null);
+        return CommonResult.success(page);
+    }
+
+
+    /**
+     * 更新密码，当UpdatePasswordDto里的参数不符合要求时，会抛出BindingException的异常，接着会被全局异常捕捉器捕捉，返回异常消息
+     *
+     * @param username
+     * @param updatePasswordDto
+     * @return
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @Operation(description = "update password")
     public CommonResult<?> updatePassword(@ParseToken String username,
-                                          @Length(min = 6, max = 12) String oldPassword,
-                                          @Length(min = 6, max = 12) String newPassword) {   //当UpdatePasswordDto里的参数不符合要求时，会抛出BindingException的异常，接着会被全局异常捕捉器捕捉，返回异常消息
-        userInfoService.updatePassword(username, oldPassword, newPassword);
+                                          @RequestBody @Validated UpdatePasswordDto updatePasswordDto) {
+        userInfoService.updatePassword(username, updatePasswordDto.getOldPassword(), updatePasswordDto.getNewPassword());
         return CommonResult.success();
     }
 
-    @PostMapping(value = "/reset-password")
+    @PostMapping(value = "/reset")
     @Operation(description = "reset password")
     public CommonResult<?> resetPassword(String emailAddress, String captcha, String newPassword) {
         userInfoService.resetPassword(emailAddress, captcha, newPassword);
@@ -123,7 +162,7 @@ public class UserController {
     @RequestMapping(value = "/wxlogin", method = RequestMethod.POST)
     @Operation(description = "Wechat login")
     public CommonResult<?> wxLogin(String code) {
-        String token = userLoginService.wxLogin(code);
+        String token = userLoginLogService.wxLogin(code);
         if (token == null) return CommonResult.failed("登录失败");
         return CommonResult.success(token);
     }

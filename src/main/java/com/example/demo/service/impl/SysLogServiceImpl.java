@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.demo.mbg.mapper.SysLogMapper;
 import com.example.demo.mbg.model.SysLog;
 import com.example.demo.service.SysLogService;
@@ -9,7 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class SysLogServiceImpl implements SysLogService {
+public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog>
+        implements SysLogService {
     @Autowired
     private SysLogMapper sysLogMapper;
 
@@ -21,6 +23,6 @@ public class SysLogServiceImpl implements SysLogService {
         sysLog.setParams(params);
         sysLog.setIp(ip);
         sysLog.setCreateTime(createTime);
-        sysLogMapper.insertSelective(sysLog);
+        sysLogMapper.insert(sysLog);
     }
 }

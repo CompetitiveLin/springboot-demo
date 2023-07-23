@@ -3,7 +3,7 @@ package com.example.demo.aspect;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.example.demo.service.UserInfoService;
-import com.example.demo.service.UserLoginService;
+import com.example.demo.service.UserLoginLogService;
 import com.example.demo.util.IpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class LoginAspect {
     @Autowired
-    private UserLoginService userLoginService;
+    private UserLoginLogService userLoginLogService;
 
     @Autowired
     private UserInfoService userInfoService;
@@ -35,22 +35,24 @@ public class LoginAspect {
      * 4.第四个*用于定义方法，*表示任意方法，(..)表示方法的参数也是任意的。
      */
     @Pointcut("execution(* com.example.demo.controller.UserController.login(..))")
-    public void pointCut(){}
+    public void pointCut() {
+    }
 
 
     /**
      * 前置通知，在前置通知里一般是给变量赋值
+     *
      * @param joinPoint
      */
     @Before("pointCut()")
-    public void before(JoinPoint joinPoint){
+    public void before(JoinPoint joinPoint) {
         log.info("Before method");
     }
 
 
-
     /**
      * 环绕通知
+     *
      * @param joinPoint
      * @return
      * @throws Throwable
@@ -64,7 +66,7 @@ public class LoginAspect {
         Long userId = userInfoService.getUserByUsername(username).getId();  // 当找不到userId时，会返回null。但在此处找不到username时已经抛出异常，并不会执行到这里
         String userAgent = request.getHeader("User-Agent");
         UserAgent ua = UserAgentUtil.parse(userAgent);
-        userLoginService.insertLog(userId, ua.getBrowser().toString(), ua.getPlatform().toString(), IpUtil.getIpAddr(request), ua.getOs().toString());
+        userLoginLogService.insertLog(userId, ua.getBrowser().toString(), ua.getPlatform().toString(), IpUtil.getIpAddr(request), ua.getOs().toString());
         return result;
     }
 
@@ -73,26 +75,28 @@ public class LoginAspect {
      * 切点方法完成后执行
      */
     @After("pointCut()")
-    public void after(){
+    public void after() {
         log.info("After method");
     }
 
     /**
      * 切点方法抛出通知后执行
+     *
      * @param e
      */
-    @AfterThrowing(value = "pointCut()",throwing = "e")
-    public void afterThrowable(Throwable e){
+    @AfterThrowing(value = "pointCut()", throwing = "e")
+    public void afterThrowable(Throwable e) {
         log.error("After throwable");
     }
 
 
     /**
      * 切点方法返回后执行
+     *
      * @param object
      */
-    @AfterReturning(returning = "object",pointcut = "pointCut()")
-    public void afterReturning(Object object){
+    @AfterReturning(returning = "object", pointcut = "pointCut()")
+    public void afterReturning(Object object) {
         log.info("After returning");
     }
 
