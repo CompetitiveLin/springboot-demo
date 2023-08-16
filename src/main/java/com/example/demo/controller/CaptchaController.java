@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.example.demo.annotation.Log;
-import com.example.demo.exception.Asserts;
 import com.example.demo.response.CommonResult;
 import com.example.demo.service.CaptchaService;
 import com.example.demo.service.EmailService;
