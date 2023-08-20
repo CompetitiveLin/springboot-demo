@@ -1,14 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.mbg.model.AcademicStudent;
-import com.example.demo.mbg.model.Confirmation;
 import com.example.demo.mbg.model.CourseStudent;
+import com.example.demo.mbg.model.UserConfirmation;
 
-import java.util.HashMap;
 import java.util.List;
 
 
-public interface ConfirmationService {
+public interface UserConfirmationService {
 
     void submitDissertation(String username, String title, String keywords, String abstracts);
 
@@ -18,7 +17,7 @@ public interface ConfirmationService {
 
     void clickAcademic(String username);
 
-    Confirmation getConfirmationByUsername(String username);
+    UserConfirmation getConfirmationByUsername(String username);
 
     List<CourseStudent> getCourseStudentByUsername(String username);
 
