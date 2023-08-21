@@ -33,4 +33,8 @@ public interface RedisKeyConstant {
 
         int LIMIT_SECOND = 2;
     }
+
+    interface url {
+        String SHORT_URL_PREFIX = "short:prefix:";
+    }
 }

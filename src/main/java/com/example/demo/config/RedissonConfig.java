@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import org.redisson.Redisson;
+import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.Codec;
 import org.redisson.config.Config;
@@ -14,13 +15,12 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.demo.constant.RedissonConstant.REDISS_PROTOCOL_PREFIX;
-import static com.example.demo.constant.RedissonConstant.REDIS_PROTOCOL_PREFIX;
+import static com.example.demo.constant.RedissonConstant.*;
 
 @Configuration
 public class RedissonConfig {
 
-    @Bean(destroyMethod="shutdown")
+    @Bean(destroyMethod = "shutdown")
     @ConditionalOnMissingBean(RedissonClient.class)
     public RedissonClient redisClient(RedisProperties properties) {
         Config config;
@@ -30,20 +30,20 @@ public class RedissonConfig {
             config = new Config();
             config.useSentinelServers()
                     .setMasterName(properties.getSentinel().getMaster())
-                    .addSentinelAddress(convertNodes(properties.isSsl(),properties.getSentinel().getNodes()))
+                    .addSentinelAddress(convertNodes(properties.isSsl(), properties.getSentinel().getNodes()))
                     .setDatabase(properties.getDatabase())
                     .setConnectTimeout(timeout)
                     .setPassword(properties.getPassword());
         } else if (properties.getCluster() != null) {
             config = new Config();
             config.useClusterServers()
-                    .addNodeAddress(convertNodes(properties.isSsl(),properties.getCluster().getNodes()))
+                    .addNodeAddress(convertNodes(properties.isSsl(), properties.getCluster().getNodes()))
                     .setPassword(properties.getPassword())
                     .setTimeout(timeout);
         } else {
             config = new Config();
             config.useSingleServer()
-                    .setAddress(convertAddress(properties.isSsl(),properties.getHost() ,properties.getPort()))
+                    .setAddress(convertAddress(properties.isSsl(), properties.getHost(), properties.getPort()))
                     .setDatabase(properties.getDatabase())
 //                    .setPassword(properties.getPassword())    //  Comment when no password
                     .setTimeout(timeout);
@@ -55,7 +55,7 @@ public class RedissonConfig {
         return isSsl ? REDISS_PROTOCOL_PREFIX : REDIS_PROTOCOL_PREFIX;
     }
 
-    private String convertAddress(boolean isSsl,String host,int port) {
+    private String convertAddress(boolean isSsl, String host, int port) {
         return getProtocolPrefix(isSsl) + host + ":" + port;
     }
 
@@ -69,6 +69,13 @@ public class RedissonConfig {
             }
         }
         return nodes.toArray(new String[0]);
+    }
+
+    @Bean
+    public RBloomFilter<Object> bloomFilter(RedissonClient redisson) {
+        RBloomFilter<Object> bloomFilter = redisson.getBloomFilter(BLOOM_FILTER);
+        bloomFilter.tryInit(10000, 0.001);
+        return bloomFilter;
     }
 
 }

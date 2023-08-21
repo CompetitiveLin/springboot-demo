@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mbg.mapper.UrlMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.demo.mbg.model.Url">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="surl" column="surl" jdbcType="VARCHAR"/>
+        <result property="lurl" column="lurl" jdbcType="VARCHAR"/>
+        <result property="views" column="views" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,surl,lurl,
+        views,create_time
+    </sql>
+</mapper>
