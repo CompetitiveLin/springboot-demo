@@ -34,6 +34,24 @@ public class UrlServiceImpl implements UrlService {
 
 
     @Override
+    public String getLongUrl(String shortUrl) {
+        String key = SHORT_URL_PREFIX + shortUrl;
+        String longUrl = (String) redisService.get(key);
+        if (longUrl != null) {
+            redisService.expire(key, TIMEOUT);
+            return longUrl;
+        }
+        QueryWrapper<Url> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Url::getSurl, shortUrl);
+        Url url = urlMapper.selectOne(queryWrapper);
+        if (url != null) {
+            redisService.set(key, longUrl, TIMEOUT);
+            longUrl = url.getLurl();
+        }
+        return longUrl;
+    }
+
+    @Override
     public String generate(String longUrl) {
         String shortUrl = HashUtil.hashToBase62(longUrl);
         String key = SHORT_URL_PREFIX + shortUrl;
