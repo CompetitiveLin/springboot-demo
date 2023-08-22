@@ -63,7 +63,7 @@ public class UrlServiceImpl implements UrlService {
         url.setLurl(longUrl);
         url.setCreateTime(new Date());
         urlMapper.insert(url);
-        redisService.set(key, longUrl, TIMEOUT);
+        redisService.set(SHORT_URL_PREFIX + shortUrl, longUrl, TIMEOUT);
         bloomFilter.add(shortUrl);
 
         return shortUrl;
