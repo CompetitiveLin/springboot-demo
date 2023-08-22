@@ -1,7 +1,9 @@
 package com.example.demo.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.demo.mbg.mapper.UrlMapper;
 import com.example.demo.mbg.model.Url;
+import com.example.demo.mbg.model.UserInfo;
 import com.example.demo.service.RedisService;
 import com.example.demo.service.UrlService;
 import com.example.demo.util.HashUtil;
@@ -28,24 +30,42 @@ public class UrlServiceImpl implements UrlService {
     private static final String DUPLICATE = "*";
 
     //最近使用的短链接缓存过期时间(秒)
-    private static final long TIMEOUT = 10 * 60;
+    private static final long TIMEOUT = 24 * 60 * 60;
 
 
     @Override
     public String generate(String longUrl) {
         String shortUrl = HashUtil.hashToBase62(longUrl);
+        String key = SHORT_URL_PREFIX + shortUrl;
         if (bloomFilter.contains(shortUrl)) {
-
-        } else {
-            Url url = new Url();
-            url.setSurl(shortUrl);
-            url.setLurl(longUrl);
-            url.setCreateTime(new Date());
-            urlMapper.insert(url);
-            String key = SHORT_URL_PREFIX + shortUrl;
-            redisService.set(key, longUrl, TIMEOUT);
-            bloomFilter.add(shortUrl);
+            // Retrieve from redis
+            if (redisService.hasKey(key)) {
+                redisService.expire(key, TIMEOUT);
+                return shortUrl;
+            }
+            // Retrieve from mysql
+            QueryWrapper<Url> queryWrapper = new QueryWrapper<>();
+            queryWrapper.lambda().eq(Url::getSurl, shortUrl);
+            Url url = urlMapper.selectOne(queryWrapper);
+            if (url != null) {
+                redisService.set(key, longUrl, TIMEOUT);
+                return url.getSurl();
+            }
+            // Bloom filter false positive,then hash loop.
+            StringBuilder sb = new StringBuilder(longUrl);
+            while (bloomFilter.contains(shortUrl)) {
+                sb.append(DUPLICATE);
+                shortUrl = HashUtil.hashToBase62(sb.toString());
+            }
         }
+        Url url = new Url();
+        url.setSurl(shortUrl);
+        url.setLurl(longUrl);
+        url.setCreateTime(new Date());
+        urlMapper.insert(url);
+        redisService.set(key, longUrl, TIMEOUT);
+        bloomFilter.add(shortUrl);
+
         return shortUrl;
     }
 
