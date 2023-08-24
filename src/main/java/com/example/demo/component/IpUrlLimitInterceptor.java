@@ -34,6 +34,7 @@ public class IpUrlLimitInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
         log.info("Interceptor preHandle: requestUri = {}, ip = {}", httpServletRequest.getRequestURI(), IpUtil.getIpAddr(httpServletRequest));
+        if (httpServletRequest.getRequestURI().startsWith("/test")) return true;
         if (ipIsLock(IpUtil.getIpAddr(httpServletRequest))) {
             log.info("ip = {} is locked", IpUtil.getIpAddr(httpServletRequest));
             returnJson(httpServletResponse, String.valueOf(JSONUtil.parse(CommonResult.failed(ResultCode.LOCK_IP))));
