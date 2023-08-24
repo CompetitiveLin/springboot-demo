@@ -7,4 +7,6 @@ public interface RedissonConstant {
     String REDISS_PROTOCOL_PREFIX = "rediss://";
 
     String BLOOM_FILTER = "config:redisson:bloom-filter";
+
+    String VIEW_INCREASING_KEY = "rlock:view-increasing";
 }

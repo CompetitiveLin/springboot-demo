@@ -26,7 +26,9 @@ public class ShortURLController {
 
     @GetMapping("/{shortURL}")
     public void sendRedirect(HttpServletResponse response, @PathVariable String shortURL) throws IOException {
-        String url = "https://www.baidu.com";
-        response.sendRedirect(url);
+        String url = urlService.getLongUrl(shortURL);
+        if (url != null) {
+            response.sendRedirect(url);
+        }
     }
 }
