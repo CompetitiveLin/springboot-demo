@@ -8,5 +8,5 @@ public interface RedissonConstant {
 
     String BLOOM_FILTER = "config:redisson:bloom-filter";
 
-    String VIEW_INCREASING_KEY = "rlock:view-increasing";
+    String VIEW_INCREASING_KEY = "rlock:view-increasing:";
 }

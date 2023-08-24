@@ -42,7 +42,7 @@ public class UrlServiceImpl implements UrlService {
 
     @Transactional
     public void increaseViews(String shortUrl) {
-        RLock rLock = redissonClient.getLock(VIEW_INCREASING_KEY);
+        RLock rLock = redissonClient.getLock(VIEW_INCREASING_KEY + shortUrl);
         rLock.lock();
         UpdateWrapper<Url> updateWrapper = Wrappers.update();
         updateWrapper.lambda().eq(Url::getSurl, shortUrl);
