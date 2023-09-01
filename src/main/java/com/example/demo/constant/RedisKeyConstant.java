@@ -37,4 +37,8 @@ public interface RedisKeyConstant {
     interface url {
         String SHORT_URL_PREFIX = "short:prefix:";
     }
+
+    interface idempotency {
+        String IDEMPOTENCY_PREFIX = "idempotency:";
+    }
 }

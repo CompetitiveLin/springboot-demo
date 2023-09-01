@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.annotation.Idempotency;
 import com.example.demo.response.CommonResult;
 import com.example.demo.service.RedisService;
 import com.example.demo.util.IpUtil;
@@ -34,6 +35,7 @@ public class TestController {
     private RedissonClient redissonClient;
 
 
+    @Idempotency(period = 10)
     @GetMapping("/bean-list")
     public List<String> beanList() {
         return Arrays.asList(applicationContext.getBeanDefinitionNames());
