@@ -43,6 +43,7 @@ logging:
   config: classpath:logback-spring.xml
   file:
     path: ./logs
+    name: slf4j-test
 
 minio:
   accessKey: minioadmin
