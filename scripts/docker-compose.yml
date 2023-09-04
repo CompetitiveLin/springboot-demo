@@ -1,0 +1,42 @@
+version: '3.5'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: demo-mysql
+    volumes:
+      - C:\Users\CompetitiveLin\Documents\Volume\mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: demo
+
+  redis:
+    image: redis:latest
+    container_name: demo-redis
+    volumes:
+      - C:\Users\CompetitiveLin\Documents\Volume\redis:/data
+    ports:
+      - 6379:6379
+
+  minio:
+    image: minio/minio:latest
+    container_name: demo-minio
+    ports:
+      - 9000:9000
+      - 9090:9090
+    volumes:
+      - C:\Users\CompetitiveLin\Documents\Volume\minio:/data
+    command: server /data --console-address ":9090"
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+
+  mongodb:
+    image: mongo:latest
+    container_name: demo-mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - C:\Users\CompetitiveLin\Documents\Volume\mongodb:/data/db

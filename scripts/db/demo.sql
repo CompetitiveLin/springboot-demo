@@ -11,7 +11,7 @@
  Target Server Version : 80032 (8.0.32)
  File Encoding         : 65001
 
- Date: 17/05/2023 20:13:53
+ Date: 02/09/2023 17:19:26
 */
 
 SET NAMES utf8mb4;
@@ -37,34 +37,6 @@ INSERT INTO `academic_student` VALUES (2, 9, 'CBA Based on ABC', '2022-06-24');
 INSERT INTO `academic_student` VALUES (3, 18, 'Title', '2023-02-13');
 INSERT INTO `academic_student` VALUES (4, 18, 'Title2', '2022-11-01');
 INSERT INTO `academic_student` VALUES (5, 19, 'ABC', '2023-01-10');
-
--- ----------------------------
--- Table structure for confirmation
--- ----------------------------
-DROP TABLE IF EXISTS `confirmation`;
-CREATE TABLE `confirmation`  (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `stu_id` bigint NULL DEFAULT NULL,
-  `information_confirmation` tinyint NOT NULL DEFAULT 0,
-  `information_confirmation_time` datetime NULL DEFAULT NULL,
-  `course_confirmation` tinyint NOT NULL DEFAULT 0,
-  `course_confirmation_time` datetime NULL DEFAULT NULL,
-  `academic_confirmation` tinyint NOT NULL DEFAULT 0,
-  `academic_confirmation_time` datetime NULL DEFAULT NULL,
-  `dissertation_submitted` tinyint NOT NULL DEFAULT 0,
-  `dissertation_submitted_time` datetime NULL DEFAULT NULL,
-  `dissertation_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `dissertation_keywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `dissertation_abstract` varchar(2550) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of confirmation
--- ----------------------------
-INSERT INTO `confirmation` VALUES (1, 9, 1, '2023-05-17 10:35:02', 1, '2023-05-17 11:53:57', 1, '2023-05-17 11:54:00', 1, '2023-05-17 11:54:34', 'ab', 'ss; sss; ssss', 'abstract');
-INSERT INTO `confirmation` VALUES (2, 18, 1, '2023-05-10 10:57:00', 1, '2023-05-06 06:33:54', 0, NULL, 1, '2023-05-04 12:18:06', 'TEST', 'k1; k2; k3', 'testtest');
-INSERT INTO `confirmation` VALUES (3, 19, 1, '2023-05-12 06:54:26', 1, '2023-05-16 06:26:22', 1, '2023-05-13 07:03:30', 0, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for course_student
@@ -107,7 +79,7 @@ CREATE TABLE `sys_log`  (
   `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip地址',
   `create_time` datetime NULL DEFAULT NULL COMMENT '执行时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 707 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 722 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_log
@@ -810,6 +782,85 @@ INSERT INTO `sys_log` VALUES (703, 'com.example.demo.controller.CaptchaControlle
 INSERT INTO `sys_log` VALUES (704, 'com.example.demo.controller.CaptchaController.getRandomCode()', 15, 'uuid: 1 ', '127.0.0.1', '2023-05-17 11:35:14');
 INSERT INTO `sys_log` VALUES (705, 'com.example.demo.controller.CaptchaController.getRandomCode()', 19, 'uuid: 6e315d6e-a361-4d6c-b726-210a5426c834 ', '127.0.0.1', '2023-05-17 11:52:33');
 INSERT INTO `sys_log` VALUES (706, 'com.example.demo.controller.CaptchaController.getRandomCode()', 7, 'uuid: b6495e4b-f267-469c-bfda-21e8cbd96468 ', '127.0.0.1', '2023-05-17 11:53:21');
+INSERT INTO `sys_log` VALUES (707, 'com.example.demo.controller.CaptchaController.getRandomCode()', 137, 'uuid: 1 ', '127.0.0.1', '2023-07-14 05:18:32');
+INSERT INTO `sys_log` VALUES (708, 'com.example.demo.controller.CaptchaController.getRandomCode()', 147, 'uuid: 1 ', '127.0.0.1', '2023-07-14 05:55:41');
+INSERT INTO `sys_log` VALUES (709, 'com.example.demo.controller.CaptchaController.getRandomCode()', 137, 'uuid: 1 ', '127.0.0.1', '2023-07-14 12:28:21');
+INSERT INTO `sys_log` VALUES (710, 'com.example.demo.controller.CaptchaController.getRandomCode()', 110, 'uuid: 1 ', '127.0.0.1', '2023-07-14 12:39:39');
+INSERT INTO `sys_log` VALUES (711, 'com.example.demo.controller.CaptchaController.getRandomCode()', 125, 'uuid: 1 ', '127.0.0.1', '2023-07-19 11:30:02');
+INSERT INTO `sys_log` VALUES (712, 'com.example.demo.controller.CaptchaController.getRandomCode()', 115, 'uuid: 1 ', '127.0.0.1', '2023-07-19 11:58:13');
+INSERT INTO `sys_log` VALUES (713, 'com.example.demo.controller.UserController.getUser()', 44, '', '127.0.0.1', '2023-07-19 20:53:38');
+INSERT INTO `sys_log` VALUES (714, 'com.example.demo.controller.CaptchaController.getRandomCode()', 129, 'uuid: 1 ', '127.0.0.1', '2023-07-22 19:59:24');
+INSERT INTO `sys_log` VALUES (715, 'com.example.demo.controller.CaptchaController.getRandomCode()', 10, 'uuid: 1 ', '127.0.0.1', '2023-07-22 19:59:47');
+INSERT INTO `sys_log` VALUES (716, 'com.example.demo.controller.CaptchaController.getRandomCode()', 124, 'uuid: 2 ', '127.0.0.1', '2023-07-22 20:35:23');
+INSERT INTO `sys_log` VALUES (717, 'com.example.demo.controller.CaptchaController.getRandomCode()', 9, 'uuid: null ', '127.0.0.1', '2023-07-22 20:35:26');
+INSERT INTO `sys_log` VALUES (718, 'com.example.demo.controller.CaptchaController.getRandomCode()', 8, 'uuid: null ', '127.0.0.1', '2023-07-22 20:35:28');
+INSERT INTO `sys_log` VALUES (719, 'com.example.demo.controller.CaptchaController.getRandomCode()', 10, 'uuid: null ', '127.0.0.1', '2023-07-22 20:35:29');
+INSERT INTO `sys_log` VALUES (720, 'com.example.demo.controller.CaptchaController.getRandomCode()', 6, 'uuid: null ', '127.0.0.1', '2023-07-22 20:35:29');
+INSERT INTO `sys_log` VALUES (721, 'com.example.demo.controller.CaptchaController.getRandomCode()', 172, 'uuid: 2 ', '127.0.0.1', '2023-07-22 21:53:54');
+
+-- ----------------------------
+-- Table structure for url
+-- ----------------------------
+DROP TABLE IF EXISTS `url`;
+CREATE TABLE `url`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `surl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `lurl` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `views` int NOT NULL DEFAULT 0,
+  `create_time` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `SURL_UK`(`surl` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of url
+-- ----------------------------
+INSERT INTO `url` VALUES (10, '2X1s3X', 'https://www.baidu.com', 3595, '2023-08-21 21:22:59');
+INSERT INTO `url` VALUES (11, '123', 'https://www.baidu.com', 0, '2023-08-22 22:42:11');
+INSERT INTO `url` VALUES (12, '36lWcr', 'https://github.com/Naccl/ShortURL/blob/master/src/main/java/top/naccl/dwz/service/impl/UrlServiceImpl.java', 2500, '2023-08-23 22:46:12');
+
+-- ----------------------------
+-- Table structure for user_checkin
+-- ----------------------------
+DROP TABLE IF EXISTS `user_checkin`;
+CREATE TABLE `user_checkin`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  `sum` int NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user_checkin
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for user_confirmation
+-- ----------------------------
+DROP TABLE IF EXISTS `user_confirmation`;
+CREATE TABLE `user_confirmation`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `stu_id` bigint NULL DEFAULT NULL,
+  `information_confirmation` tinyint NOT NULL DEFAULT 0,
+  `information_confirmation_time` datetime NULL DEFAULT NULL,
+  `course_confirmation` tinyint NOT NULL DEFAULT 0,
+  `course_confirmation_time` datetime NULL DEFAULT NULL,
+  `academic_confirmation` tinyint NOT NULL DEFAULT 0,
+  `academic_confirmation_time` datetime NULL DEFAULT NULL,
+  `dissertation_submitted` tinyint NOT NULL DEFAULT 0,
+  `dissertation_submitted_time` datetime NULL DEFAULT NULL,
+  `dissertation_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `dissertation_keywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `dissertation_abstract` varchar(2550) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user_confirmation
+-- ----------------------------
+INSERT INTO `user_confirmation` VALUES (1, 9, 1, '2023-05-17 10:35:02', 1, '2023-05-17 11:53:57', 1, '2023-05-17 11:54:00', 1, '2023-05-17 11:54:34', 'ab', 'ss; sss; ssss', 'abstract');
+INSERT INTO `user_confirmation` VALUES (2, 18, 1, '2023-05-10 10:57:00', 1, '2023-05-06 06:33:54', 0, NULL, 1, '2023-05-04 12:18:06', 'TEST', 'k1; k2; k3', 'testtest');
+INSERT INTO `user_confirmation` VALUES (3, 19, 1, '2023-07-23 16:38:29', 1, '2023-07-23 16:38:46', 1, '2023-07-23 16:35:42', 1, '2023-07-23 16:43:02', 'abc', '11;1;1', 'hello');
 
 -- ----------------------------
 -- Table structure for user_info
@@ -824,25 +875,27 @@ CREATE TABLE `user_info`  (
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '电子邮箱',
   `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '头像',
   `phone_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '电话号码',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '账号创建时间',
-  `modified_time` datetime NULL DEFAULT NULL COMMENT '账号修改时间',
   `sex` tinyint NULL DEFAULT NULL COMMENT '性别：0男，1女',
   `permission` tinyint NOT NULL COMMENT '权限：0管理员，1教师，2家长',
   `birth` date NULL DEFAULT NULL COMMENT '生日',
-  `enroll_time` date NULL DEFAULT NULL COMMENT '入学（职）时间',
-  `graduate_time` date NULL DEFAULT NULL COMMENT '预计毕业时间（学生）',
+  `enroll_date` date NULL DEFAULT NULL COMMENT '入学（职）时间',
+  `graduate_date` date NULL DEFAULT NULL COMMENT '预计毕业时间（学生）',
   `department` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '院系',
   `institute` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '系所',
+  `created_time` datetime NULL DEFAULT NULL COMMENT '账号创建时间',
+  `updated_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '账号修改时间',
+  `is_deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '账号删除标记',
+  `deleted_time` datetime NULL DEFAULT NULL COMMENT '账号删除时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_info
 -- ----------------------------
-INSERT INTO `user_info` VALUES (9, '51255902052', '$2a$10$GZ32o0skk3hOUCWVqJyVIOgRzxXYbttWxsjYG.ToovNqmB4G4igK6', 1, 'Ze Lin', 'ze_lin@stu.ecnu.edu.cn', 'https://cdn.pixabay.com/photo/2023/03/28/19/55/lake-7884049_960_720.jpg', '19858123456', '2013-11-13 00:10:41', '2005-10-14 21:38:32', 1, 0, '2017-01-18', '2022-09-01', '2025-06-30', 'Information Technology', 'Software Engineering Institute');
-INSERT INTO `user_info` VALUES (14, '110', '$2a$10$ALfqITSCcDYN3.BYWn1//O177PQOdtAdzSvMCfHN3eLjrAdPor2AG', 1, 'Teacher1', 'teacher1@sei.ecnu.edu.cn', 'https://media.istockphoto.com/id/1299625114/nl/foto/hiawassee-georgi%C3%AB-het-landschap-van-de-v-s-met-het-meer-van-chatuge-in-vroege-herfst.jpg?b=1&s=170667a&w=0&k=20&c=TGMXfTYUGEdqRPMen5l7KGU-cyvJ4ngJSAX_IiqZ1qc=', '123123', '2021-08-18 05:29:23', '2015-05-06 19:43:49', 0, 1, '2003-05-20', '2009-03-18', NULL, 'Information Technology', 'School of Computer Science and Technology');
-INSERT INTO `user_info` VALUES (18, '51255902042', '$2a$10$YJTTiNVvXTBbAbML.vbtD.bTwB9LvagBqMzFmW6uAnehdo0Y0/Nl2', 1, 'Jianxun Wang', '51255902042@stu.ecnu.edu.cn', 'https://media.istockphoto.com/id/1299625114/nl/foto/hiawassee-georgi%C3%AB-het-landschap-van-de-v-s-met-het-meer-van-chatuge-in-vroege-herfst.jpg?b=1&s=170667a&w=0&k=20&c=TGMXfTYUGEdqRPMen5l7KGU-cyvJ4ngJSAX_IiqZ1qc=', '18958123456', NULL, NULL, 1, 0, '2016-11-01', '2022-09-02', '2025-06-30', 'Information Technology', 'Software Engineering Institute');
-INSERT INTO `user_info` VALUES (19, '51255902015', '$2a$10$2Rjd6sEfdSMIb6syhreXy.IOgNd9ORSU/hDnBzEDqkaq26RbC8ney', 1, 'Benchi Ma', '51255902015@stu.ecnu.edu.cn', 'https://alifei04.cfp.cn/creative/vcg/veer/1600water/veer-303764513.jpg', '13659191993', NULL, NULL, 1, 0, '1998-02-04', '2022-09-02', '2025-06-30', 'Information Technology', 'Software Engineering Institute');
+INSERT INTO `user_info` VALUES (9, '51255902052', '$2a$10$PQww4I4v46l0U7fHYtmEPu6/89pa/O.oJTNZJAcYm5H2NTk22xVGm', 1, 'Ze Lin', 'ze_lin@stu.ecnu.edu.cn', 'https://cdn.pixabay.com/photo/2023/03/28/19/55/lake-7884049_960_720.jpg', '19858123456', 1, 0, '2017-01-18', '2022-09-01', '2025-06-30', 'Information Technology', 'Software Engineering Institute', '2013-11-13 00:10:41', '2023-07-23 07:53:43', b'0', NULL);
+INSERT INTO `user_info` VALUES (14, '51255902042', '$2a$10$zdK2z4Nrz9pSbfIG7EIeY.bJjfqOc5NUy.v3SdVqX6z.Mg./dlAC.', 1, 'Jianxun Wang', '51255902042@stu.ecnu.edu.cn', 'https://cdn.pixabay.com/photo/2023/03/28/19/55/lake-7884049_960_720.jpg', '19858123456', 1, 0, '2017-01-18', '2022-09-01', '2025-06-30', 'Information Technology', 'Software Engineering Institute', '2013-11-13 00:10:41', '2023-07-23 07:57:07', b'0', NULL);
+INSERT INTO `user_info` VALUES (18, '51255902032', '$2a$10$2S1rBcaTIvra9kMQ6lXhZ.9xzlII/FSLqC44dqr.dZZAy6q98YHim', 1, 'Anyone', '51255902032@stu.ecnu.edu.cn', 'https://cdn.pixabay.com/photo/2023/03/28/19/55/lake-7884049_960_720.jpg', '19858123456', 1, 0, '2017-01-18', '2022-09-01', '2025-06-30', 'Information Technology', 'Software Engineering Institute', '2013-11-13 00:10:41', '2023-07-23 07:57:41', b'0', NULL);
+INSERT INTO `user_info` VALUES (19, '51255902015', '$2a$10$48xmnlyXriCSGTLYW1oucuEDTxXMNlN/.KwCBMrX86//fI8NGvRlu', 1, 'Benchi Ma', '51255902015@stu.ecnu.edu.cn', 'https://cdn.pixabay.com/photo/2023/03/28/19/55/lake-7884049_960_720.jpg', '19858123456', 1, 0, '2017-01-18', '2022-09-01', '2025-06-30', 'Information Technology', 'Software Engineering Institute', '2013-11-13 00:10:41', '2023-07-23 07:58:00', b'0', NULL);
 
 -- ----------------------------
 -- Table structure for user_login_log
@@ -850,7 +903,7 @@ INSERT INTO `user_info` VALUES (19, '51255902015', '$2a$10$2Rjd6sEfdSMIb6syhreXy
 DROP TABLE IF EXISTS `user_login_log`;
 CREATE TABLE `user_login_log`  (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '用户登录记录id',
-  `user_id` bigint NULL DEFAULT NULL COMMENT '用户id',
+  `user_id` bigint NOT NULL COMMENT '用户id',
   `ip_address` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip地址',
   `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip地址所对应的地区',
   `login_time` datetime NULL DEFAULT NULL COMMENT '登录时间',
@@ -858,125 +911,29 @@ CREATE TABLE `user_login_log`  (
   `operating_system` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统',
   `platform` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录平台',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 116 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 130 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_login_log
 -- ----------------------------
-INSERT INTO `user_login_log` VALUES (1, NULL, '127.0.0.1', NULL, '2022-08-02 22:51:55', 'Unknown', NULL, 'Unknown');
-INSERT INTO `user_login_log` VALUES (2, NULL, '127.0.0.1', NULL, '2022-08-02 22:54:42', 'Chrome', NULL, 'Windows');
-INSERT INTO `user_login_log` VALUES (3, NULL, '192.168.10.101', NULL, '2022-08-02 22:59:42', 'Safari', NULL, 'iPhone');
-INSERT INTO `user_login_log` VALUES (4, NULL, '192.168.10.101', NULL, '2022-08-02 23:03:24', 'Safari', 'iPhone', 'iPhone');
-INSERT INTO `user_login_log` VALUES (5, NULL, '127.0.0.1', NULL, '2022-08-02 23:03:50', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (6, NULL, '192.168.10.101', NULL, '2022-08-02 23:08:34', 'Safari', 'iPhone', 'iPhone');
-INSERT INTO `user_login_log` VALUES (7, NULL, '127.0.0.1', NULL, '2022-08-03 16:40:44', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (8, NULL, '127.0.0.1', NULL, '2022-08-03 21:30:02', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (9, NULL, '127.0.0.1', NULL, '2022-08-03 21:30:49', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (10, NULL, '127.0.0.1', NULL, '2022-08-03 21:34:20', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (11, NULL, '127.0.0.1', NULL, '2022-08-03 21:35:01', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (12, NULL, '127.0.0.1', NULL, '2022-08-03 21:35:52', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (13, NULL, '127.0.0.1', NULL, '2022-08-03 21:48:39', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (14, 4, '127.0.0.1', NULL, '2022-08-03 21:54:12', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (15, 4, '127.0.0.1', NULL, '2022-08-03 23:00:11', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (16, 4, '127.0.0.1', NULL, '2022-08-05 22:17:41', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (17, 4, '127.0.0.1', NULL, '2022-08-11 19:20:11', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (18, 4, '127.0.0.1', NULL, '2022-08-11 19:39:59', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (19, 4, '127.0.0.1', NULL, '2022-08-11 19:40:28', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (20, 4, '127.0.0.1', NULL, '2022-08-11 19:42:03', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (21, 4, '127.0.0.1', NULL, '2022-09-01 15:39:09', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (22, 4, '127.0.0.1', NULL, '2022-10-17 20:49:14', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (23, 4, '127.0.0.1', NULL, '2023-02-20 11:37:37', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (24, 2, '127.0.0.1', NULL, '2023-02-23 19:02:19', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (25, 3, '127.0.0.1', NULL, '2023-02-23 19:03:29', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (26, 4, '127.0.0.1', NULL, '2023-02-23 19:03:45', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (27, 6, '127.0.0.1', NULL, '2023-02-23 19:03:57', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (28, 7, '127.0.0.1', NULL, '2023-02-23 19:04:07', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (29, 8, '127.0.0.1', NULL, '2023-02-23 19:04:36', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (30, 9, '127.0.0.1', NULL, '2023-02-23 19:04:48', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (31, 10, '127.0.0.1', NULL, '2023-02-23 19:05:09', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (32, 9, '127.0.0.1', NULL, '2023-04-29 04:56:50', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (33, 9, '127.0.0.1', NULL, '2023-04-29 06:17:12', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (34, 9, '172.31.222.184', NULL, '2023-04-29 08:07:14', 'MSEdge', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (35, 9, '127.0.0.1', NULL, '2023-04-29 08:08:28', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (36, 9, '172.31.222.184', NULL, '2023-04-29 08:30:38', 'MSEdge', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (37, 9, '127.0.0.1', NULL, '2023-04-29 08:34:42', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (38, 9, '172.31.222.184', NULL, '2023-04-29 09:29:38', 'MSEdge', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (39, 9, '172.31.222.184', NULL, '2023-04-29 10:21:05', 'MSEdge', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (40, 18, '127.0.0.1', NULL, '2023-05-01 04:53:54', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (41, 9, '172.31.222.184', NULL, '2023-05-01 11:33:56', 'MSEdge', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (42, 9, '58.198.176.171', NULL, '2023-05-02 08:27:29', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (43, 18, '172.20.159.5', NULL, '2023-05-02 14:03:36', 'MSEdge', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (44, 18, '172.20.159.37', NULL, '2023-05-03 05:22:51', 'MSEdge', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (45, 18, '172.20.144.141', NULL, '2023-05-06 04:55:20', 'MSEdge', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (46, 18, '172.20.144.141', NULL, '2023-05-06 06:37:06', 'MSEdge', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (47, 18, '172.20.144.141', NULL, '2023-05-06 06:44:45', 'MSEdge', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (48, 18, '172.20.144.141', NULL, '2023-05-06 06:50:16', 'MSEdge', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (49, 18, '172.30.212.58', NULL, '2023-05-10 10:56:26', 'MSEdge', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (50, 18, '172.20.146.94', NULL, '2023-05-11 03:20:32', 'MSEdge', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (51, 9, '127.0.0.1', NULL, '2023-05-12 07:04:04', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (52, 9, '127.0.0.1', NULL, '2023-05-12 07:04:45', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (53, 9, '127.0.0.1', NULL, '2023-05-12 07:07:51', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (54, 9, '127.0.0.1', NULL, '2023-05-12 07:38:11', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (55, 9, '127.0.0.1', NULL, '2023-05-12 08:09:50', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (56, 9, '127.0.0.1', NULL, '2023-05-12 08:10:40', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (57, 9, '127.0.0.1', NULL, '2023-05-12 08:12:58', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (58, 18, '127.0.0.1', NULL, '2023-05-12 08:48:43', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (59, 9, '127.0.0.1', NULL, '2023-05-12 08:49:50', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (60, 19, '172.31.159.233', NULL, '2023-05-12 09:31:39', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (61, 19, '172.31.159.233', NULL, '2023-05-12 09:33:32', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (62, 19, '172.31.159.233', NULL, '2023-05-12 09:33:58', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (63, 19, '172.31.159.233', NULL, '2023-05-12 09:34:48', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (64, 19, '172.31.159.233', NULL, '2023-05-12 09:35:46', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (65, 19, '172.31.159.233', NULL, '2023-05-12 09:36:44', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (66, 9, '127.0.0.1', NULL, '2023-05-12 10:08:33', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (67, 9, '127.0.0.1', NULL, '2023-05-12 10:09:51', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (68, 18, '127.0.0.1', NULL, '2023-05-12 10:10:59', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (69, 9, '127.0.0.1', NULL, '2023-05-12 10:11:50', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (70, 18, '127.0.0.1', NULL, '2023-05-12 10:13:09', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (71, 19, '172.31.159.233', NULL, '2023-05-12 12:10:50', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (72, 19, '172.31.159.233', NULL, '2023-05-12 12:17:04', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (73, 19, '172.31.159.233', NULL, '2023-05-12 12:18:40', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (74, 19, '172.31.159.233', NULL, '2023-05-12 12:19:02', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (75, 19, '172.31.159.233', NULL, '2023-05-12 13:08:25', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (76, 19, '172.31.159.233', NULL, '2023-05-12 13:09:22', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (77, 19, '172.31.159.233', NULL, '2023-05-12 13:10:12', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (78, 19, '172.31.159.233', NULL, '2023-05-12 13:11:35', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (79, 19, '172.31.159.233', NULL, '2023-05-12 13:13:09', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (80, 19, '172.31.159.233', NULL, '2023-05-12 13:14:20', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (81, 19, '172.31.159.233', NULL, '2023-05-12 13:15:16', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (82, 19, '172.31.159.233', NULL, '2023-05-12 13:17:06', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (83, 19, '172.31.159.233', NULL, '2023-05-12 13:36:17', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (84, 19, '172.31.159.233', NULL, '2023-05-12 13:37:17', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (85, 19, '172.31.159.233', NULL, '2023-05-12 13:38:14', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (86, 19, '172.31.159.233', NULL, '2023-05-12 13:41:34', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (87, 19, '172.31.159.233', NULL, '2023-05-12 13:42:53', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (88, 19, '172.31.159.233', NULL, '2023-05-12 13:45:58', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (89, 19, '172.31.159.233', NULL, '2023-05-12 13:46:55', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (90, 19, '172.31.159.233', NULL, '2023-05-13 06:20:03', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (91, 19, '172.31.159.233', NULL, '2023-05-13 06:20:27', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (92, 19, '172.31.159.233', NULL, '2023-05-13 06:26:24', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (93, 19, '172.31.159.233', NULL, '2023-05-13 06:28:40', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (94, 19, '172.31.159.233', NULL, '2023-05-13 06:29:35', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (95, 19, '172.31.159.233', NULL, '2023-05-13 06:30:23', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (96, 19, '172.31.159.233', NULL, '2023-05-13 06:30:49', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (97, 19, '172.31.159.233', NULL, '2023-05-13 06:31:30', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (98, 19, '172.31.159.233', NULL, '2023-05-13 06:31:59', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (99, 19, '172.31.159.233', NULL, '2023-05-13 06:32:53', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (100, 19, '172.31.159.233', NULL, '2023-05-13 06:33:43', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (101, 19, '172.31.159.233', NULL, '2023-05-13 06:35:47', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (102, 19, '172.31.159.233', NULL, '2023-05-13 06:38:04', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (103, 19, '172.31.159.233', NULL, '2023-05-13 06:39:15', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (104, 19, '172.31.159.233', NULL, '2023-05-13 06:51:23', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (105, 19, '172.31.159.233', NULL, '2023-05-13 06:58:30', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (106, 19, '172.31.159.233', NULL, '2023-05-13 06:58:49', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (107, 19, '172.31.159.233', NULL, '2023-05-13 07:03:18', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (108, 19, '172.31.159.233', NULL, '2023-05-14 02:27:03', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (109, 19, '172.31.159.233', NULL, '2023-05-14 08:33:24', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (110, 19, '172.30.131.32', NULL, '2023-05-16 06:26:04', 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO `user_login_log` VALUES (111, 9, '127.0.0.1', NULL, '2023-05-17 09:52:36', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (112, 9, '127.0.0.1', NULL, '2023-05-17 10:30:09', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (113, 9, '127.0.0.1', NULL, '2023-05-17 10:34:57', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (114, 9, '127.0.0.1', NULL, '2023-05-17 11:26:13', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
-INSERT INTO `user_login_log` VALUES (115, 9, '127.0.0.1', NULL, '2023-05-17 11:53:38', 'Chrome', 'Windows 10 or Windows Server 2016', 'Windows');
+INSERT INTO `user_login_log` VALUES (126, 19, '127.0.0.1', '内网IP', '2023-07-23 16:02:11', 'Unknown', 'Unknown', 'Unknown');
+INSERT INTO `user_login_log` VALUES (127, 14, '127.0.0.1', '内网IP', '2023-07-23 16:02:24', 'Unknown', 'Unknown', 'Unknown');
+INSERT INTO `user_login_log` VALUES (128, 14, '127.0.0.1', '内网IP', '2023-08-16 19:53:25', 'Unknown', 'Unknown', 'Unknown');
+INSERT INTO `user_login_log` VALUES (129, 9, '127.0.0.1', '内网IP', '2023-08-16 19:54:48', 'Unknown', 'Unknown', 'Unknown');
+
+-- ----------------------------
+-- Table structure for user_possession
+-- ----------------------------
+DROP TABLE IF EXISTS `user_possession`;
+CREATE TABLE `user_possession`  (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  `money` bigint NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user_possession
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;
