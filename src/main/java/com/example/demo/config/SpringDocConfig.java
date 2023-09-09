@@ -13,14 +13,15 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * SpringDoc配置
- * @url: http://localhost:8080/swagger-ui.html
+ *
+ * @url: http://localhost:8080/swagger-ui/index.html
  * @Author CommpetitiveLin
  * @Date 2023-02-20 12:04:22
  */
 @Configuration
 public class SpringDocConfig {
     @Bean
-    public OpenAPI openAPI(){
+    public OpenAPI openAPI() {
         return new OpenAPI()
                 .info(new Info()
                         .title("My REST API")
