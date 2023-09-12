@@ -93,6 +93,7 @@ public class IpUrlLimitInterceptor implements HandlerInterceptor {
         PrintWriter writer = null;
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/json; charset=utf-8");
+        response.setStatus(423);
         try {
             writer = response.getWriter();
             writer.print(json);
