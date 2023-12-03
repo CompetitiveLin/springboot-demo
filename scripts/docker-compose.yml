@@ -11,7 +11,11 @@ services:
       TZ: Asia/Shanghai
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: demo
-
+    command:
+      --log-bin=mysql-bin
+      --binlog-format=ROW
+      --server_id=1
+  
   redis:
     image: redis:latest
     container_name: demo-redis
@@ -45,7 +49,7 @@ services:
     image: apache/rocketmq:4.9.7
     container_name: demo-rocketmq-nameserver
     ports:
-      - "9876:9876"
+      - 9876:9876
     volumes:
       - C:\Users\CompetitiveLin\Documents\Volume\rocketmq\nameserver\logs:/home/rocketmq/logs
     command: sh mqnamesrv
@@ -54,9 +58,9 @@ services:
     image: apache/rocketmq:4.9.7
     container_name: demo-rocketmq-broker
     ports:
-      - "10909:10909"
-      - "10911:10911"
-      - "10912:10912"
+      - 10909:10909
+      - 10911:10911
+      - 10912:10912
     volumes:
       - C:\Users\CompetitiveLin\Documents\Volume\rocketmq\broker\logs:/home/rocketmq/logs
       - C:\Users\CompetitiveLin\Documents\Volume\rocketmq\broker\store:/home/rocketmq/store
@@ -71,10 +75,27 @@ services:
     image: apacherocketmq/rocketmq-dashboard:latest
     container_name: demo-rocketmq-dashboard
     ports:
-      - "8088:8080"
+      - 8088:8080
     environment:
       - JAVA_OPTS=-Drocketmq.namesrv.addr=nameserver:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false
     volumes:
       - C:\Users\CompetitiveLin\Documents\Volume\rocketmq\dashboard\tmp:/tmp
     depends_on:
       - nameserver
+  canal-server:
+    image: canal/canal-server:latest
+    container_name: demo-canal-server
+    ports:
+      - 11111:11111
+    environment:
+      #      - canal.destinations = example
+      - canal.instance.mysql.slaveId=222  # 不能与 server_id 相同
+      - canal.instance.master.address=172.19.0.3:3306
+      - canal.instance.dbUsername=canal
+      - canal.instance.dbPassword=canal
+      - canal.serverMode=RocketMQ
+      - rocketmq.namesrv.addr=172.19.0.6:9876
+      - canal.mq.topic=CanalTopic
+    volumes:
+      #      - C:\Users\CompetitiveLin\Documents\Volume\canal\conf:/home/admin/canal-server/conf/
+      - C:\Users\CompetitiveLin\Documents\Volume\canal\logs:/home/admin/canal-server/logs/
