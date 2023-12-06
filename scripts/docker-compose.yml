@@ -82,6 +82,7 @@ services:
       - C:\Users\CompetitiveLin\Documents\Volume\rocketmq\dashboard\tmp:/tmp
     depends_on:
       - nameserver
+
   canal-server:
     image: canal/canal-server:latest
     container_name: demo-canal-server
@@ -90,12 +91,44 @@ services:
     environment:
       #      - canal.destinations = example
       - canal.instance.mysql.slaveId=222  # 不能与 server_id 相同
-      - canal.instance.master.address=172.19.0.3:3306
+      - canal.instance.master.address=mysql:3306
       - canal.instance.dbUsername=canal
       - canal.instance.dbPassword=canal
       - canal.serverMode=RocketMQ
-      - rocketmq.namesrv.addr=172.19.0.6:9876
+      - rocketmq.namesrv.addr=nameserver:9876
       - canal.mq.topic=CanalTopic
     volumes:
-      #      - C:\Users\CompetitiveLin\Documents\Volume\canal\conf:/home/admin/canal-server/conf/
-      - C:\Users\CompetitiveLin\Documents\Volume\canal\logs:/home/admin/canal-server/logs/
+      #      - C:\Users\CompetitiveLin\Documents\Volume\canal\conf:/home/admin/canal-server/conf
+      - C:\Users\CompetitiveLin\Documents\Volume\canal\logs:/home/admin/canal-server/logs
+    depends_on:
+      - mysql
+      - nameserver
+
+  elasticsearch:
+    image: elasticsearch:7.17.15
+    container_name: demo-elasticsearch
+    ports:
+      - 9200:9200
+      - 9300:9300
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    environment:
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms256m -Xmx256m
+      - discovery.type=single-node
+    volumes:
+      - C:\Users\CompetitiveLin\Documents\Volume\elasticsearch\data:/usr/share/elasticsearch/data
+
+  kibana:
+    image: kibana:7.17.15
+    container_name: demo-kibana
+    ports:
+      - 5601:5601
+    environment:
+      - elasticsearch.hosts=elasticsearch:9200
+    volumes:
+      - C:\Users\CompetitiveLin\Documents\Volume\kibana\data:/usr/share/kibana/data
+    depends_on:
+      - elasticsearch
