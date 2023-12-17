@@ -89,16 +89,13 @@ services:
     ports:
       - 11111:11111
     environment:
-      #      - canal.destinations = example
-      - canal.instance.mysql.slaveId=222  # 不能与 server_id 相同
       - canal.instance.master.address=mysql:3306
       - canal.instance.dbUsername=canal
       - canal.instance.dbPassword=canal
       - canal.serverMode=RocketMQ
       - rocketmq.namesrv.addr=nameserver:9876
-      - canal.mq.topic=CanalTopic
     volumes:
-      #      - C:\Users\CompetitiveLin\Documents\Volume\canal\conf:/home/admin/canal-server/conf
+      - C:\Users\CompetitiveLin\Documents\Volume\canal\conf\example\instance.properties:/home/admin/canal-server/conf/example/instance.properties
       - C:\Users\CompetitiveLin\Documents\Volume\canal\logs:/home/admin/canal-server/logs
     depends_on:
       - mysql
