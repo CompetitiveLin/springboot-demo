@@ -13,8 +13,8 @@ spring:
     host: smtp.yeah.net
     password: TRYOAEHEKOLVOXGX
     username: springcloud_mail@yeah.net
-  main:
-    allow-bean-definition-overriding: true
+  #  main:
+  #    allow-bean-definition-overriding: true
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
@@ -34,6 +34,8 @@ spring:
     multipart:
       enabled: true
       max-file-size: 10MB
+  elasticsearch:
+    uris: localhost:9200
 
 jwt:
   expiration: 604800
@@ -58,3 +60,17 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
       logic-delete-field: is_deleted
+
+rocketmq:
+  name-server: localhost:9876
+  producer:
+    group: rocketmq-producer
+    # 消息发送超时时长，默认3s
+    send-message-timeout: 3000
+    # 同步发送消息失败重试次数，默认2
+    retry-times-when-send-failed: 3
+    # 异步发送消息失败重试次数，默认2
+    retry-times-when-send-async-failed: 3
+  consumer:
+    # 一次拉取消息最大值，注意是拉取消息的最大值而非消费最大值
+    pull-batch-size: 10

@@ -22,7 +22,8 @@ import java.util.Map;
 public class HttpClientUtil {
     /**
      * 发送get请求
-     * @param url 请求URL
+     *
+     * @param url   请求URL
      * @param param 请求参数 key:value url携带参数 或者无参可不填
      * @return
      */
@@ -73,7 +74,8 @@ public class HttpClientUtil {
 
     /**
      * 发送post请求
-     * @param url 请求URL
+     *
+     * @param url   请求URL
      * @param param 请求参数 key:value
      * @return
      */
@@ -104,18 +106,17 @@ public class HttpClientUtil {
             try {
                 response.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
-
         return resultString;
     }
 
 
     /**
      * 发送post 请求
-     * @param url 请求地址
+     *
+     * @param url  请求地址
      * @param json 请求参数
      * @return
      */
@@ -139,7 +140,6 @@ public class HttpClientUtil {
             try {
                 response.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }

@@ -4,15 +4,18 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.Data;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 /**
- * 
  * @TableName sys_log
  */
-@TableName(value ="sys_log")
+@TableName(value = "sys_log")
+@Document(indexName = "canal-to-es")
 @Data
 public class SysLog implements Serializable {
     /**
@@ -62,11 +65,11 @@ public class SysLog implements Serializable {
         }
         SysLog other = (SysLog) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getMethod() == null ? other.getMethod() == null : this.getMethod().equals(other.getMethod()))
-            && (this.getDuration() == null ? other.getDuration() == null : this.getDuration().equals(other.getDuration()))
-            && (this.getParams() == null ? other.getParams() == null : this.getParams().equals(other.getParams()))
-            && (this.getIp() == null ? other.getIp() == null : this.getIp().equals(other.getIp()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
+                && (this.getMethod() == null ? other.getMethod() == null : this.getMethod().equals(other.getMethod()))
+                && (this.getDuration() == null ? other.getDuration() == null : this.getDuration().equals(other.getDuration()))
+                && (this.getParams() == null ? other.getParams() == null : this.getParams().equals(other.getParams()))
+                && (this.getIp() == null ? other.getIp() == null : this.getIp().equals(other.getIp()))
+                && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
     }
 
     @Override
