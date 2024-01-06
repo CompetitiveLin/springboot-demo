@@ -2,6 +2,7 @@ package com.example.demo.component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.annotation.Idempotency;
 import com.example.demo.mbg.model.SysLog;
 import com.example.demo.repository.CanalToElasticsearchRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class RocketMQToESListener implements RocketMQListener<MessageExt> {
     private final CanalToElasticsearchRepository canalToElasticsearchRepository;
 
     @Override
+    @Idempotency(period = 100)
     public void onMessage(MessageExt s) {
         String message = new String(s.getBody(), StandardCharsets.UTF_8);
         log.info(message);
