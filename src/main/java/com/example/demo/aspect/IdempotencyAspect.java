@@ -2,20 +2,16 @@ package com.example.demo.aspect;
 
 
 import com.example.demo.annotation.Idempotency;
-import com.example.demo.exception.CustomException;
 import com.example.demo.service.RedisService;
-import com.example.demo.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
+import org.apache.rocketmq.common.message.MessageExt;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 
 import static com.example.demo.constant.RedisKeyConstant.idempotency.IDEMPOTENCY_PREFIX;
@@ -35,30 +31,34 @@ public class IdempotencyAspect {
 
     private final RedisService redisService;
 
-    @Before("@annotation(com.example.demo.annotation.Idempotency)")
-    public void idempotencyCheck(JoinPoint joinPoint) {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
-        String authorization = request.getHeader("Authorization");
-        String username = JwtUtil.getUserNameBearerToken(authorization);
+    @Around("@annotation(com.example.demo.annotation.Idempotency)")
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
 
-        log.info(signature.getName());  // beanList
-        log.info(String.valueOf(signature.getDeclaringType())); // class com.example.demo.controller.TestController
-        log.info(signature.getDeclaringTypeName()); // com.example.demo.controller.TestController
+        log.info(signature.getName());  // onMessage
+        log.info(String.valueOf(signature.getDeclaringType())); // class com.example.demo.component.RocketMQToESListener
+        log.info(signature.getDeclaringTypeName()); // com.example.demo.component.RocketMQToESListener
         log.info(String.valueOf(signature.getModifiers())); // 1
-        log.info(signature.toString()); // List com.example.demo.controller.TestController.beanList()
-        log.info(signature.toShortString());    // TestController.beanList()
-        log.info(signature.toLongString()); // public java.util.List com.example.demo.controller.TestController.beanList()
+        log.info(signature.toString()); // void com.example.demo.component.RocketMQToESListener.onMessage(MessageExt)
+        log.info(signature.toShortString());    // RocketMQToESListener.onMessage(..)
+        log.info(signature.toLongString()); // public void com.example.demo.component.RocketMQToESListener.onMessage(org.apache.rocketmq.common.message.MessageExt)
+
+        String uniqueKey = null;
+        Object[] args = joinPoint.getArgs();
+        for (Object arg : args) {
+            if (arg instanceof MessageExt) {
+                uniqueKey = ((MessageExt) arg).getMsgId();  // 虽然此处用MsgID，但并**不建议**，建议使用业务唯一标识，如订单号。发送消息 `message.setKeys("Order ID")`，消费消息使用 `message.getKeys()`，以保证此处一定有uniqueKey
+            }
+        }
 
         Method signatureMethod = signature.getMethod();
         Idempotency limit = signatureMethod.getAnnotation(Idempotency.class);
         int period = limit.period();
-        String key = IDEMPOTENCY_PREFIX + username + ":" + signature.getDeclaringTypeName() + "." + signature.getName();
+        String key = IDEMPOTENCY_PREFIX + uniqueKey.toString();
         if (redisService.hasKey(key)) {
-            throw new CustomException("您按的太快了！休息一下！");
-        } else {
-            redisService.set(key, "", period);
+            return null;
         }
+        redisService.set(key, "", period);
+        return joinPoint.proceed();
     }
 }

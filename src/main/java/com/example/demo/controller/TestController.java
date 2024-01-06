@@ -34,8 +34,7 @@ public class TestController {
     @Autowired
     private RedissonClient redissonClient;
 
-
-    @Idempotency(period = 10)
+    
     @GetMapping("/bean-list")
     public List<String> beanList() {
         return Arrays.asList(applicationContext.getBeanDefinitionNames());
